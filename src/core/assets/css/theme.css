@@ -1,0 +1,39 @@
+@layer base {
+  :root {
+    --color-primary: var(--red-500);
+    --color-primary-hover: var(--red-600);
+    --color-primary-gradient: var(--gradient-primary);
+
+    --text-primary: var(--gray-900);
+    --text-secondary: var(--gray-500);
+    --text-muted: var(--gray-300);
+    --text-inverse: var(--white);
+    --text-on-primary: var(--white);
+
+    --bg-page: var(--gray-50);
+    --bg-card: var(--white);
+    --bg-muted: var(--gray-100);
+
+    --border-default: var(--gray-300);
+    --border-muted: var(--gray-100);
+    --border-focus: var(--color-primary);
+    --border-danger: var(--color-danger);
+
+    --color-success: var(--green-500);
+    --color-success-hover: var(--green-600);
+    --color-danger: var(--danger-500);
+
+    --radius-button: var(--radius-md);
+    --radius-card: var(--radius-lg);
+
+    --shadow-card: var(--shadow-md);
+    --shadow-button: var(--shadow-sm);
+
+    --btn-text-primary: var(--text-on-primary);
+    --btn-text-secondary: var(--text-primary);
+    --btn-text-success: var(--text-inverse);
+    --btn-text-danger: var(--text-inverse);
+    --btn-text-outline: var(--color-danger);
+    --btn-text-ghost: var(--text-primary);
+  }
+}
