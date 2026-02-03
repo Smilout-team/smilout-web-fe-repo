@@ -58,20 +58,19 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
           <input
             ref={ref}
             id={inputId}
-            required={required}
             className={clsx(
               'w-full border bg-[var(--bg-card)] transition outline-none',
               'focus:ring-2',
               error
                 ? [
-                    'border-[var(--border-danger)]',
-                    'focus:border-[var(--border-danger)]',
-                    'focus:ring-[var(--border-danger)]/30',
+                    'border-[#FB2C36]',
+                    'focus:border-[#FB2C36]',
+                    'focus:ring-[#FB2C36]/30',
                   ]
                 : [
                     'border-[var(--border-default)]',
-                    'focus:border-[var(--border-focus)]',
-                    'focus:ring-[var(--border-focus)]/30',
+                    'focus:border-[#FF6B6B]',
+                    'focus:ring-[#FF6B6B]/30',
                   ],
               icon && 'pr-11',
               sizeStyles[inputSize],
@@ -92,7 +91,11 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
           )}
         </div>
 
-        {error && <p className="text-[var(--color-danger)]">{error}</p>}
+        {error && (
+          <p className="mt-[4px] font-sans text-[12px] text-[#FB2C36]">
+            {error}
+          </p>
+        )}
       </div>
     );
   }

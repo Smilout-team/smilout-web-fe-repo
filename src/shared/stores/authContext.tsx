@@ -1,17 +1,20 @@
-import { type ReactNode, createContext, useMemo } from 'react';
+import {
+  type ReactNode,
+  createContext,
+  useCallback,
+  useEffect,
+  useMemo,
+} from 'react';
+import { useLocation } from 'react-router-dom';
 import {
   type QueryStatus,
   useMutation,
   useQuery,
   useQueryClient,
 } from '@tanstack/react-query';
-import {
-  authService,
-  type AuthUser,
-  type SignInPayload,
-} from '../services/authService';
-
-export const AUTH_QUERY_KEY = ['auth', 'me'] as const;
+import { authService } from '../services/authService';
+import { AUTH_QUERY_KEY, PUBLIC_PATHS } from '@/shared/constants';
+import { type AuthUser, type SignInPayload } from '@/shared/types';
 
 type AuthContextValue = {
   user: AuthUser | null;
@@ -30,6 +33,11 @@ export const AuthContext = createContext<AuthContextValue | undefined>(
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const queryClient = useQueryClient();
+  const location = useLocation();
+
+  const isPublicPath = PUBLIC_PATHS.some((path) =>
+    location.pathname.startsWith(path)
+  );
 
   const { data, status, error, refetch, isFetching } = useQuery<AuthUser>({
     queryKey: AUTH_QUERY_KEY,
@@ -37,15 +45,20 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     staleTime: 5 * 60 * 1000,
     gcTime: 30 * 60 * 1000,
     retry: false,
+    enabled: false,
   });
+
+  useEffect(() => {
+    if (!isPublicPath) {
+      refetch();
+    }
+  }, [isPublicPath]);
 
   const signInMutation = useMutation({
     mutationFn: authService.signIn,
     onSuccess: (user) => {
       queryClient.setQueryData(AUTH_QUERY_KEY, user);
-    },
-    onSettled: async () => {
-      await queryClient.invalidateQueries({ queryKey: AUTH_QUERY_KEY });
+      refetch();
     },
   });
 
@@ -60,6 +73,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const { mutateAsync: signInAsync } = signInMutation;
   const { mutateAsync: signOutAsync } = signOutMutation;
 
+  const refetchProfile = useCallback(async () => {
+    const result = await refetch();
+    return result.data;
+  }, [refetch]);
+
   const value = useMemo<AuthContextValue>(() => {
     const authError = error instanceof Error ? error.message : null;
     const user = data ?? null;
@@ -70,14 +88,19 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       status,
       isLoading: status === 'pending' || isFetching,
       error: authError,
-      signIn: async (payload: SignInPayload) => signInAsync(payload),
-      signOut: async () => signOutAsync(),
-      refetchProfile: async () => {
-        const result = await refetch();
-        return result.data;
-      },
+      signIn: signInAsync,
+      signOut: signOutAsync,
+      refetchProfile,
     };
-  }, [data, status, isFetching, error, signInAsync, signOutAsync, refetch]);
+  }, [
+    data,
+    status,
+    isFetching,
+    error,
+    signInAsync,
+    signOutAsync,
+    refetchProfile,
+  ]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

@@ -87,13 +87,15 @@ export const Button: React.FC<ButtonProps> = ({
         'transition-all duration-200',
         'select-none',
 
-        !(disabled || loading) && variantStyles[variant],
+        variantStyles[variant],
 
         sizeStyles[size],
         shapeStyles[shape],
         fullWidth && 'w-full',
 
-        (disabled || loading) &&
+        loading && 'cursor-wait opacity-60',
+        disabled &&
+          !loading &&
           'cursor-not-allowed bg-[var(--gray-300)] text-[var(--gray-500)]',
         className
       )}

@@ -1,3 +1,5 @@
+import { ROUTES } from '@/shared/constants';
+
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 async function request<T>(
@@ -19,7 +21,13 @@ async function request<T>(
   const response = await fetch(`${BASE_URL}${endpoint}`, config);
 
   if (response.status === 401) {
-    window.location.href = '/sign-in';
+    const isPublicPage =
+      window.location.pathname.includes(ROUTES.SIGN_IN) ||
+      window.location.pathname.includes(ROUTES.SIGN_UP) ||
+      window.location.pathname.includes(ROUTES.WELCOME);
+    if (!isPublicPage) {
+      window.location.href = ROUTES.WELCOME;
+    }
     throw new Error('Unauthorized');
   }
 
