@@ -1,0 +1,26 @@
+:root {
+  --red-400: #ff6b6b;
+  --red-500: #ff5252;
+  --red-600: #ff4444;
+
+  --gradient-primary: linear-gradient(
+    90deg,
+    var(--red-400) 0%,
+    var(--red-500) 50%,
+    var(--red-600) 100%
+  );
+
+  --green-500: #22c55e;
+  --green-600: #16a34a;
+
+  --danger-500: #ef4444;
+
+  --white: #ffffff;
+
+  --gray-50: #f7f7f7;
+  --gray-100: #eeeeee;
+  --gray-300: #d1d5db;
+  --gray-500: #6b7280;
+  --gray-700: #374151;
+  --gray-900: #111827;
+}

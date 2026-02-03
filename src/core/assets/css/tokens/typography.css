@@ -1,0 +1,22 @@
+:root {
+  --font-family-base: 'Inter', system-ui, sans-serif;
+
+  --text-xs: 12px;
+  --text-sm: 14px;
+  --text-md: 16px;
+  --text-lg: 18px;
+  --text-xl: 20px;
+  --text-2xl: 24px;
+
+  --text-3xl: 28px;
+  --text-4xl: 34px;
+  --text-5xl: 38px;
+
+  --font-regular: 400;
+  --font-medium: 500;
+  --font-semibold: 600;
+  --font-bold: 700;
+
+  --line-height-tight: 1.2;
+  --line-height-normal: 1.5;
+}
