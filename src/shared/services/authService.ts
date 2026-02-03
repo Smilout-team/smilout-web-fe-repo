@@ -1,22 +1,19 @@
 import { httpClient } from '@/core/api/httpClient.api';
+import { type ApiResponse } from '@/core/api/types';
+import { type AuthUser, type SignInPayload } from '@/shared/types';
 
-export type AuthUser = {
-  id: string;
-  name: string;
-  email: string;
-  roles: string[];
-};
-
-export type SignInPayload = {
-  email: string;
-  password: string;
-};
+export type { AuthUser, SignInPayload };
 
 type AuthResponse = {
   user: AuthUser;
 };
 
-const parseAuthUser = (payload: AuthResponse | AuthUser): AuthUser => {
+const parseAuthUser = (
+  payload: AuthResponse | AuthUser | ApiResponse<AuthUser>
+): AuthUser => {
+  if ((payload as ApiResponse<AuthUser>).data && 'statusCode' in payload) {
+    return (payload as ApiResponse<AuthUser>).data;
+  }
   if ((payload as AuthResponse).user) {
     return (payload as AuthResponse).user;
   }
@@ -26,19 +23,21 @@ const parseAuthUser = (payload: AuthResponse | AuthUser): AuthUser => {
 
 export const authService = {
   getMe: async (): Promise<AuthUser> => {
-    return httpClient.get<AuthUser>('/auth/me');
+    const response = await httpClient.get<ApiResponse<AuthUser> | AuthUser>(
+      '/auth/me'
+    );
+    return parseAuthUser(response);
   },
 
   signIn: async (payload: SignInPayload): Promise<AuthUser> => {
-    const response = await httpClient.post<AuthResponse | AuthUser>(
-      '/auth/sign-in',
-      payload
-    );
+    const response = await httpClient.post<
+      ApiResponse<AuthUser> | AuthResponse | AuthUser
+    >('/auth/sign-in', payload);
 
     return parseAuthUser(response);
   },
 
   signOut: async (): Promise<void> => {
-    await httpClient.post<void>('/auth/sign-out', {});
+    await httpClient.get<void>('/auth/sign-out', {});
   },
 };

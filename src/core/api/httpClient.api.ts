@@ -1,3 +1,5 @@
+import { ROUTES } from '@/shared/constants';
+
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 async function request<T>(
@@ -19,7 +21,9 @@ async function request<T>(
   const response = await fetch(`${BASE_URL}${endpoint}`, config);
 
   if (response.status === 401) {
-    window.location.href = '/sign-in';
+    if (!window.location.pathname.includes(ROUTES.SIGN_IN)) {
+      window.location.href = ROUTES.SIGN_IN;
+    }
     throw new Error('Unauthorized');
   }
 

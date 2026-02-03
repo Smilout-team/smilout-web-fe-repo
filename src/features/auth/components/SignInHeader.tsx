@@ -2,7 +2,7 @@ export function SignInHeader() {
   return (
     <div className="flex flex-col items-center">
       <img
-        src="/public/Logo.svg"
+        src="/Logo.svg"
         alt="SMILOUT Logo"
         className="mb-[32px] h-auto w-[192px] object-contain"
       />

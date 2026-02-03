@@ -15,7 +15,8 @@ const ProtectedRoutes = ({ allowedRoles = [] }: ProtectedRoutesProps) => {
 
   const roles = user?.roles ?? [];
   const isAuthorized =
-    allowedRoles.length === 0 || roles.some((role) => allowedRoles.includes(role));
+    allowedRoles.length === 0 ||
+    roles.some((role) => allowedRoles.includes(role));
 
   if (!isAuthenticated) {
     return <Navigate to="/sign-in" replace state={{ from: location }} />;
