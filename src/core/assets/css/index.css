@@ -1,11 +1,13 @@
-@import "tailwindcss";
-@import "tw-animate-css";
+@import 'tailwindcss';
+@import 'tw-animate-css';
 
 @custom-variant dark (&:is(.dark *));
 
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-  box-sizing: border-box;
-}
+@import './tokens/colors.css';
+@import './tokens/typography.css';
+@import './tokens/radius.css';
+@import './tokens/shadow.css';
+
+@import './theme.css';
+
+@import './base.css';

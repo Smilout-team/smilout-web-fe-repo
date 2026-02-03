@@ -1,0 +1,71 @@
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    font-family: var(--font-family-base);
+    font-weight: var(--font-regular);
+    line-height: var(--line-height-normal);
+
+    color: var(--text-primary);
+    background-color: var(--bg-page);
+  }
+
+  h1 {
+    font-size: var(--text-5xl);
+    font-weight: var(--font-bold);
+    line-height: var(--line-height-tight);
+  }
+  h2 {
+    font-size: var(--text-4xl);
+    font-weight: var(--font-semibold);
+  }
+  h3 {
+    font-size: var(--text-3xl);
+  }
+  h4 {
+    font-size: var(--text-2xl);
+  }
+  h5 {
+    font-size: var(--text-xl);
+  }
+  h6 {
+    font-size: var(--text-lg);
+  }
+
+  p {
+    margin: 0;
+    color: var(--text-secondary);
+  }
+
+  a {
+    color: var(--color-primary);
+    text-decoration: none;
+  }
+  a:hover {
+    text-decoration: underline;
+  }
+
+  button {
+    font-family: inherit;
+    border: none;
+    cursor: pointer;
+    background: none;
+  }
+
+  input,
+  textarea,
+  select {
+    font-family: inherit;
+    font-size: inherit;
+  }
+}
