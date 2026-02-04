@@ -21,8 +21,12 @@ async function request<T>(
   const response = await fetch(`${BASE_URL}${endpoint}`, config);
 
   if (response.status === 401) {
-    if (!window.location.pathname.includes(ROUTES.SIGN_IN)) {
-      window.location.href = ROUTES.SIGN_IN;
+    const isPublicPage =
+      window.location.pathname.includes(ROUTES.SIGN_IN) ||
+      window.location.pathname.includes(ROUTES.SIGN_UP) ||
+      window.location.pathname.includes(ROUTES.WELCOME);
+    if (!isPublicPage) {
+      window.location.href = ROUTES.WELCOME;
     }
     throw new Error('Unauthorized');
   }

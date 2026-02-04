@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Eye, EyeOff } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { toast } from 'sonner';
 import { Input } from '@/shared/components/common/Input';
 import { Button } from '@/shared/components/common/Button';
 import { useAuth } from '@/shared/hooks/useAuth';
+import { ROUTES } from '@/shared/constants';
 
 interface SignInFormData {
   email: string;
@@ -125,9 +126,12 @@ export function SignInForm() {
       <div className="text-center">
         <p className="font-sans text-[16px] text-[#4A5565]">
           Chưa có tài khoản?{' '}
-          <a href="#" className="font-bold text-[#FF6B6B] hover:underline">
+          <Link
+            to={ROUTES.SIGN_UP}
+            className="font-bold text-[#FF6B6B] hover:underline"
+          >
             Đăng ký ngay
-          </a>
+          </Link>
         </p>
       </div>
     </form>

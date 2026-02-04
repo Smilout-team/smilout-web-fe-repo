@@ -1,8 +1,12 @@
 import { httpClient } from '@/core/api/httpClient.api';
 import { type ApiResponse } from '@/core/api/types';
-import { type AuthUser, type SignInPayload } from '@/shared/types';
+import {
+  type AuthUser,
+  type SignInPayload,
+  type SignUpPayload,
+} from '@/shared/types';
 
-export type { AuthUser, SignInPayload };
+export type { AuthUser, SignInPayload, SignUpPayload };
 
 type AuthResponse = {
   user: AuthUser;
@@ -33,6 +37,14 @@ export const authService = {
     const response = await httpClient.post<
       ApiResponse<AuthUser> | AuthResponse | AuthUser
     >('/auth/sign-in', payload);
+
+    return parseAuthUser(response);
+  },
+
+  signUp: async (payload: SignUpPayload): Promise<AuthUser> => {
+    const response = await httpClient.post<
+      ApiResponse<AuthUser> | AuthResponse | AuthUser
+    >('/auth/sign-up', payload);
 
     return parseAuthUser(response);
   },

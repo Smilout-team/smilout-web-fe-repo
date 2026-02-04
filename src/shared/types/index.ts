@@ -1,1 +1,1 @@
-export * from './auth.types';
+export type { AuthUser, SignInPayload, SignUpPayload } from './auth.types';
