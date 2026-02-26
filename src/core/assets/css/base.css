@@ -17,7 +17,7 @@
     line-height: var(--line-height-normal);
 
     color: var(--text-primary);
-    background-color: var(--bg-page);
+    background-color: var(--bg-card);
   }
 
   h1 {
