@@ -41,14 +41,17 @@ export function SignInForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col">
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="flex flex-col"
+      noValidate
+    >
       {/* Email Field */}
       <div className="mb-[24px]">
         <Input
           label="Email"
           type="email"
           placeholder="email@example.com"
-          required
           error={errors.email?.message}
           inputSize="lg"
           className="h-[58.46px]"

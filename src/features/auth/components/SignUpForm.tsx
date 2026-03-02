@@ -53,7 +53,11 @@ export function SignUpForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col">
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="flex flex-col"
+      noValidate
+    >
       {/* Họ và tên */}
       <div className="mb-[24px]">
         <Input
@@ -67,6 +71,9 @@ export function SignUpForm() {
           disabled={isLoading}
           {...register('name', {
             required: 'Vui lòng nhập họ tên',
+            validate: (value) =>
+              value?.trim() !== '' ||
+              'Họ và tên không được chứa chỉ khoảng trắng',
           })}
         />
       </div>
@@ -84,6 +91,8 @@ export function SignUpForm() {
           disabled={isLoading}
           {...register('email', {
             required: 'Vui lòng nhập email',
+            validate: (value) =>
+              value?.trim() !== '' || 'Email không được chứa chỉ khoảng trắng',
             pattern: {
               value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
               message: 'Email không hợp lệ',
@@ -105,6 +114,9 @@ export function SignUpForm() {
           disabled={isLoading}
           {...register('phoneNumber', {
             required: 'Vui lòng nhập số điện thoại',
+            validate: (value) =>
+              value?.trim() !== '' ||
+              'Số điện thoại không được chứa chỉ khoảng trắng',
             pattern: {
               value: /^[0-9]{10,11}$/,
               message: 'Số điện thoại không hợp lệ',
@@ -128,6 +140,9 @@ export function SignUpForm() {
           onIconClick={() => setShowPassword(!showPassword)}
           {...register('password', {
             required: 'Vui lòng nhập mật khẩu',
+            validate: (value) =>
+              value?.trim() !== '' ||
+              'Mật khẩu không được chứa chỉ khoảng trắng',
             minLength: {
               value: 8,
               message: 'Mật khẩu phải có ít nhất 8 ký tự',
@@ -151,7 +166,11 @@ export function SignUpForm() {
           onIconClick={() => setShowConfirmPassword(!showConfirmPassword)}
           {...register('confirmPassword', {
             required: 'Vui lòng xác nhận mật khẩu',
-            validate: (value) => value === password || 'Mật khẩu không khớp',
+            validate: (value) => {
+              if (value?.trim() === '')
+                return 'Xác nhận mật khẩu không được chứa chỉ khoảng trắng';
+              return value === password || 'Mật khẩu không khớp';
+            },
           })}
         />
       </div>
