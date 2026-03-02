@@ -15,7 +15,7 @@ export default {
           if (!jiraRegex.test(scope)) {
             return [
               false,
-              `Scope "${scope}" is invalid format. There must be a Jira Key (VD: PNBOOK-123)`,
+              `Scope "${scope}" is invalid format. There must be a Jira Key (VD: SMILOUT-123)`,
             ];
           }
 

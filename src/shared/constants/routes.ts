@@ -1,0 +1,17 @@
+export const PUBLIC_PATHS = [
+  '/welcome',
+  '/sign-in',
+  '/sign-up',
+  '/unauthorized',
+  '/store-staff/sign-in',
+] as const;
+
+export const ROUTES = {
+  WELCOME: '/welcome',
+  HOME: '/home',
+  SIGN_IN: '/sign-in',
+  SIGN_UP: '/sign-up',
+  UNAUTHORIZED: '/unauthorized',
+  STORE_STAFF_SIGN_IN: '/store-staff/sign-in',
+  STORE_STAFF_DASHBOARD: '/store-staff/dashboard',
+} as const;
