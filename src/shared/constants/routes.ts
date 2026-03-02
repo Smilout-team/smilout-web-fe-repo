@@ -3,6 +3,7 @@ export const PUBLIC_PATHS = [
   '/sign-in',
   '/sign-up',
   '/unauthorized',
+  '/store-staff/sign-in',
 ] as const;
 
 export const ROUTES = {
@@ -11,4 +12,6 @@ export const ROUTES = {
   SIGN_IN: '/sign-in',
   SIGN_UP: '/sign-up',
   UNAUTHORIZED: '/unauthorized',
+  STORE_STAFF_SIGN_IN: '/store-staff/sign-in',
+  STORE_STAFF_DASHBOARD: '/store-staff/dashboard',
 } as const;
