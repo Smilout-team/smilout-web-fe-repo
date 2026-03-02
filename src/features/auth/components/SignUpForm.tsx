@@ -118,7 +118,7 @@ export function SignUpForm() {
         <Input
           label="Mật khẩu"
           type={showPassword ? 'text' : 'password'}
-          placeholder="Nhập mật khẩu (tối thiểu 6 ký tự)"
+          placeholder="Nhập mật khẩu (tối thiểu 8 ký tự)"
           required
           error={errors.password?.message}
           inputSize="lg"
@@ -129,8 +129,8 @@ export function SignUpForm() {
           {...register('password', {
             required: 'Vui lòng nhập mật khẩu',
             minLength: {
-              value: 6,
-              message: 'Mật khẩu phải có ít nhất 6 ký tự',
+              value: 8,
+              message: 'Mật khẩu phải có ít nhất 8 ký tự',
             },
           })}
         />
