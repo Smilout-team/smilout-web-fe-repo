@@ -1,10 +1,10 @@
 import { Outlet } from 'react-router-dom';
-
+import { BottomNav } from '@/shared/components/common/BottomNav';
 const PrivateLayout = () => {
   return (
     <div>
-      <h1>Private Layout</h1>
       <Outlet />
+      <BottomNav />
     </div>
   );
 };
