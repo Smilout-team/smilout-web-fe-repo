@@ -53,7 +53,11 @@ export function SignUpForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col">
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="flex flex-col"
+      noValidate
+    >
       {/* Họ và tên */}
       <div className="mb-[24px]">
         <Input

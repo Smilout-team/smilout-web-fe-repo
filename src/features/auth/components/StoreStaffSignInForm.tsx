@@ -41,7 +41,11 @@ export function StoreStaffSignInForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col">
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="flex flex-col"
+      noValidate
+    >
       {/* Email Field */}
       <div className="mb-[16px]">
         <div className="mb-1.5 flex items-center gap-1.5">
