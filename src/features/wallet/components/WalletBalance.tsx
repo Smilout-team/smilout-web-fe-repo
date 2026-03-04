@@ -1,0 +1,42 @@
+import React, { useMemo } from 'react';
+import { Plus } from 'lucide-react';
+import { Button } from '@/shared/components/common/Button';
+import { formatCurrency } from '../utils/currency';
+
+interface WalletBalanceProps {
+  balance: number;
+  onTopUpClick?: () => void;
+}
+
+export const WalletBalance: React.FC<WalletBalanceProps> = ({
+  balance,
+  onTopUpClick,
+}) => {
+  const displayBalance = useMemo(() => formatCurrency(balance), [balance]);
+
+  return (
+    <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#FF6B6B] to-[#FF8585] px-6 py-8 text-white">
+      <div className="absolute top-0 right-0 -mt-16 -mr-16 h-32 w-32 rounded-full bg-white/10" />
+      <div className="absolute bottom-0 left-0 -mb-12 -ml-12 h-24 w-24 rounded-full bg-white/10" />
+
+      <div className="relative z-10 space-y-4">
+        <div>
+          <p className="text-sm font-medium opacity-90">Số dư ví</p>
+          <p className="mt-1 text-4xl font-bold">{displayBalance}</p>
+        </div>
+
+        <Button
+          variant="secondary"
+          size="md"
+          onClick={onTopUpClick}
+          leftIcon={<Plus size={20} />}
+          className="w-full bg-white font-semibold text-[#FF6B6B] hover:bg-gray-50"
+        >
+          Nạp tiền vào ví
+        </Button>
+      </div>
+    </div>
+  );
+};
+
+export default WalletBalance;
