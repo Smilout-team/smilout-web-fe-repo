@@ -63,10 +63,17 @@ export const useTransactionHistoryInfinite = ({
     }
   }, [loadMore, page, isLoadingMore, hasMore]);
 
+  const reset = useCallback(() => {
+    setTransactions([]);
+    setPage(1);
+    setHasMore(true);
+  }, []);
+
   return {
     transactions,
     hasMore,
     isLoadingMore,
     loadMore: handleLoadMore,
+    reset,
   };
 };

@@ -46,9 +46,6 @@ const TransactionItem: React.FC<{ transaction: Transaction }> = ({
           {isIncome ? '+' : '-'}
           {formatCurrency(transaction.amount)}
         </p>
-        <p className="text-xs text-[#6B7280]">
-          {formatCurrency(transaction.balance)}
-        </p>
       </div>
     </div>
   );
@@ -107,7 +104,6 @@ export const BalanceHistory: React.FC<BalanceHistoryProps> = ({
             ))}
           </div>
 
-          {/* Load more trigger */}
           {hasMore && (
             <div
               ref={loadMoreRef}
