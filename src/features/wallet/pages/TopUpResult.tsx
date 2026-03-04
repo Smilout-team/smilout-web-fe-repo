@@ -1,7 +1,9 @@
 import { useEffect, useState, useCallback } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import type { TopUpStatus } from '../types/wallet.types';
 import { walletService } from '../services/walletService';
+import { WALLET_QUERY_KEYS } from '../constants/queryKeys';
 import { ROUTES } from '@/shared/constants/routes';
 import {
   TopUpResultLoading,
@@ -19,6 +21,7 @@ const TOP_UP_NOT_FOUND_MESSAGE = 'Không tìm thấy yêu cầu nạp tiền';
 export const TopUpResult = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const [status, setStatus] = useState<TopUpStatus | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -43,6 +46,20 @@ export const TopUpResult = () => {
       setStatus(response.data.status);
       setAmount(response.data.amount);
 
+      if (response.data.status === 'PAID') {
+        await Promise.all([
+          queryClient.invalidateQueries({
+            queryKey: WALLET_QUERY_KEYS.balance,
+          }),
+          queryClient.invalidateQueries({
+            predicate: (query) =>
+              Array.isArray(query.queryKey) &&
+              query.queryKey[0] === 'wallet' &&
+              query.queryKey[1] === 'transactionHistory',
+          }),
+        ]);
+      }
+
       return response.data.status !== 'PENDING';
     } catch (err) {
       const errorMessage =
@@ -56,7 +73,7 @@ export const TopUpResult = () => {
       setError(errorMessage);
       return false;
     }
-  }, [invoiceNumber]);
+  }, [invoiceNumber, queryClient]);
 
   useEffect(() => {
     if (!invoiceNumber) {

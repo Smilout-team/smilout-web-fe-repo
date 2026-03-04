@@ -1,20 +1,16 @@
-import { useState, useEffect } from 'react';
-import { toast } from 'sonner';
+import { useEffect, useState } from 'react';
 import WalletBalance from '../components/WalletBalance';
 import BalanceStats from '../components/BalanceStats';
 import BalanceHistory from '../components/BalanceHistory';
 import TopUpModal from '../components/TopUpModal';
-import type {
-  Transaction,
-  WalletTransactionHistoryItem,
-} from '../types/wallet.types';
-import { useWalletBalance, useTransactionHistoryInfinite } from '../hooks';
-import { walletService } from '../services/walletService';
+import {
+  useWalletBalance,
+  useTransactionHistory,
+  useTransactionHistoryInfinite,
+} from '../hooks';
 
 export const Wallet = () => {
   const [isTopUpModalOpen, setIsTopUpModalOpen] = useState(false);
-  const [transactions, setTransactions] = useState<Transaction[]>([]);
-  const [isLoadingInitial, setIsLoadingInitial] = useState(true);
 
   const {
     data: balanceData,
@@ -22,55 +18,30 @@ export const Wallet = () => {
     error: balanceError,
   } = useWalletBalance();
 
-  useEffect(() => {
-    const loadInitialTransactions = async () => {
-      try {
-        setIsLoadingInitial(true);
-        const response = await walletService.getTransactionHistory(1, 10);
-
-        if (!response || !Array.isArray(response.data)) {
-          throw new Error('Failed to load transaction history');
-        }
-
-        const transformed = response.data.map(
-          (item: WalletTransactionHistoryItem) => ({
-            id: item.id,
-            type: item.transactionType === 'DEPOSIT' ? 'IN' : 'OUT',
-            description:
-              item.transactionType === 'DEPOSIT'
-                ? 'Nạp tiền vào ví'
-                : 'Thanh toán',
-            amount: item.amount,
-            balance: 0,
-            date: new Date(item.createdAt).toISOString().split('T')[0],
-            time: new Date(item.createdAt).toLocaleTimeString('vi-VN', {
-              hour: '2-digit',
-              minute: '2-digit',
-            }),
-          })
-        ) as Transaction[];
-
-        setTransactions(transformed);
-      } catch {
-        toast.error('Không thể tải lịch sử giao dịch');
-      } finally {
-        setIsLoadingInitial(false);
-      }
-    };
-
-    loadInitialTransactions();
-  }, []);
+  const {
+    data: initialTransactions = [],
+    isLoading: transactionsLoading,
+    error: transactionsError,
+    dataUpdatedAt,
+  } = useTransactionHistory({ page: 1, limit: 10 });
 
   const {
     transactions: moreTransactions,
+    hasMore,
     isLoadingMore,
     loadMore,
+    reset,
   } = useTransactionHistoryInfinite({ limit: 10 });
 
-  const allTransactions = [...transactions, ...moreTransactions];
+  useEffect(() => {
+    reset();
+  }, [dataUpdatedAt, reset]);
 
-  const isLoading = balanceLoading || isLoadingInitial;
-  const error = balanceError;
+  const allTransactions = [...initialTransactions, ...moreTransactions];
+  const canLoadMore = initialTransactions.length >= 10 && hasMore;
+
+  const isLoading = balanceLoading || transactionsLoading;
+  const error = balanceError || transactionsError;
 
   const handleTopUpClick = () => {
     setIsTopUpModalOpen(true);
@@ -148,7 +119,7 @@ export const Wallet = () => {
           transactions={allTransactions}
           onLoadMore={loadMore}
           isLoadingMore={isLoadingMore}
-          hasMore={transactions.length >= 10 || moreTransactions.length > 0}
+          hasMore={canLoadMore}
         />
       </div>
     </div>
