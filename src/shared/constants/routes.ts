@@ -14,4 +14,6 @@ export const ROUTES = {
   UNAUTHORIZED: '/unauthorized',
   STORE_STAFF_SIGN_IN: '/store-staff/sign-in',
   STORE_STAFF_DASHBOARD: '/store-staff/dashboard',
+  WALLET: '/wallet',
+  TOP_UP_RESULT: '/wallet/top-up/result',
 } as const;
