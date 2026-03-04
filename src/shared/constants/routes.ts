@@ -16,4 +16,5 @@ export const ROUTES = {
   STORE_STAFF_DASHBOARD: '/store-staff/dashboard',
   WALLET: '/wallet',
   TOP_UP_RESULT: '/wallet/top-up/result',
+  SCAN_STORE: '/scan-store',
 } as const;

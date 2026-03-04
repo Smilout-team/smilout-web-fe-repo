@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import { useAuth } from '@/shared/hooks/useAuth';
+import { ROUTES } from '@/shared/constants/routes';
 import {
   HomeGreetingCard,
   StartShoppingSection,
@@ -13,7 +14,7 @@ export default function Home() {
   const navigate = useNavigate();
 
   const handleStorePurchase = () => {
-    toast.info('Tính năng quét QR đang được cập nhật');
+    navigate(ROUTES.SCAN_STORE);
   };
 
   const handleOnlinePurchase = () => {
