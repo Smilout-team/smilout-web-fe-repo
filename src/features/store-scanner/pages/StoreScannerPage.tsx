@@ -1,22 +1,47 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { MapPin } from 'lucide-react';
 import { toast } from 'sonner';
 import { AppHeader } from '@/shared/components/common/Header';
 import { Button } from '@/shared/components/common/Button';
+import { ROUTES } from '@/shared/constants/routes';
+import { STORAGE_KEYS } from '@/shared/constants';
+import { useScanStore } from '../hooks';
 import { QRScanFrame, QRScanGuide } from '../components';
 
 export const StoreScannerPage = () => {
   const [isScanning, setIsScanning] = useState(false);
+  const navigate = useNavigate();
+  const scanStoreMutation = useScanStore();
 
   const handleScanQR = () => {
     setIsScanning((prev) => !prev);
   };
 
-  const handleScanSuccess = (decodedText: string) => {
+  const handleScanSuccess = async (decodedText: string) => {
     setIsScanning(false);
-    toast.success(`Đã quét thành công: ${decodedText}`);
-    // TODO: Navigate to store page or connect to store
-    console.log('QR Code scanned:', decodedText);
+
+    try {
+      const result = await scanStoreMutation.mutateAsync({
+        storeId: decodedText,
+      });
+
+      localStorage.setItem(
+        STORAGE_KEYS.ACTIVE_STORE_SESSION,
+        JSON.stringify({
+          storeId: result.storeId,
+          orderId: result.orderId,
+        })
+      );
+      navigate(ROUTES.STORE_HUB, {
+        state: {
+          storeId: result.storeId,
+          orderId: result.orderId,
+        },
+      });
+    } catch (error) {
+      void error;
+    }
   };
 
   const handleScanError = (error: string) => {
@@ -33,7 +58,6 @@ export const StoreScannerPage = () => {
 
       <div className="px-4 py-6">
         <div className="mx-auto max-w-md space-y-4">
-          {/* Title section */}
           <div className="text-center">
             <h2 className="text-[length:var(--text-xl)] font-[var(--font-semibold)] text-[var(--text-primary)]">
               Quét mã QR tại cửa hàng
@@ -43,14 +67,12 @@ export const StoreScannerPage = () => {
             </p>
           </div>
 
-          {/* QR Scanner Frame */}
           <QRScanFrame
             isScanning={isScanning}
             onScanSuccess={handleScanSuccess}
             onScanError={handleScanError}
           />
 
-          {/* Action Buttons */}
           <div className="space-y-3">
             <Button
               variant="primary"
@@ -58,8 +80,13 @@ export const StoreScannerPage = () => {
               size="lg"
               className="h-14"
               onClick={handleScanQR}
+              disabled={scanStoreMutation.isPending}
             >
-              {isScanning ? 'Dừng quét' : 'Quét mã QR'}
+              {scanStoreMutation.isPending
+                ? 'Đang xử lý...'
+                : isScanning
+                  ? 'Dừng quét'
+                  : 'Quét mã QR'}
             </Button>
 
             <Button
@@ -74,7 +101,6 @@ export const StoreScannerPage = () => {
             </Button>
           </div>
 
-          {/* Guide Section */}
           <QRScanGuide />
         </div>
       </div>

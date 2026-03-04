@@ -13,6 +13,8 @@ export const QRScanFrame = ({
   isScanning,
 }: QRScanFrameProps) => {
   const scannerRef = useRef<Html5Qrcode | null>(null);
+  const transitionRef = useRef<Promise<void> | null>(null);
+  const hasScannedRef = useRef(false);
   const qrCodeRegionId = 'qr-reader';
 
   useEffect(() => {
@@ -36,25 +38,55 @@ export const QRScanFrame = ({
   }, []);
 
   useEffect(() => {
-    if (!isScanning) {
-      return;
-    }
+    const stopScanner = async () => {
+      if (transitionRef.current) {
+        await transitionRef.current;
+      }
+
+      if (!scannerRef.current) {
+        return;
+      }
+
+      const transition = (async () => {
+        try {
+          if (scannerRef.current?.isScanning) {
+            await scannerRef.current.stop();
+          }
+          await scannerRef.current?.clear();
+        } catch (error) {
+          void error;
+        } finally {
+          scannerRef.current = null;
+        }
+      })();
+
+      transitionRef.current = transition;
+      await transition;
+      transitionRef.current = null;
+    };
 
     const startScanner = async () => {
       try {
-        if (!scannerRef.current) {
-          scannerRef.current = new Html5Qrcode(qrCodeRegionId);
-        }
+        await stopScanner();
+        hasScannedRef.current = false;
+
+        scannerRef.current = new Html5Qrcode(qrCodeRegionId);
 
         const config = {
           fps: 10,
           qrbox: { width: 250, height: 250 },
         };
 
-        await scannerRef.current.start(
+        const transition = scannerRef.current.start(
           { facingMode: 'environment' },
           config,
-          (decodedText) => {
+          async (decodedText) => {
+            if (hasScannedRef.current) {
+              return;
+            }
+
+            hasScannedRef.current = true;
+            await stopScanner();
             onScanSuccess(decodedText);
           },
           (errorMessage) => {
@@ -74,36 +106,33 @@ export const QRScanFrame = ({
             }
           }
         );
+
+        transitionRef.current = transition.then(() => undefined);
+        await transition;
+        transitionRef.current = null;
       } catch (err) {
         if (onScanError) {
-          onScanError(
-            err instanceof Error ? err.message : 'Không thể khởi động camera'
-          );
+          const errorMsg =
+            err instanceof Error ? err.message : 'Không thể khởi động camera';
+          onScanError(errorMsg);
         }
       }
     };
 
-    startScanner();
+    if (isScanning) {
+      startScanner();
+    } else {
+      stopScanner();
+    }
 
     return () => {
-      if (scannerRef.current?.isScanning) {
-        scannerRef.current
-          .stop()
-          .then(() => {
-            scannerRef.current?.clear();
-            scannerRef.current = null;
-          })
-          .catch((err) => {
-            console.error('Error stopping scanner:', err);
-          });
-      }
+      stopScanner();
     };
   }, [isScanning, onScanSuccess, onScanError]);
 
   return (
     <div className="flex flex-col items-center justify-center rounded-[var(--radius-xl)] bg-gray-900 px-6 py-8">
       <div className="relative w-full max-w-sm">
-        {/* Camera container */}
         <div
           id={qrCodeRegionId}
           className={isScanning ? 'block w-full' : 'hidden'}
@@ -112,28 +141,23 @@ export const QRScanFrame = ({
           }}
         />
 
-        {/* Static placeholder when not scanning */}
         {!isScanning && (
           <div className="mx-auto flex h-48 w-48 items-center justify-center">
-            {/* Top left corner */}
             <div className="absolute top-0 left-0 h-12 w-12">
               <div className="absolute top-0 left-0 h-1 w-8 rounded-full bg-white" />
               <div className="absolute top-0 left-0 h-8 w-1 rounded-full bg-white" />
             </div>
 
-            {/* Top right corner */}
             <div className="absolute top-0 right-0 h-12 w-12">
               <div className="absolute top-0 right-0 h-1 w-8 rounded-full bg-white" />
               <div className="absolute top-0 right-0 h-8 w-1 rounded-full bg-white" />
             </div>
 
-            {/* Bottom left corner */}
             <div className="absolute bottom-0 left-0 h-12 w-12">
               <div className="absolute bottom-0 left-0 h-1 w-8 rounded-full bg-white" />
               <div className="absolute bottom-0 left-0 h-8 w-1 rounded-full bg-white" />
             </div>
 
-            {/* Bottom right corner */}
             <div className="absolute right-0 bottom-0 h-12 w-12">
               <div className="absolute right-0 bottom-0 h-1 w-8 rounded-full bg-white" />
               <div className="absolute right-0 bottom-0 h-8 w-1 rounded-full bg-white" />
