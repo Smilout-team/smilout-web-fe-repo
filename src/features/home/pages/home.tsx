@@ -1,38 +1,69 @@
-import { useAuth } from '@/shared/hooks/useAuth';
-import { Button } from '@/shared/components/common/Button';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
+import { useAuth } from '@/shared/hooks/useAuth';
+import { ROUTES } from '@/shared/constants/routes';
+import {
+  HomeGreetingCard,
+  StartShoppingSection,
+  QuickReorderSection,
+  HomeShortcutGrid,
+} from '../components';
 
 export default function Home() {
-  const { user, signOut } = useAuth();
+  const { user } = useAuth();
   const navigate = useNavigate();
 
-  const handleLogout = async () => {
-    try {
-      await signOut();
-      navigate('/sign-in');
-    } catch (error) {
-      console.error('Logout failed:', error);
-      navigate('/sign-in');
-    }
+  const handleStorePurchase = () => {
+    navigate(ROUTES.SCAN_STORE);
+  };
+
+  const handleOnlinePurchase = () => {
+    toast.info('Tính năng mua sắm online đang được cập nhật');
+  };
+
+  const handleViewAllReorders = () => {
+    toast.info('Danh sách mua lại sẽ sớm có');
+  };
+
+  const handleReorder = () => {
+    toast.success('Đang xử lý mua lại đơn hàng');
+  };
+
+  const handleFindStore = () => {
+    toast.info('Tính năng tìm cửa hàng đang được cập nhật');
+  };
+
+  const handleOrders = () => {
+    toast.info('Tính năng đơn hàng đang được cập nhật');
+  };
+
+  const handleWallet = () => {
+    navigate('/wallet');
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-8">
-      <div className="mx-auto max-w-2xl rounded-lg bg-white p-8 shadow">
-        <h1 className="text-3xl font-bold text-gray-900">
-          Chào mừng, {user?.name || user?.email}!
-        </h1>
-        <p className="mt-2 text-gray-600">Đây là trang chủ</p>
+    <div className="min-h-screen bg-[var(--bg-page)] px-4 py-4 pb-24">
+      <div className="mx-auto space-y-4">
+        <HomeGreetingCard
+          userName={user?.name || user?.email || 'Khách hàng'}
+          walletBalance="88.000đ"
+        />
 
-        <div className="mt-6 space-y-2 text-gray-700">
-          <p>
-            <strong>Email:</strong> {user?.email}
-          </p>
-        </div>
+        <StartShoppingSection
+          onStorePurchase={handleStorePurchase}
+          onOnlinePurchase={handleOnlinePurchase}
+        />
 
-        <Button onClick={handleLogout} variant="danger" className="mt-8">
-          Đăng xuất
-        </Button>
+        <QuickReorderSection
+          onViewAll={handleViewAllReorders}
+          onReorder={handleReorder}
+        />
+
+        <HomeShortcutGrid
+          onFindStore={handleFindStore}
+          onOrders={handleOrders}
+          onWallet={handleWallet}
+        />
       </div>
     </div>
   );

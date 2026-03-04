@@ -5,6 +5,7 @@ import NotFound from '@/features/auth/pages/NotFound';
 import { AuthRoutes } from '@/features/auth/routes/AuthRoutes';
 import { StoreStaffRoutes } from '@/features/store-staff/routes/StoreStaffRoutes';
 import { WalletRoutes } from '@/features/wallet/routes/WalletRoutes';
+import { StoreScannerRoutes } from '@/features/store-scanner/routes/StoreScannerRoutes';
 import ProtectedRoutes from '@/routes/ProtectedRoutes';
 import Home from '@/features/home/pages/home';
 
@@ -28,6 +29,7 @@ const routes: RouteObject[] = [
             element: <Home />,
           },
           ...WalletRoutes,
+          ...StoreScannerRoutes,
         ],
       },
     ],
