@@ -1,0 +1,1 @@
+export { productScannerService } from './productScannerService';

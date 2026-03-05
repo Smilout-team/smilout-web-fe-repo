@@ -1,0 +1,1 @@
+export { ProductScannerRoutes } from './ProductScannerRoutes';

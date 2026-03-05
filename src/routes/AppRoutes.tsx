@@ -6,7 +6,9 @@ import { AuthRoutes } from '@/features/auth/routes/AuthRoutes';
 import { StoreStaffRoutes } from '@/features/store-staff/routes/StoreStaffRoutes';
 import { WalletRoutes } from '@/features/wallet/routes/WalletRoutes';
 import { StoreScannerRoutes } from '@/features/store-scanner/routes/StoreScannerRoutes';
+import { ProductScannerRoutes } from '@/features/product-scanner/routes/ProductScannerRoutes';
 import StoreHubPage from '@/features/store-scanner/pages/StoreHubPage';
+import CartPage from '@/features/store-scanner/pages/CartPage';
 import ProtectedRoutes from '@/routes/ProtectedRoutes';
 import Home from '@/features/home/pages/home';
 
@@ -31,9 +33,14 @@ const routes: RouteObject[] = [
           },
           ...WalletRoutes,
           ...StoreScannerRoutes,
+          ...ProductScannerRoutes,
           {
             path: 'store-hub',
             element: <StoreHubPage />,
+          },
+          {
+            path: 'cart',
+            element: <CartPage />,
           },
         ],
       },

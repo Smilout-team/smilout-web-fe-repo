@@ -5,6 +5,7 @@ import { Button } from '@/shared/components/common/Button';
 import { ROUTES } from '@/shared/constants/routes';
 import { STORAGE_KEYS } from '@/shared/constants';
 import { useStoreDetail } from '../hooks/useStoreDetail';
+import { useOrderItems } from '../hooks/useOrderItems';
 import type { ActiveStoreSession } from '../types';
 
 interface StoreCartItem {
@@ -56,7 +57,21 @@ export const StoreHubPage = () => {
     activeStoreSession?.storeId ?? null
   );
 
+  const { data: apiCartItems = [] } = useOrderItems(
+    activeStoreSession?.orderId ?? null
+  );
+
   const cartItems = useMemo<StoreCartItem[]>(() => {
+    if (apiCartItems && apiCartItems.length > 0) {
+      return apiCartItems.map((item) => ({
+        id: item.id,
+        name: item.name,
+        price: item.price,
+        quantity: item.quantity,
+        imageUrl: item.imageUrls?.[0],
+      }));
+    }
+
     const routeState = location.state as
       | { cartItems?: StoreCartItem[] }
       | null
@@ -67,7 +82,7 @@ export const StoreHubPage = () => {
     }
 
     return [];
-  }, [location.state]);
+  }, [apiCartItems, location.state]);
 
   const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
   const totalAmount = cartItems.reduce(
@@ -214,7 +229,7 @@ export const StoreHubPage = () => {
       </div>
 
       <div className="fixed right-0 bottom-16 left-0 border-t border-[var(--border-default)] bg-[var(--bg-card)] px-4 py-3">
-        <div className="mx-auto flex max-w-md gap-3">
+        <div className="mx-auto flex gap-3">
           <Button
             variant="secondary"
             fullWidth
