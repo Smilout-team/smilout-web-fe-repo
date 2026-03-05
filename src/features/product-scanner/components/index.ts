@@ -1,0 +1,1 @@
+export { BarcodeScanFrame } from './BarcodeScanFrame';

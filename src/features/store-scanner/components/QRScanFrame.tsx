@@ -15,6 +15,7 @@ export const QRScanFrame = ({
   const scannerRef = useRef<Html5Qrcode | null>(null);
   const transitionRef = useRef<Promise<void> | null>(null);
   const hasScannedRef = useRef(false);
+  const isInitializingRef = useRef(false);
   const qrCodeRegionId = 'qr-reader';
 
   useEffect(() => {
@@ -44,6 +45,7 @@ export const QRScanFrame = ({
       }
 
       if (!scannerRef.current) {
+        isInitializingRef.current = false;
         return;
       }
 
@@ -56,7 +58,12 @@ export const QRScanFrame = ({
         } catch (error) {
           void error;
         } finally {
+          const container = document.getElementById(qrCodeRegionId);
+          if (container) {
+            container.innerHTML = '';
+          }
           scannerRef.current = null;
+          isInitializingRef.current = false;
         }
       })();
 
@@ -66,9 +73,22 @@ export const QRScanFrame = ({
     };
 
     const startScanner = async () => {
+      if (isInitializingRef.current || scannerRef.current) {
+        return;
+      }
+
       try {
+        isInitializingRef.current = true;
         await stopScanner();
+
+        await new Promise<void>((resolve) => setTimeout(resolve, 100));
+
         hasScannedRef.current = false;
+
+        const container = document.getElementById(qrCodeRegionId);
+        if (container) {
+          container.innerHTML = '';
+        }
 
         scannerRef.current = new Html5Qrcode(qrCodeRegionId);
 
@@ -80,7 +100,7 @@ export const QRScanFrame = ({
         const transition = scannerRef.current.start(
           { facingMode: 'environment' },
           config,
-          async (decodedText) => {
+          async (decodedText: string) => {
             if (hasScannedRef.current) {
               return;
             }
@@ -89,7 +109,7 @@ export const QRScanFrame = ({
             await stopScanner();
             onScanSuccess(decodedText);
           },
-          (errorMessage) => {
+          (errorMessage: string) => {
             const ignoredErrors = [
               'NotFoundException',
               'IndexSizeError',
@@ -116,6 +136,8 @@ export const QRScanFrame = ({
             err instanceof Error ? err.message : 'Không thể khởi động camera';
           onScanError(errorMsg);
         }
+      } finally {
+        isInitializingRef.current = false;
       }
     };
 

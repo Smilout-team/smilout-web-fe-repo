@@ -2,6 +2,7 @@ export const API_PATHS = {
   WALLET: '/wallet',
   TOP_UP: '/wallet/top-up',
   STORES: '/stores',
+  ORDERS: '/orders',
 };
 
 export const ENDPOINTS = {
@@ -12,4 +13,10 @@ export const ENDPOINTS = {
     `${API_PATHS.TOP_UP}/${invoiceNumber}`,
   SCAN_STORE: `${API_PATHS.STORES}/scan`,
   GET_STORE_DETAIL: (storeId: string) => `${API_PATHS.STORES}/${storeId}`,
+  SCAN_PRODUCT: `${API_PATHS.ORDERS}/scan-product`,
+  GET_ORDER_ITEMS: (orderId: string) => `${API_PATHS.ORDERS}/${orderId}/items`,
+  DELETE_ORDER_ITEM: (orderId: string, itemId: string) =>
+    `${API_PATHS.ORDERS}/${orderId}/items/${itemId}`,
+  UPDATE_ORDER_ITEM: (orderId: string, itemId: string) =>
+    `${API_PATHS.ORDERS}/${orderId}/items/${itemId}`,
 };

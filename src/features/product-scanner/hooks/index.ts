@@ -1,0 +1,1 @@
+export { useScanProduct } from './useScanProduct';
