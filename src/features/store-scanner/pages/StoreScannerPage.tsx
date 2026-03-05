@@ -56,7 +56,7 @@ export const StoreScannerPage = () => {
     <div className="min-h-screen bg-[var(--bg-page)]">
       <AppHeader title="Quét mã cửa hàng" />
 
-      <div className="px-4 py-6">
+      <div className="mb-16 px-4 py-6">
         <div className="mx-auto max-w-md space-y-4">
           <div className="text-center">
             <h2 className="text-[length:var(--text-xl)] font-[var(--font-semibold)] text-[var(--text-primary)]">
