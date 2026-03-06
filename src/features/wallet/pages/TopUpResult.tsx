@@ -5,6 +5,7 @@ import type { TopUpStatus } from '../types/wallet.types';
 import { walletService } from '../services/walletService';
 import { WALLET_QUERY_KEYS } from '../constants/queryKeys';
 import { ROUTES } from '@/shared/constants/routes';
+import { STORAGE_KEYS } from '@/shared/constants';
 import {
   TopUpResultLoading,
   TopUpResultError,
@@ -104,8 +105,33 @@ export const TopUpResult = () => {
     pollStatus();
   }, [invoiceNumber, checkStatus]);
 
+  useEffect(() => {
+    if (status === 'PAID') {
+      const pendingOrderId = localStorage.getItem(
+        STORAGE_KEYS.CHECKOUT_PENDING_ORDERID
+      );
+
+      if (pendingOrderId) {
+        const redirectTimer = setTimeout(() => {
+          localStorage.removeItem(STORAGE_KEYS.CHECKOUT_PENDING_ORDERID);
+          navigate(ROUTES.CHECKOUT);
+        }, 2500);
+
+        return () => clearTimeout(redirectTimer);
+      }
+    }
+  }, [status, navigate]);
+
   const handleReturnToWallet = () => {
-    navigate(ROUTES.WALLET);
+    const pendingOrderId = localStorage.getItem(
+      STORAGE_KEYS.CHECKOUT_PENDING_ORDERID
+    );
+    if (pendingOrderId) {
+      localStorage.removeItem(STORAGE_KEYS.CHECKOUT_PENDING_ORDERID);
+      navigate(ROUTES.CHECKOUT);
+    } else {
+      navigate(ROUTES.WALLET);
+    }
   };
 
   const handleRetry = () => {

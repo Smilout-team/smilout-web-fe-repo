@@ -58,7 +58,6 @@ export function SignUpForm() {
       className="flex flex-col"
       noValidate
     >
-      {/* Họ và tên */}
       <div className="mb-[24px]">
         <Input
           label="Họ và tên"
@@ -78,7 +77,6 @@ export function SignUpForm() {
         />
       </div>
 
-      {/* Email */}
       <div className="mb-[24px]">
         <Input
           label="Email"
@@ -101,7 +99,6 @@ export function SignUpForm() {
         />
       </div>
 
-      {/* Số điện thoại */}
       <div className="mb-[24px]">
         <Input
           label="Số điện thoại"
@@ -125,7 +122,6 @@ export function SignUpForm() {
         />
       </div>
 
-      {/* Mật khẩu */}
       <div className="mb-[24px]">
         <Input
           label="Mật khẩu"
@@ -151,7 +147,6 @@ export function SignUpForm() {
         />
       </div>
 
-      {/* Xác nhận mật khẩu */}
       <div className="mb-[24px]">
         <Input
           label="Xác nhận mật khẩu"
@@ -175,7 +170,6 @@ export function SignUpForm() {
         />
       </div>
 
-      {/* Nút Đăng ký */}
       <Button
         type="submit"
         variant="primary"
@@ -188,7 +182,6 @@ export function SignUpForm() {
         Đăng ký
       </Button>
 
-      {/* Link Đăng nhập */}
       <div className="mt-[30px] text-center">
         <p className="font-sans text-[16px] text-[#4A5565]">
           Đã có tài khoản?{' '}

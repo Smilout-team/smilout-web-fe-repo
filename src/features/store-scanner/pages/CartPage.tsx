@@ -6,9 +6,9 @@ import { AppHeader } from '@/shared/components/common/Header';
 import { Button } from '@/shared/components/common/Button';
 import { ROUTES } from '@/shared/constants/routes';
 import { STORAGE_KEYS } from '@/shared/constants';
-import { useOrderItems } from '../hooks/useOrderItems';
-import { storeHubService } from '../services/storeHubService';
-import type { ActiveStoreSession } from '../types';
+import { useOrderItems } from '@/shared/hooks/useOrderItems';
+import { storeHubService } from '@/shared/services/storeHubService';
+import type { ActiveStoreSession } from '@/shared/types';
 
 const SHIPPING_FEE = 15000;
 

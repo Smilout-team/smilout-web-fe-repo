@@ -20,4 +20,6 @@ export const ROUTES = {
   STORE_HUB: '/store-hub',
   SCAN_PRODUCT: '/scan-product',
   CART: '/cart',
+  CHECKOUT: '/checkout',
+  CHECKOUT_SUCCESS: '/checkout/success',
 } as const;

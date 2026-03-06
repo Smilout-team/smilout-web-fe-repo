@@ -5,11 +5,11 @@ import { AppHeader } from '@/shared/components/common/Header';
 import { Button } from '@/shared/components/common/Button';
 import { STORAGE_KEYS } from '@/shared/constants';
 import { ROUTES } from '@/shared/constants/routes';
+import { useOrderItems } from '@/shared/hooks/useOrderItems';
+import type { ActiveStoreSession, OrderItem } from '@/shared/types';
 import { useScanProduct } from '../hooks';
-import { useOrderItems } from '../../store-scanner/hooks/useOrderItems';
 import { BarcodeScanFrame } from '../components/BarcodeScanFrame';
-import type { ActiveStoreSession, ScanProductResponse } from '../types';
-import type { OrderItem } from '../../store-scanner/services/storeHubService';
+import type { ScanProductResponse } from '../types';
 
 export const ProductScanPage = () => {
   const navigate = useNavigate();
@@ -247,7 +247,7 @@ export const ProductScanPage = () => {
                   fullWidth
                   onClick={() => navigate(ROUTES.STORE_HUB)}
                 >
-                  Về store hub
+                  Về cửa hàng
                 </Button>
               </div>
             </div>

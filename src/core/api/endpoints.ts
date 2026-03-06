@@ -3,6 +3,7 @@ export const API_PATHS = {
   TOP_UP: '/wallet/top-up',
   STORES: '/stores',
   ORDERS: '/orders',
+  PAYMENT: '/payment',
 };
 
 export const ENDPOINTS = {
@@ -19,4 +20,5 @@ export const ENDPOINTS = {
     `${API_PATHS.ORDERS}/${orderId}/items/${itemId}`,
   UPDATE_ORDER_ITEM: (orderId: string, itemId: string) =>
     `${API_PATHS.ORDERS}/${orderId}/items/${itemId}`,
+  PROCESS_PAYMENT: `${API_PATHS.PAYMENT}`,
 };
