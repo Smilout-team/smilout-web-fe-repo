@@ -99,17 +99,17 @@ export const StoreHubPage = () => {
     <div className="min-h-screen bg-[var(--bg-page)] pb-32">
       <div className="px-4 py-6">
         <div className="mx-auto space-y-6">
-          <div className="rounded-[var(--radius-xl)] bg-gradient-to-r from-[#FF6B6B] to-[#FF8E53] p-3 text-white shadow-md">
+          <div className="rounded-[var(--radius-xl)] bg-[var(--color-primary)] p-3 text-white shadow-md">
             <div className="mb-3 flex items-start justify-between">
               <div className="flex items-start gap-2">
                 <div className="mt-0.5 rounded-full bg-white/20 p-1.5">
                   <Store size={14} />
                 </div>
                 <div>
-                  <p className="text-[length:var(--text-xs)] opacity-90">
+                  <p className="text-[length:var(--text-xs)] text-[var(--text-inverse)] opacity-90">
                     Đang mua sắm tại
                   </p>
-                  <p className="text-[length:var(--text-lg)] font-[var(--font-semibold)]">
+                  <p className="text-[length:var(--text-lg)] font-[var(--font-semibold)] text-[var(--text-inverse)]">
                     {storeDetail?.storeName ?? 'Đang tải cửa hàng...'}
                   </p>
                 </div>
@@ -151,15 +151,15 @@ export const StoreHubPage = () => {
           </div>
           <button
             onClick={() => navigate(ROUTES.SCAN_PRODUCT)}
-            className="flex w-full flex-col items-center justify-center rounded-[var(--radius-xl)] bg-gradient-to-b from-[#FF6B6B] to-[#FF5757] py-10 text-white shadow-md transition-all"
+            className="flex w-full flex-col items-center justify-center rounded-[var(--radius-xl)] bg-[var(--color-primary)] py-10 text-white shadow-md transition-all"
           >
             <div className="mb-3 flex h-16 w-16 items-center justify-center rounded-full bg-white/20">
               <ScanLine size={30} className="text-white" />
             </div>
-            <p className="text-[length:var(--text-2xl)] font-[var(--font-semibold)]">
+            <p className="text-[length:var(--text-2xl)] font-[var(--font-semibold)] text-[var(--text-inverse)]">
               Quét sản phẩm
             </p>
-            <p className="text-[length:var(--text-sm)] opacity-90">
+            <p className="text-[length:var(--text-sm)] text-[var(--text-inverse)] opacity-90">
               Nhấn để quét mã vạch sản phẩm
             </p>
           </button>
