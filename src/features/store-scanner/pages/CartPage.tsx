@@ -10,8 +10,6 @@ import { useOrderItems } from '@/shared/hooks/useOrderItems';
 import { storeHubService } from '@/shared/services/storeHubService';
 import type { ActiveStoreSession } from '@/shared/types';
 
-const SHIPPING_FEE = 15000;
-
 export const CartPage = () => {
   const navigate = useNavigate();
   const [isProcessing, setIsProcessing] = useState(false);
@@ -37,14 +35,12 @@ export const CartPage = () => {
     activeStoreSession?.orderId ?? null
   );
 
-  const subtotal = useMemo(() => {
+  const total = useMemo(() => {
     return orderItems.reduce(
       (sum, item) => sum + item.price * item.quantity,
       0
     );
   }, [orderItems]);
-
-  const total = subtotal + SHIPPING_FEE;
 
   useEffect(() => {
     if (itemToDelete) {
@@ -203,24 +199,6 @@ export const CartPage = () => {
 
           {orderItems.length > 0 && (
             <div className="space-y-3 rounded-[var(--radius-lg)] bg-white p-4 shadow-sm">
-              <div className="flex justify-between">
-                <p className="text-[length:var(--text-sm)] text-[var(--text-secondary)]">
-                  Tạm tính ({orderItems.length} sản phẩm)
-                </p>
-                <p className="text-[length:var(--text-sm)] font-[var(--font-medium)] text-[var(--text-primary)]">
-                  {subtotal.toLocaleString('vi-VN')}₫
-                </p>
-              </div>
-
-              <div className="flex justify-between border-t border-[var(--border-default)] pt-3">
-                <p className="text-[length:var(--text-sm)] text-[var(--text-secondary)]">
-                  Phí giao hàng
-                </p>
-                <p className="text-[length:var(--text-sm)] font-[var(--font-medium)] text-[var(--text-primary)]">
-                  {SHIPPING_FEE.toLocaleString('vi-VN')}₫
-                </p>
-              </div>
-
               <div className="flex justify-between border-t border-[var(--border-default)] pt-3">
                 <p className="text-[length:var(--text-sm)] font-[var(--font-semibold)] text-[var(--text-primary)]">
                   Tổng cộng
