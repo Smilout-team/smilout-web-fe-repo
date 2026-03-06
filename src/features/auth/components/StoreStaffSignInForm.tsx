@@ -46,7 +46,6 @@ export function StoreStaffSignInForm() {
       className="flex flex-col"
       noValidate
     >
-      {/* Email Field */}
       <div className="mb-[16px]">
         <div className="mb-1.5 flex items-center gap-1.5">
           <Mail size={14} className="text-[#6B7280]" />
@@ -70,7 +69,6 @@ export function StoreStaffSignInForm() {
         />
       </div>
 
-      {/* Password Field */}
       <div className="mb-[24px]">
         <div className="mb-1.5 flex items-center gap-1.5">
           <Lock size={14} className="text-[#6B7280]" />
@@ -90,7 +88,6 @@ export function StoreStaffSignInForm() {
         />
       </div>
 
-      {/* Nút Đăng nhập */}
       <Button
         type="submit"
         variant="primary"

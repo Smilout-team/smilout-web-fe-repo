@@ -3,7 +3,6 @@ import { Store } from 'lucide-react';
 export function StoreStaffSignInHeader() {
   return (
     <div className="flex flex-col items-center">
-      {/* Lock Icon */}
       <div className="mb-[16px] flex h-[48px] w-[48px] items-center justify-center rounded-full bg-gradient-to-r from-[var(--red-400)] via-[var(--red-500)] to-[var(--red-600)]">
         <Store size={24} className="text-white" />
       </div>

@@ -46,7 +46,6 @@ export function SignInForm() {
       className="flex flex-col"
       noValidate
     >
-      {/* Email Field */}
       <div className="mb-[24px]">
         <Input
           label="Email"
@@ -66,7 +65,6 @@ export function SignInForm() {
         />
       </div>
 
-      {/* Password Field */}
       <div className="mb-[20px]">
         <Input
           label="Mật khẩu"
@@ -83,7 +81,6 @@ export function SignInForm() {
         />
       </div>
 
-      {/* Quên mật khẩu */}
       <div className="mb-[20px]">
         <a
           href="#"
@@ -93,7 +90,6 @@ export function SignInForm() {
         </a>
       </div>
 
-      {/* Nút Đăng nhập */}
       <Button
         type="submit"
         variant="primary"
@@ -106,14 +102,12 @@ export function SignInForm() {
         Đăng nhập
       </Button>
 
-      {/* Divider */}
       <div className="mt-[24px] mb-[24px] flex items-center gap-x-[12px]">
         <div className="h-[1px] flex-1 bg-[#E5E7EB]" />
         <span className="font-sans text-[14px] text-[#6A7282]">hoặc</span>
         <div className="h-[1px] flex-1 bg-[#E5E7EB]" />
       </div>
 
-      {/* Nút Tiếp tục với Google */}
       <Button
         type="button"
         variant="secondary"
@@ -125,7 +119,6 @@ export function SignInForm() {
         Tiếp tục với Google
       </Button>
 
-      {/* Link Đăng ký */}
       <div className="text-center">
         <p className="font-sans text-[16px] text-[#4A5565]">
           Chưa có tài khoản?{' '}

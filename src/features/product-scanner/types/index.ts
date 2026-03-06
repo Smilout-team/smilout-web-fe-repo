@@ -7,8 +7,3 @@ export interface ScanProductResponse {
   productId: string;
   quantity: number;
 }
-
-export interface ActiveStoreSession {
-  storeId: string;
-  orderId: string;
-}

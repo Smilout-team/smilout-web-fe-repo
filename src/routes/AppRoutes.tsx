@@ -9,6 +9,7 @@ import { StoreScannerRoutes } from '@/features/store-scanner/routes/StoreScanner
 import { ProductScannerRoutes } from '@/features/product-scanner/routes/ProductScannerRoutes';
 import StoreHubPage from '@/features/store-scanner/pages/StoreHubPage';
 import CartPage from '@/features/store-scanner/pages/CartPage';
+import { CheckoutPage, CheckoutSuccessPage } from '@/features/checkout/pages';
 import ProtectedRoutes from '@/routes/ProtectedRoutes';
 import Home from '@/features/home/pages/home';
 
@@ -41,6 +42,14 @@ const routes: RouteObject[] = [
           {
             path: 'cart',
             element: <CartPage />,
+          },
+          {
+            path: 'checkout',
+            element: <CheckoutPage />,
+          },
+          {
+            path: 'checkout/success',
+            element: <CheckoutSuccessPage />,
           },
         ],
       },

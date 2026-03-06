@@ -4,9 +4,9 @@ import { LogOut, ScanLine, ShoppingCart, Store } from 'lucide-react';
 import { Button } from '@/shared/components/common/Button';
 import { ROUTES } from '@/shared/constants/routes';
 import { STORAGE_KEYS } from '@/shared/constants';
-import { useStoreDetail } from '../hooks/useStoreDetail';
-import { useOrderItems } from '../hooks/useOrderItems';
-import type { ActiveStoreSession } from '../types';
+import { useOrderItems } from '@/shared/hooks/useOrderItems';
+import { useStoreDetail } from '@/shared/hooks/useStoreDetail';
+import type { ActiveStoreSession } from '@/shared/types';
 
 interface StoreCartItem {
   id: string;

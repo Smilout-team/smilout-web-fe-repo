@@ -19,7 +19,6 @@ const features = [
 export function Welcome() {
   return (
     <div className="flex min-h-screen flex-col bg-gradient-to-b from-[#FF6B6B] to-[#FF5252]">
-      {/* Hero Section */}
       <div className="flex flex-1 flex-col items-center justify-center px-6 pt-16 pb-8">
         <h1 className="text-center text-[32px] font-bold text-white">
           Mua sắm thông minh
@@ -28,7 +27,6 @@ export function Welcome() {
           Tự phục vụ - Nhanh chóng - Tiện lợi
         </p>
 
-        {/* Feature Cards */}
         <div className="mt-10 w-full max-w-[340px] space-y-4">
           {features.map((feature) => (
             <div
@@ -46,7 +44,6 @@ export function Welcome() {
         </div>
       </div>
 
-      {/* Bottom Actions */}
       <div className="px-6 pb-8">
         <div className="mx-auto w-full max-w-[340px] space-y-4">
           <Link
@@ -64,7 +61,6 @@ export function Welcome() {
           </Link>
         </div>
 
-        {/* Version */}
         <p className="mt-6 text-center text-[12px] text-white/60">
           Phiên bản 1.0.0
         </p>

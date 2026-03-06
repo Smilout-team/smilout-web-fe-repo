@@ -25,7 +25,6 @@ export const SuccessHeader: React.FC<SuccessHeaderProps> = ({
       <div className="absolute top-10 -left-1 h-38 w-38 rounded-full bg-[var(--bg-card)] opacity-10"></div>
       <div className="absolute -right-1 -bottom-1 h-38 w-38 rounded-full bg-[var(--bg-card)] opacity-10"></div>
 
-      {/* --- MAIN CONTENT --- */}
       <div className="relative z-10 flex flex-col items-center text-center">
         <div className="mb-4 flex h-24 w-24 items-center justify-center rounded-full bg-[var(--bg-card)] shadow-[var(--shadow-card)]">
           <Check
