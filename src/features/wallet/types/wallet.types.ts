@@ -76,10 +76,15 @@ export interface TopUpResponse {
 export type TopUpStatus = 'PENDING' | 'PAID' | 'FAILED' | 'CANCELLED';
 
 export interface TopUpStatusData {
+  topUpRequestId: string;
   invoiceNumber: string;
   status: TopUpStatus;
   amount: number;
   currency: string;
+  transactionId?: string;
+  paidAt?: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface TopUpStatusResponse {
