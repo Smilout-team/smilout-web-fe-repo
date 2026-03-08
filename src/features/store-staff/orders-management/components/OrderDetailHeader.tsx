@@ -1,35 +1,28 @@
 import ReturnButton from '@/shared/components/common/ReturnButton';
-import OrderTabs from './OrderTabs';
+import OrderStatusTag from './OrderStatusTag';
+import type { Order } from '../types/order.type';
 
 interface Props {
-  total: number;
-  activeTab: string;
-  counts: Record<string, number>;
-  onChangeTab: (tab: string) => void;
+  order: Order;
 }
 
-export default function OrdersManagementHeader({
-  total,
-  activeTab,
-  counts,
-  onChangeTab,
-}: Props) {
+export default function OrderDetailHeader({ order }: Props) {
   return (
     <div className="bg-[var(--color-primary)] px-4 pt-5 pb-6 text-white">
       <div className="mb-3 flex items-center gap-3">
         <ReturnButton variant="web" className="bg-white/20 hover:bg-white/30" />
 
-        <div>
+        <div className="flex-1">
           <p className="text-lg font-semibold text-[var(--text-on-primary)]">
-            Quản lý đơn hàng
+            Chi tiết đơn hàng
           </p>
           <p className="text-sm text-[var(--text-on-primary)] opacity-90">
-            {total} đơn hàng
+            #{order.id}
           </p>
         </div>
-      </div>
 
-      <OrderTabs active={activeTab} counts={counts} onChange={onChangeTab} />
+        <OrderStatusTag status={order.status} />
+      </div>
     </div>
   );
 }
