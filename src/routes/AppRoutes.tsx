@@ -14,7 +14,7 @@ import CartPage from '@/features/store-scanner/pages/CartPage';
 import { CheckoutPage, CheckoutSuccessPage } from '@/features/checkout/pages';
 import ProtectedRoutes from '@/routes/ProtectedRoutes';
 import Home from '@/features/home/pages/home';
-
+import { OrderHistoryRoutes } from '@/features/order-history/routes/OrderHistoryRoutes';
 const routes: RouteObject[] = [
   {
     path: '/',
@@ -37,6 +37,7 @@ const routes: RouteObject[] = [
           ...WalletRoutes,
           ...StoreScannerRoutes,
           ...ProductScannerRoutes,
+          ...OrderHistoryRoutes,
           {
             path: 'store-hub',
             element: <StoreHubPage />,
