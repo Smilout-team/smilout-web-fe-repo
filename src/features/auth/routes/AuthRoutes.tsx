@@ -4,6 +4,8 @@ import SignIn from '@/features/auth/pages/SignIn';
 import SignUp from '@/features/auth/pages/SignUp';
 import Unauthorized from '@/features/auth/pages/Unauthorized';
 import StoreStaffSignIn from '@/features/auth/pages/StoreStaffSignIn';
+import ForgotPassword from '@/features/auth/pages/ForgotPassword';
+import EmailVerification from '../pages/EmailVerification';
 
 export const AuthRoutes: RouteObject[] = [
   {
@@ -17,6 +19,14 @@ export const AuthRoutes: RouteObject[] = [
   {
     path: 'sign-up',
     element: <SignUp />,
+  },
+  {
+    path: 'forgot-password',
+    element: <ForgotPassword />,
+  },
+  {
+    path: 'email-verification',
+    element: <EmailVerification />,
   },
   {
     path: 'unauthorized',
