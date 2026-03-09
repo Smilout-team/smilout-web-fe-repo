@@ -19,16 +19,13 @@ export default function ConfirmRejectModal({
         <p className="text-lg font-semibold text-[var(--text-primary)]">
           Xác nhận từ chối đơn?
         </p>
-
         <p className="text-sm text-[var(--text-secondary)]">
           Bạn có chắc chắn muốn từ chối đơn hàng này không?
         </p>
-
         <div className="flex gap-3 pt-2">
           <Button variant="secondary" size="sm" fullWidth onClick={onClose}>
             Hủy
           </Button>
-
           <Button variant="danger" size="sm" fullWidth onClick={onConfirm}>
             Từ chối
           </Button>

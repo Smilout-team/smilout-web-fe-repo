@@ -11,12 +11,30 @@ const mockOrders: Order[] = [
     phone: '0912345678',
     address: '123 Nguyễn Huệ, Q1',
     note: 'Giao nhanh giúp em',
-    items: 2,
+
+    items: [
+      {
+        id: '1',
+        name: 'Phở Bò Đặc Biệt',
+        price: 20000,
+        quantity: 1,
+        image: 'https://picsum.photos/80',
+      },
+      {
+        id: '2',
+        name: 'Trà Sữa Trân Châu',
+        price: 19000,
+        quantity: 1,
+        image: 'https://picsum.photos/81',
+      },
+    ],
+
     subtotal: 39000,
     shippingFee: 15000,
     total: 54000,
     time: '5 phút trước',
     status: 'PENDING',
+    paymentMethod: 'Ví SMILOUT',
     isPaid: true,
   },
   {
@@ -24,12 +42,23 @@ const mockOrders: Order[] = [
     customerName: 'Trần Thị C',
     phone: '0909123456',
     address: '45 Lê Lợi, Q3',
-    items: 1,
+
+    items: [
+      {
+        id: '3',
+        name: 'Bánh Mì Thịt Nướng',
+        price: 50000,
+        quantity: 1,
+        image: 'https://picsum.photos/82',
+      },
+    ],
+
     subtotal: 50000,
     shippingFee: 15000,
     total: 65000,
     time: '10 phút trước',
     status: 'PREPARING',
+    paymentMethod: 'Ví SMILOUT',
     isPaid: true,
   },
 ];

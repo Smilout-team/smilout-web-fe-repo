@@ -28,23 +28,19 @@ export default function OrderCard({
           <div className="flex h-10 w-10 items-center justify-center rounded-full bg-red-100 font-semibold text-[var(--color-primary)]">
             {order.customerName.charAt(0)}
           </div>
-
           <div className="space-y-1">
             <p className="text-sm font-medium text-[var(--text-primary)]">
               {order.customerName}
             </p>
-
             <p className="flex items-center gap-1 text-xs text-[var(--text-secondary)]">
               <Phone size={12} />
               {order.phone}
             </p>
-
             <p className="text-xs text-[var(--text-muted)]">
               #{order.id} • {order.time}
             </p>
           </div>
         </div>
-
         <OrderStatusTag status={order.status} />
       </div>
 
@@ -54,7 +50,6 @@ export default function OrderCard({
             <MapPin size={12} />
             Địa chỉ giao hàng
           </div>
-
           <div className="text-sm text-[var(--text-primary)]">
             {order.address}
           </div>
@@ -66,7 +61,6 @@ export default function OrderCard({
           <ClipboardList size={12} />
           Ghi chú
         </div>
-
         <div className="text-sm text-[var(--text-primary)]">
           {order.note || 'Không có ghi chú nào từ khách hàng'}
         </div>
@@ -77,7 +71,7 @@ export default function OrderCard({
         className="flex items-center gap-1 text-sm text-[var(--color-primary)]"
       >
         <Eye size={14} />
-        Xem chi tiết ({order.items} sản phẩm)
+        Xem chi tiết ({order.items.length} sản phẩm)
       </button>
 
       <div className="space-y-2 border-t border-b border-[var(--border-default)] py-3 text-sm">
@@ -85,7 +79,6 @@ export default function OrderCard({
           <span>Tạm tính</span>
           <span>{order.subtotal.toLocaleString()}đ</span>
         </div>
-
         <div className="flex justify-between text-gray-600">
           <span>Phí giao hàng</span>
           <span>{order.shippingFee.toLocaleString()}đ</span>
@@ -94,13 +87,11 @@ export default function OrderCard({
 
       <div className="flex justify-between font-semibold text-[var(--color-primary)]">
         <span>Tổng cộng</span>
-
         <span>{order.total.toLocaleString()}đ</span>
       </div>
 
       <div className="flex items-center justify-between text-xs text-[var(--text-secondary)]">
         <span>Thanh toán: Ví SMILOUT</span>
-
         {order.isPaid && (
           <Tag tone="green" variant="light" size="sm">
             Đã thanh toán
