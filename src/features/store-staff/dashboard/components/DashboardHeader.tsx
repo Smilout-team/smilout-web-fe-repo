@@ -11,7 +11,7 @@ export default function DashboardHeader() {
 
           <div>
             <p className="text-lg font-semibold text-[var(--text-on-primary)]">
-              Nguyễn Văn A
+              Kim Hân
             </p>
 
             <p className="text-sm text-[var(--text-on-primary)] opacity-90">

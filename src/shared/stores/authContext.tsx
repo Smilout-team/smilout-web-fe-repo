@@ -23,6 +23,7 @@ type AuthContextValue = {
   isLoading: boolean;
   error: string | null;
   signIn: (payload: SignInPayload) => Promise<AuthUser>;
+  googleSignIn: (authCode: string) => Promise<AuthUser>;
   signOut: () => Promise<void>;
   refetchProfile: () => Promise<AuthUser | undefined>;
 };
@@ -62,6 +63,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     },
   });
 
+  const googleSignInMutation = useMutation({
+    mutationFn: authService.googleSignIn,
+    onSuccess: (user) => {
+      queryClient.setQueryData(AUTH_QUERY_KEY, user);
+      refetch();
+    },
+  });
+
   const signOutMutation = useMutation({
     mutationFn: authService.signOut,
     onSuccess: () => {
@@ -71,6 +80,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   });
 
   const { mutateAsync: signInAsync } = signInMutation;
+  const { mutateAsync: googleSignInAsync } = googleSignInMutation;
   const { mutateAsync: signOutAsync } = signOutMutation;
 
   const refetchProfile = useCallback(async () => {
@@ -89,6 +99,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       isLoading: status === 'pending' || isFetching,
       error: authError,
       signIn: signInAsync,
+      googleSignIn: googleSignInAsync,
       signOut: signOutAsync,
       refetchProfile,
     };
@@ -98,6 +109,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     isFetching,
     error,
     signInAsync,
+    googleSignInAsync,
     signOutAsync,
     refetchProfile,
   ]);

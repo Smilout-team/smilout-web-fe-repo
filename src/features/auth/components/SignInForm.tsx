@@ -3,6 +3,8 @@ import { useForm } from 'react-hook-form';
 import { Eye, EyeOff } from 'lucide-react';
 import { useNavigate, Link } from 'react-router-dom';
 import { toast } from 'sonner';
+import { useGoogleLogin } from '@react-oauth/google';
+import { FcGoogle } from 'react-icons/fc';
 import { Input } from '@/shared/components/common/Input';
 import { Button } from '@/shared/components/common/Button';
 import { useAuth } from '@/shared/hooks/useAuth';
@@ -17,7 +19,7 @@ export function SignInForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
-  const { signIn } = useAuth();
+  const { signIn, googleSignIn } = useAuth();
 
   const {
     register,
@@ -39,6 +41,27 @@ export function SignInForm() {
       setIsLoading(false);
     }
   };
+
+  const handleGoogleLogin = useGoogleLogin({
+    flow: 'auth-code',
+    onSuccess: async (codeResponse) => {
+      try {
+        setIsLoading(true);
+
+        await googleSignIn(codeResponse.code);
+
+        toast.success('Đăng nhập Google thành công!');
+        navigate('/home');
+      } catch (error) {
+        const message =
+          error instanceof Error ? error.message : 'Đăng nhập Google thất bại';
+        toast.error(message);
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    onError: () => toast.error('Đăng nhập Google thất bại'),
+  });
 
   return (
     <form
@@ -114,9 +137,13 @@ export function SignInForm() {
         size="lg"
         fullWidth
         disabled={isLoading}
+        onClick={() => handleGoogleLogin()}
         className="mb-[30px] h-[58.46px]"
       >
-        Tiếp tục với Google
+        <span className="flex items-center justify-center gap-2">
+          <FcGoogle size={20} />
+          Tiếp tục với Google
+        </span>
       </Button>
 
       <div className="text-center">
