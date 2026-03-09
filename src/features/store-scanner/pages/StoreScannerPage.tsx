@@ -31,6 +31,7 @@ export const StoreScannerPage = () => {
         JSON.stringify({
           storeId: result.storeId,
           orderId: result.orderId,
+          context: 'in_store',
         })
       );
       navigate(ROUTES.STORE_HUB, {

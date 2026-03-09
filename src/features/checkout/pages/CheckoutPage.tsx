@@ -1,9 +1,24 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Wallet, AlertCircle } from 'lucide-react';
-import { useProcessPayment } from '../hooks';
+import { toast } from 'sonner';
+import {
+  CheckoutHeader,
+  CheckoutSubmitBar,
+  DeliveryAddressSection,
+  DeliveryOptionSection,
+  OrderSummarySection,
+  PaymentMethodCard,
+} from '../components';
+import {
+  useDeliveryAddressOptions,
+  useProcessPayment,
+  useSearchDeliveryAddresses,
+} from '../hooks';
+import type { DeliveryAddressOption } from '../types';
+import { getSelectedDeliveryAddress } from '../utils/deliveryAddress.util';
 import { useWalletBalance } from '@/features/wallet/hooks/useWalletBalance';
 import { useOrderItems } from '@/shared/hooks/useOrderItems';
+import { useStoreDetail } from '@/shared/hooks/useStoreDetail';
 import { ROUTES } from '@/shared/constants/routes';
 import { STORAGE_KEYS } from '@/shared/constants';
 
@@ -11,40 +26,202 @@ export const CheckoutPage = () => {
   const navigate = useNavigate();
   const processPayment = useProcessPayment();
   const { data: walletData } = useWalletBalance();
+  const [selectedAddressId, setSelectedAddressId] = useState<string | null>(
+    null
+  );
+  const [deliveryOption, setDeliveryOption] = useState<'ASAP' | 'SCHEDULED'>(
+    'ASAP'
+  );
+  const [scheduledDeliveryAt, setScheduledDeliveryAt] = useState('');
+  const [addressKeyword, setAddressKeyword] = useState('');
+  const [debouncedAddressKeyword, setDebouncedAddressKeyword] = useState('');
+  const [userLocation, setUserLocation] = useState<{
+    latitude: number;
+    longitude: number;
+  } | null>(null);
 
-  const orderId = useMemo(() => {
+  const sessionData = useMemo(() => {
     const session = localStorage.getItem(STORAGE_KEYS.ACTIVE_STORE_SESSION);
     if (!session) {
       navigate(ROUTES.HOME);
       return null;
     }
-    const { orderId: id } = JSON.parse(session);
-    return id;
+    return JSON.parse(session) as {
+      orderId: string;
+      storeId: string;
+      context?: 'in_store' | 'online';
+    };
   }, [navigate]);
+
+  const orderId = sessionData?.orderId ?? null;
+  const isOnlineDelivery = sessionData?.context === 'online';
+
+  const { data: storeDetail } = useStoreDetail(sessionData?.storeId ?? null);
 
   const { data: orderItems } = useOrderItems(orderId);
 
+  const { data: deliveryAddressOptions = [] } = useDeliveryAddressOptions(
+    userLocation?.latitude,
+    userLocation?.longitude
+  );
+
+  const {
+    data: searchedAddressOptions = [],
+    isFetching: isSearchingAddresses,
+  } = useSearchDeliveryAddresses(
+    debouncedAddressKeyword,
+    userLocation?.latitude,
+    userLocation?.longitude
+  );
+
+  const combinedAddressOptions = useMemo(() => {
+    if (debouncedAddressKeyword.trim().length < 2) {
+      return deliveryAddressOptions;
+    }
+
+    return searchedAddressOptions;
+  }, [debouncedAddressKeyword, deliveryAddressOptions, searchedAddressOptions]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedAddressKeyword(addressKeyword.trim());
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [addressKeyword]);
+
+  const defaultAddressId = useMemo(() => {
+    if (deliveryAddressOptions.length === 0) {
+      return null;
+    }
+
+    return (
+      deliveryAddressOptions.find((option) => option.isDefault)?.id ??
+      deliveryAddressOptions[0].id
+    );
+  }, [deliveryAddressOptions]);
+
+  const activeSelectedAddressId = selectedAddressId ?? defaultAddressId;
+
+  useEffect(() => {
+    if (!isOnlineDelivery || !navigator.geolocation) {
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        setUserLocation({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+        });
+      },
+      () => {
+        toast.error('Không thể lấy vị trí hiện tại để tính phí giao hàng');
+      }
+    );
+  }, [isOnlineDelivery]);
+
   const balance = walletData?.balance ?? 0;
-  const totalAmount =
+  const subtotalAmount =
     orderItems?.reduce((sum, item) => sum + item.price * item.quantity, 0) ?? 0;
+
+  const deliveryFee = useMemo(() => {
+    if (!isOnlineDelivery || !storeDetail?.coordinate || !userLocation) {
+      return 0;
+    }
+
+    const storeCoordinates = parseCoordinates(storeDetail.coordinate);
+    if (!storeCoordinates) {
+      return 0;
+    }
+
+    const distance = calculateDistance(
+      userLocation.latitude,
+      userLocation.longitude,
+      storeCoordinates.lat,
+      storeCoordinates.lng
+    );
+
+    if (distance < 3) {
+      return 0;
+    }
+
+    if (distance <= 5) {
+      return 15000;
+    }
+
+    return 15000 + Math.ceil(distance - 5) * 3000;
+  }, [isOnlineDelivery, storeDetail, userLocation]);
+
+  const totalAmount = subtotalAmount + deliveryFee;
   const isInsufficientBalance = balance < totalAmount;
   const shortage = isInsufficientBalance ? totalAmount - balance : 0;
 
+  const selectedAddress = useMemo(() => {
+    return (
+      combinedAddressOptions.find(
+        (option: DeliveryAddressOption) => option.id === activeSelectedAddressId
+      ) ??
+      deliveryAddressOptions.find(
+        (option: DeliveryAddressOption) => option.id === activeSelectedAddressId
+      ) ??
+      null
+    );
+  }, [activeSelectedAddressId, combinedAddressOptions, deliveryAddressOptions]);
+
   const handleProcessPayment = async () => {
     if (!orderId || isInsufficientBalance) return;
+
+    if (isOnlineDelivery && !userLocation) {
+      toast.error('Cần bật vị trí để tính phí giao hàng trước khi thanh toán');
+      return;
+    }
+
+    if (isOnlineDelivery && !selectedAddress) {
+      toast.error('Vui lòng chọn địa chỉ giao hàng');
+      return;
+    }
+
+    if (deliveryOption === 'SCHEDULED' && !scheduledDeliveryAt) {
+      toast.error('Vui lòng chọn thời gian hẹn giao hàng');
+      return;
+    }
 
     try {
       const session = localStorage.getItem(STORAGE_KEYS.ACTIVE_STORE_SESSION);
       const { storeId } = session ? JSON.parse(session) : { storeId: null };
 
-      await processPayment.mutateAsync({ orderId });
-
-      navigate(ROUTES.CHECKOUT_SUCCESS, {
-        state: { storeId, orderId },
+      const paymentData = await processPayment.mutateAsync({
+        orderId,
+        deliveryAddress:
+          getSelectedDeliveryAddress(selectedAddress) ??
+          storeDetail?.address ??
+          'Chưa có địa chỉ',
+        deliveryOption,
+        scheduledDeliveryAt:
+          deliveryOption === 'SCHEDULED'
+            ? new Date(scheduledDeliveryAt).toISOString()
+            : undefined,
+        userLatitude: isOnlineDelivery
+          ? (selectedAddress?.latitude ?? userLocation?.latitude)
+          : undefined,
+        userLongitude: isOnlineDelivery
+          ? (selectedAddress?.longitude ?? userLocation?.longitude)
+          : undefined,
       });
 
-      localStorage.removeItem(STORAGE_KEYS.ACTIVE_STORE_SESSION);
-    } catch {
+      navigate(ROUTES.CHECKOUT_SUCCESS, {
+        state: {
+          storeId,
+          orderId,
+          context: isOnlineDelivery ? 'online' : 'in_store',
+          paymentData,
+        },
+      });
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : 'Thanh toán không thành công';
+      toast.error(message);
       return null;
     }
   };
@@ -70,117 +247,100 @@ export const CheckoutPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 pb-36">
-      <div className="sticky top-0 z-10 bg-white px-4 py-4 shadow-sm">
-        <div className="flex items-center">
-          <button
-            onClick={() => navigate(-1)}
-            className="mr-3 -ml-2 rounded-full p-2 hover:bg-gray-100"
-          >
-            <ArrowLeft size={20} />
-          </button>
-          <h1 className="text-lg font-semibold">Thanh toán</h1>
-        </div>
-      </div>
+      <CheckoutHeader onBack={() => navigate(-1)} />
 
       <div className="px-4 py-4">
-        <div className="mb-4 rounded-lg bg-white p-4 shadow-sm">
-          <h2 className="mb-3 text-sm font-medium text-gray-700">
-            Phương thức thanh toán
-          </h2>
-          <div className="flex items-center justify-between rounded-lg border-2 border-[#FF5252] bg-red-50 p-3">
-            <div className="flex items-center gap-3">
-              <div className="rounded-full bg-[#FF5252] p-2">
-                <Wallet size={20} className="text-white" />
-              </div>
-              <div>
-                <div className="font-medium text-gray-900">Ví SMILOUT</div>
-                <div className="text-sm text-gray-600">
-                  Số dư: {formatCurrency(balance)}đ
-                </div>
-              </div>
-            </div>
-            <div className="text-orange-500">
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-              >
-                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
-              </svg>
-            </div>
-          </div>
+        <PaymentMethodCard
+          balance={balance}
+          isInsufficientBalance={isInsufficientBalance}
+          shortage={shortage}
+          onTopUp={handleTopUp}
+          formatCurrency={formatCurrency}
+        />
 
-          {isInsufficientBalance && (
-            <div className="mt-3 flex items-start gap-2 rounded-lg bg-red-50 p-3">
-              <AlertCircle size={18} className="mt-0.5 text-red-500" />
-              <div className="flex-1">
-                <div className="text-sm font-medium text-red-900">
-                  Số dư không đủ. Thiếu {formatCurrency(shortage)}đ
-                </div>
-                <button
-                  onClick={handleTopUp}
-                  className="mt-1 text-sm font-medium text-red-600 underline"
-                >
-                  Nạp tiền ngay
-                </button>
-              </div>
-            </div>
-          )}
-        </div>
+        {isOnlineDelivery && (
+          <>
+            <DeliveryAddressSection
+              addressKeyword={addressKeyword}
+              onChangeKeyword={setAddressKeyword}
+              options={combinedAddressOptions}
+              selectedAddressId={activeSelectedAddressId}
+              isSearching={isSearchingAddresses}
+              onSelectAddress={setSelectedAddressId}
+            />
 
-        <div className="rounded-lg bg-white p-4 shadow-sm">
-          <h2 className="mb-3 text-sm font-medium text-gray-700">
-            Chi tiết đơn hàng
-          </h2>
-          <div className="space-y-3">
-            {orderItems.map((item) => (
-              <div key={item.id} className="flex justify-between text-sm">
-                <div className="text-gray-700">
-                  {item.name} x{item.quantity}
-                </div>
-                <div className="font-medium text-gray-900">
-                  {formatCurrency(item.price * item.quantity)}đ
-                </div>
-              </div>
-            ))}
-          </div>
+            <DeliveryOptionSection
+              deliveryOption={deliveryOption}
+              scheduledDeliveryAt={scheduledDeliveryAt}
+              onChangeDeliveryOption={setDeliveryOption}
+              onChangeScheduledAt={setScheduledDeliveryAt}
+            />
+          </>
+        )}
 
-          <div className="my-3 border-t border-gray-200" />
-
-          <div className="flex justify-between text-sm">
-            <div className="text-gray-700">Tạm tính</div>
-            <div className="font-medium text-gray-900">
-              {formatCurrency(totalAmount)}đ
-            </div>
-          </div>
-
-          <div className="mt-3 flex justify-between text-base">
-            <div className="font-semibold text-gray-900">Tổng cộng</div>
-            <div className="text-lg font-bold text-[#FF5252]">
-              {formatCurrency(totalAmount)}đ
-            </div>
-          </div>
-        </div>
+        <OrderSummarySection
+          orderItems={orderItems}
+          subtotalAmount={subtotalAmount}
+          deliveryFee={deliveryFee}
+          totalAmount={totalAmount}
+          formatCurrency={formatCurrency}
+        />
       </div>
 
-      <div className="fixed right-0 bottom-16 left-0 bg-white p-4 shadow-[0_-2px_10px_rgba(0,0,0,0.1)]">
-        <button
-          onClick={handleProcessPayment}
-          disabled={isInsufficientBalance || processPayment.isPending}
-          className={`w-full rounded-lg px-4 py-3.5 font-semibold text-white transition-colors ${
-            isInsufficientBalance || processPayment.isPending
-              ? 'bg-gray-300 text-gray-500'
-              : 'bg-[#FF5252] hover:bg-[#FF4444]'
-          }`}
-        >
-          {processPayment.isPending
-            ? 'Đang xử lý...'
-            : `Xác nhận thanh toán ${formatCurrency(totalAmount)}đ`}
-        </button>
-      </div>
+      <CheckoutSubmitBar
+        onSubmit={handleProcessPayment}
+        disabled={isInsufficientBalance || processPayment.isPending}
+        isPending={processPayment.isPending}
+        totalAmount={totalAmount}
+        formatCurrency={formatCurrency}
+      />
     </div>
   );
 };
 
 export default CheckoutPage;
+
+function calculateDistance(
+  lat1: number,
+  lon1: number,
+  lat2: number,
+  lon2: number
+): number {
+  const R = 6371;
+  const dLat = toRad(lat2 - lat1);
+  const dLon = toRad(lon2 - lon1);
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(toRad(lat1)) *
+      Math.cos(toRad(lat2)) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2);
+
+  return R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)));
+}
+
+function toRad(degrees: number): number {
+  return degrees * (Math.PI / 180);
+}
+
+function parseCoordinates(
+  coordinate: string
+): { lat: number; lng: number } | null {
+  const pointMatch = coordinate.match(/POINT\(([^ ]+) ([^ ]+)\)/);
+  if (pointMatch) {
+    return {
+      lng: parseFloat(pointMatch[1]),
+      lat: parseFloat(pointMatch[2]),
+    };
+  }
+
+  const parts = coordinate.split(',');
+  if (parts.length === 2) {
+    return {
+      lat: parseFloat(parts[0].trim()),
+      lng: parseFloat(parts[1].trim()),
+    };
+  }
+
+  return null;
+}

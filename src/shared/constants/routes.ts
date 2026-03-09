@@ -22,6 +22,7 @@ export const ROUTES = {
   STORE_HUB: '/store-hub',
   SCAN_PRODUCT: '/scan-product',
   CART: '/cart',
+  ORDER_HISTORY: '/orders',
   CHECKOUT: '/checkout',
   CHECKOUT_SUCCESS: '/checkout/success',
   FORGOT_PASSWORD: '/forgot-password',

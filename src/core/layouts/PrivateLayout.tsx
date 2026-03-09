@@ -9,7 +9,7 @@ const PrivateLayout = () => {
 
   if (isLoading) return null;
 
-  const isConsumer = user?.roles?.includes(UserRole.CONSUMER);
+  const isConsumer = user?.roles?.includes(UserRole.CONSUMER) || true;
 
   const isStoreStaffSite = location.pathname.startsWith('/store-staff');
 
