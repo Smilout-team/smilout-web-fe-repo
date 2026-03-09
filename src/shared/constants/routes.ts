@@ -4,6 +4,8 @@ export const PUBLIC_PATHS = [
   '/sign-up',
   '/unauthorized',
   '/store-staff/sign-in',
+  '/forgot-password',
+  '/email-verification',
 ] as const;
 
 export const ROUTES = {
@@ -22,4 +24,6 @@ export const ROUTES = {
   CART: '/cart',
   CHECKOUT: '/checkout',
   CHECKOUT_SUCCESS: '/checkout/success',
+  FORGOT_PASSWORD: '/forgot-password',
+  VERIFY_CODE: '/email-verification',
 } as const;
