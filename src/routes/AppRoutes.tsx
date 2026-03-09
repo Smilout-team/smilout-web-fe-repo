@@ -4,6 +4,8 @@ import PublicLayout from '@/core/layouts/PublicLayout';
 import NotFound from '@/features/auth/pages/NotFound';
 import { AuthRoutes } from '@/features/auth/routes/AuthRoutes';
 import { FraudRoutes } from '@/features/store-staff/FraudManagement/routes/FraudManagementRoutes';
+import { DashboardRoutes } from '@/features/store-staff/dashboard/routes/DashboardRoutes';
+import { OrdersManagementRoutes } from '@/features/store-staff/orders-management/routes/OrdersManagementRoutes';
 import { WalletRoutes } from '@/features/wallet/routes/WalletRoutes';
 import { StoreScannerRoutes } from '@/features/store-scanner/routes/StoreScannerRoutes';
 import { ProductScannerRoutes } from '@/features/product-scanner/routes/ProductScannerRoutes';
@@ -60,7 +62,11 @@ const routes: RouteObject[] = [
     children: [
       {
         element: <PrivateLayout />,
-        children: [...FraudRoutes],
+        children: [
+          ...DashboardRoutes,
+          ...OrdersManagementRoutes,
+          ...FraudRoutes,
+        ],
       },
     ],
   },

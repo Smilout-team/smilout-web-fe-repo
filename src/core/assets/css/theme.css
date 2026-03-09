@@ -3,7 +3,7 @@
     --color-primary: var(--red-500);
     --color-primary-hover: var(--red-600);
     --color-primary-gradient: var(--gradient-primary);
-    --color-primary-light: color-mix(in srgb, var(--color-primary) 60%, white);
+    --color-primary-light: color-mix(in srgb, var(--color-primary) 80%, white);
 
     --text-primary: var(--gray-900);
     --text-secondary: var(--gray-500);

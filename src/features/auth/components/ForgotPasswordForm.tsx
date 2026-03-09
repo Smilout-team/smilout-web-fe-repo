@@ -5,6 +5,7 @@ import { toast } from 'sonner';
 import { Input } from '@/shared/components/common/Input';
 import { Button } from '@/shared/components/common/Button';
 import { ROUTES } from '@/shared/constants';
+import { useNavigate } from 'react-router-dom';
 
 interface ForgotPasswordFormData {
   email: string;
@@ -12,7 +13,7 @@ interface ForgotPasswordFormData {
 
 export function ForgotPasswordForm() {
   const [isLoading, setIsLoading] = useState(false);
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const {
     register,
@@ -28,7 +29,7 @@ export function ForgotPasswordForm() {
       console.log(data);
 
       toast.success('Đã gửi mã xác thực!');
-      //   navigate(ROUTES.VERIFY_CODE);
+      navigate(ROUTES.VERIFY_CODE);
     } catch (error) {
       const message =
         error instanceof Error ? error.message : 'Gửi mã thất bại';

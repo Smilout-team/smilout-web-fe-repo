@@ -82,12 +82,12 @@ export function SignInForm() {
       </div>
 
       <div className="mb-[20px]">
-        <a
-          href="#"
+        <Link
+          to={ROUTES.FORGOT_PASSWORD}
           className="font-sans text-[14px] text-[#FF6B6B] hover:underline"
         >
           Quên mật khẩu?
-        </a>
+        </Link>
       </div>
 
       <Button
