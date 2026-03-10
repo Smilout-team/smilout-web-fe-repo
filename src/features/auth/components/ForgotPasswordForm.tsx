@@ -25,7 +25,6 @@ export function ForgotPasswordForm() {
     try {
       setIsLoading(true);
 
-      // chưa gọi API, chỉ chuyển trang
       console.log(data);
 
       toast.success('Đã gửi mã xác thực!');

@@ -1,6 +1,7 @@
 export interface ActiveStoreSession {
   storeId: string;
   orderId: string;
+  context?: 'in_store' | 'online';
 }
 
 export interface StoreDetail {
@@ -9,6 +10,7 @@ export interface StoreDetail {
   address: string;
   contactPhone: string;
   avatarKey: string;
+  coordinate: string | null;
 }
 
 export interface OrderItem {

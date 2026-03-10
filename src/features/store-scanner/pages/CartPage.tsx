@@ -35,6 +35,8 @@ export const CartPage = () => {
     activeStoreSession?.orderId ?? null
   );
 
+  const isOnlineFlow = activeStoreSession?.context === 'online';
+
   const total = useMemo(() => {
     return orderItems.reduce(
       (sum, item) => sum + item.price * item.quantity,
@@ -215,15 +217,17 @@ export const CartPage = () => {
       {orderItems.length > 0 && (
         <div className="fixed right-0 bottom-16 left-0 border-t border-[var(--border-default)] bg-[var(--bg-card)] px-4 py-3">
           <div className="mx-auto flex gap-3">
-            <Button
-              variant="secondary"
-              fullWidth
-              size="lg"
-              className="!py-3"
-              onClick={() => navigate(ROUTES.STORE_HUB)}
-            >
-              Tiếp tục mua
-            </Button>
+            {!isOnlineFlow && (
+              <Button
+                variant="secondary"
+                fullWidth
+                size="lg"
+                className="!py-3"
+                onClick={() => navigate(ROUTES.STORE_HUB)}
+              >
+                Tiếp tục mua
+              </Button>
+            )}
             <Button
               variant="primary"
               fullWidth

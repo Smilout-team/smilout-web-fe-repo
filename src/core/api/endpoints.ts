@@ -15,10 +15,15 @@ export const ENDPOINTS = {
   SCAN_STORE: `${API_PATHS.STORES}/scan`,
   GET_STORE_DETAIL: (storeId: string) => `${API_PATHS.STORES}/${storeId}`,
   SCAN_PRODUCT: `${API_PATHS.ORDERS}/scan-product`,
+  GET_MY_ORDERS: `${API_PATHS.ORDERS}/me`,
   GET_ORDER_ITEMS: (orderId: string) => `${API_PATHS.ORDERS}/${orderId}/items`,
   DELETE_ORDER_ITEM: (orderId: string, itemId: string) =>
     `${API_PATHS.ORDERS}/${orderId}/items/${itemId}`,
   UPDATE_ORDER_ITEM: (orderId: string, itemId: string) =>
     `${API_PATHS.ORDERS}/${orderId}/items/${itemId}`,
+  REPURCHASE_ORDER: `${API_PATHS.ORDERS}/repurchase`,
+  REPURCHASE_TO_CART: `${API_PATHS.ORDERS}/repurchase-to-cart`,
+  GET_DELIVERY_ADDRESSES: `${API_PATHS.PAYMENT}/delivery-addresses`,
+  SEARCH_DELIVERY_ADDRESSES: `${API_PATHS.PAYMENT}/delivery-addresses/search`,
   PROCESS_PAYMENT: `${API_PATHS.PAYMENT}`,
 };

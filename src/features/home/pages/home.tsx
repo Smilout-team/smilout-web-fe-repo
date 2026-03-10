@@ -22,7 +22,7 @@ export default function Home() {
   };
 
   const handleViewAllReorders = () => {
-    toast.info('Danh sách mua lại sẽ sớm có');
+    navigate('/orders');
   };
 
   const handleReorder = () => {
@@ -34,7 +34,7 @@ export default function Home() {
   };
 
   const handleOrders = () => {
-    toast.info('Tính năng đơn hàng đang được cập nhật');
+    navigate('/orders');
   };
 
   const handleWallet = () => {
