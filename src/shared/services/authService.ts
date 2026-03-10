@@ -41,6 +41,16 @@ export const authService = {
     return parseAuthUser(response);
   },
 
+  googleSignIn: async (authCode: string): Promise<AuthUser> => {
+    await httpClient.post('/auth/google', { authCode });
+
+    const response = await httpClient.get<ApiResponse<AuthUser> | AuthUser>(
+      '/auth/me'
+    );
+
+    return parseAuthUser(response);
+  },
+
   signUp: async (payload: SignUpPayload): Promise<AuthUser> => {
     const response = await httpClient.post<
       ApiResponse<AuthUser> | AuthResponse | AuthUser

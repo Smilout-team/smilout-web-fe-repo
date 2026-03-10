@@ -10,7 +10,7 @@ export default function OrderDetailPage() {
   const mockOrders: Order[] = [
     {
       id: '123456',
-      customerName: 'Nguyễn Văn B',
+      customerName: 'Kim Tuyền',
       phone: '0912345678',
       address: '123 Nguyễn Huệ, Q1',
       note: 'Giao nhanh giúp em',
@@ -42,7 +42,7 @@ export default function OrderDetailPage() {
     },
     {
       id: '123457',
-      customerName: 'Trần Thị C',
+      customerName: 'Duyên Hà',
       phone: '0909123456',
       address: '45 Lê Lợi, Q3',
 
