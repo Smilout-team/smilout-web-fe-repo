@@ -1,72 +1,26 @@
+import { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import OrderDetailHeader from '@/features/store-staff/orders-management/components/OrderDetailHeader';
 import OrderItemsCard from '@/features/store-staff/orders-management/components/OrderItemsCard';
 import OrderSummaryCard from '@/features/store-staff/orders-management/components/OrderSummaryCard';
-import type { Order } from '@/features/store-staff/orders-management/types/order.type';
+import { useOrdersManagement } from '../hooks';
 
 export default function OrderDetailPage() {
   const { id } = useParams<{ id: string }>();
+  const { data: orders = [], isLoading } = useOrdersManagement();
 
-  const mockOrders: Order[] = [
-    {
-      id: '123456',
-      customerName: 'Kim Tuyền',
-      phone: '0912345678',
-      address: '123 Nguyễn Huệ, Q1',
-      note: 'Giao nhanh giúp em',
+  const order = useMemo(
+    () => orders.find((item) => item.id === id),
+    [id, orders]
+  );
 
-      items: [
-        {
-          id: '1',
-          name: 'Phở Bò Đặc Biệt',
-          price: 20000,
-          quantity: 1,
-          image: 'https://picsum.photos/80',
-        },
-        {
-          id: '2',
-          name: 'Trà Sữa Trân Châu',
-          price: 19000,
-          quantity: 1,
-          image: 'https://picsum.photos/81',
-        },
-      ],
-
-      subtotal: 39000,
-      shippingFee: 15000,
-      total: 54000,
-      time: '5 phút trước',
-      status: 'PENDING',
-      paymentMethod: 'Ví SMILOUT',
-      isPaid: true,
-    },
-    {
-      id: '123457',
-      customerName: 'Duyên Hà',
-      phone: '0909123456',
-      address: '45 Lê Lợi, Q3',
-
-      items: [
-        {
-          id: '3',
-          name: 'Bánh Mì Thịt Nướng',
-          price: 50000,
-          quantity: 1,
-          image: 'https://picsum.photos/82',
-        },
-      ],
-
-      subtotal: 50000,
-      shippingFee: 15000,
-      total: 65000,
-      time: '10 phút trước',
-      status: 'PREPARING',
-      paymentMethod: 'Ví SMILOUT',
-      isPaid: true,
-    },
-  ];
-
-  const order = mockOrders.find((o) => o.id === id);
+  if (isLoading) {
+    return (
+      <div className="p-4 text-sm text-[var(--text-secondary)]">
+        Đang tải chi tiết đơn hàng...
+      </div>
+    );
+  }
 
   if (!order) {
     return (

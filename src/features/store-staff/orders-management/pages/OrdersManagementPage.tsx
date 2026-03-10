@@ -1,85 +1,62 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
+import { toast } from 'sonner';
 import OrdersManagementHeader from '../components/OrdersManagementHeader';
 import OrderCard from '../components/OrderCard';
 import ConfirmRejectModal from '../components/ConfirmRejectModal';
-import type { Order } from '../types/order.type';
-
-const mockOrders: Order[] = [
-  {
-    id: '123456',
-    customerName: 'Kim Tuyền',
-    phone: '0912345678',
-    address: '123 Nguyễn Huệ, Q1',
-    note: 'Giao nhanh giúp em',
-
-    items: [
-      {
-        id: '1',
-        name: 'Phở Bò Đặc Biệt',
-        price: 20000,
-        quantity: 1,
-        image: 'https://picsum.photos/80',
-      },
-      {
-        id: '2',
-        name: 'Trà Sữa Trân Châu',
-        price: 19000,
-        quantity: 1,
-        image: 'https://picsum.photos/81',
-      },
-    ],
-
-    subtotal: 39000,
-    shippingFee: 15000,
-    total: 54000,
-    time: '5 phút trước',
-    status: 'PENDING',
-    paymentMethod: 'Ví SMILOUT',
-    isPaid: true,
-  },
-  {
-    id: '123457',
-    customerName: 'Duyên Hà',
-    phone: '0909123456',
-    address: '45 Lê Lợi, Q3',
-
-    items: [
-      {
-        id: '3',
-        name: 'Bánh Mì Thịt Nướng',
-        price: 50000,
-        quantity: 1,
-        image: 'https://picsum.photos/82',
-      },
-    ],
-
-    subtotal: 50000,
-    shippingFee: 15000,
-    total: 65000,
-    time: '10 phút trước',
-    status: 'PREPARING',
-    paymentMethod: 'Ví SMILOUT',
-    isPaid: true,
-  },
-];
+import { useOrdersManagement } from '../hooks';
+import { ordersManagementService } from '../services/ordersManagementService';
+import type { OrderStatus } from '../types/order.type';
 
 export default function OrdersPage() {
-  const [orders, setOrders] = useState<Order[]>(mockOrders);
+  const { data: orders = [], isLoading } = useOrdersManagement();
+  const [statusOverrides, setStatusOverrides] = useState<
+    Record<string, OrderStatus>
+  >({});
   const [tab, setTab] = useState('PENDING');
-
   const [rejectModalOpen, setRejectModalOpen] = useState(false);
   const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null);
 
-  const handleAccept = (id: string) => {
-    setOrders((prev) =>
-      prev.map((o) => (o.id === id ? { ...o, status: 'PREPARING' } : o))
-    );
+  const mergedOrders = useMemo(
+    () =>
+      orders.map((order) => {
+        const overriddenStatus = statusOverrides[order.id];
+
+        if (!overriddenStatus) {
+          return order;
+        }
+
+        return {
+          ...order,
+          status: overriddenStatus,
+        };
+      }),
+    [orders, statusOverrides]
+  );
+
+  const handleAccept = async (id: string) => {
+    try {
+      await ordersManagementService.acceptOrder(id);
+      setStatusOverrides((prev) => ({
+        ...prev,
+        [id]: 'PREPARING',
+      }));
+      toast.success('Đã xác nhận đơn hàng');
+    } catch (_error) {
+      toast.error('Không thể xác nhận đơn hàng');
+    }
   };
 
-  const handleComplete = (id: string) => {
-    setOrders((prev) =>
-      prev.map((o) => (o.id === id ? { ...o, status: 'COMPLETED' } : o))
-    );
+  const handleComplete = async (id: string) => {
+    try {
+      await ordersManagementService.completeOrder(id);
+      setStatusOverrides((prev) => ({
+        ...prev,
+        [id]: 'COMPLETED',
+      }));
+      toast.success('Đã hoàn thành đơn hàng');
+    } catch (_error) {
+      toast.error('Không thể hoàn thành đơn hàng');
+    }
   };
 
   const handleReject = (id: string) => {
@@ -87,40 +64,51 @@ export default function OrdersPage() {
     setRejectModalOpen(true);
   };
 
-  const confirmReject = () => {
-    if (!selectedOrderId) return;
+  const confirmReject = async () => {
+    if (!selectedOrderId) {
+      return;
+    }
 
-    setOrders((prev) =>
-      prev.map((o) =>
-        o.id === selectedOrderId ? { ...o, status: 'REJECTED' } : o
-      )
-    );
+    try {
+      await ordersManagementService.rejectOrder(selectedOrderId);
+      setStatusOverrides((prev) => ({
+        ...prev,
+        [selectedOrderId]: 'REJECTED',
+      }));
+      toast.success('Đã từ chối đơn hàng');
+    } catch (_error) {
+      toast.error('Không thể từ chối đơn hàng');
+    }
 
     setRejectModalOpen(false);
     setSelectedOrderId(null);
   };
 
   const filtered =
-    tab === 'ALL' ? orders : orders.filter((o) => o.status === tab);
+    tab === 'ALL' ? mergedOrders : mergedOrders.filter((o) => o.status === tab);
 
   const counts = {
-    PENDING: orders.filter((o) => o.status === 'PENDING').length,
-    PREPARING: orders.filter((o) => o.status === 'PREPARING').length,
-    COMPLETED: orders.filter((o) => o.status === 'COMPLETED').length,
-    REJECTED: orders.filter((o) => o.status === 'REJECTED').length,
+    PENDING: mergedOrders.filter((o) => o.status === 'PENDING').length,
+    PREPARING: mergedOrders.filter((o) => o.status === 'PREPARING').length,
+    COMPLETED: mergedOrders.filter((o) => o.status === 'COMPLETED').length,
+    REJECTED: mergedOrders.filter((o) => o.status === 'REJECTED').length,
   };
 
   return (
     <div className="min-h-screen bg-[var(--bg-page)] pb-10">
       <OrdersManagementHeader
-        total={orders.length}
+        total={mergedOrders.length}
         activeTab={tab}
         counts={counts}
         onChangeTab={setTab}
       />
 
       <div className="mt-4 space-y-4 px-4">
-        {filtered.length === 0 && (
+        {isLoading && (
+          <div className="text-center text-gray-400">Đang tải đơn hàng...</div>
+        )}
+
+        {!isLoading && filtered.length === 0 && (
           <div className="text-center text-gray-400">
             Hiện tại chưa có đơn hàng nào trong danh sách.
           </div>
