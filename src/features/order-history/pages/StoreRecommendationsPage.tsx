@@ -126,10 +126,6 @@ export default function StoreRecommendationsPage() {
 
       if (session.addedItemsCount === 0) {
         toast.error('Không có sản phẩm phù hợp để thêm vào giỏ hàng');
-      } else if (session.skippedItems.length > 0) {
-        toast.success(
-          `Đã thêm ${session.addedItemsCount} sản phẩm, bỏ qua ${session.skippedItems.length} sản phẩm`
-        );
       } else {
         toast.success(
           `Đã thêm ${session.addedItemsCount} sản phẩm vào giỏ hàng`

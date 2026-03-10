@@ -26,9 +26,9 @@ export function PaymentMethodCard({
             <Wallet size={20} className="text-white" />
           </div>
           <div>
-            <div className="font-medium text-gray-900">Vi SMILOUT</div>
+            <div className="font-medium text-gray-900">Ví SMILOUT</div>
             <div className="text-sm text-gray-600">
-              Số dư: {formatCurrency(balance)}d
+              Số dư: {formatCurrency(balance)}đ
             </div>
           </div>
         </div>
@@ -44,7 +44,7 @@ export function PaymentMethodCard({
           <AlertCircle size={18} className="mt-0.5 text-red-500" />
           <div className="flex-1">
             <div className="text-sm font-medium text-red-900">
-              Số dư không đủ. Thiếu {formatCurrency(shortage)}d
+              Số dư không đủ. Thiếu {formatCurrency(shortage)}đ
             </div>
             <button
               onClick={onTopUp}

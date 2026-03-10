@@ -44,6 +44,7 @@ export default function OrderDetailPage() {
           paymentMethod={order.paymentMethod}
           isPaid={order.isPaid}
           itemCount={order.items.length}
+          orderType={order.orderType}
         />
       </div>
     </div>

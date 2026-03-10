@@ -125,8 +125,28 @@ export const CheckoutPage = () => {
   const subtotalAmount =
     orderItems?.reduce((sum, item) => sum + item.price * item.quantity, 0) ?? 0;
 
+  const selectedAddress = useMemo(() => {
+    return (
+      combinedAddressOptions.find(
+        (option: DeliveryAddressOption) => option.id === activeSelectedAddressId
+      ) ??
+      deliveryAddressOptions.find(
+        (option: DeliveryAddressOption) => option.id === activeSelectedAddressId
+      ) ??
+      null
+    );
+  }, [activeSelectedAddressId, combinedAddressOptions, deliveryAddressOptions]);
+
   const deliveryFee = useMemo(() => {
-    if (!isOnlineDelivery || !storeDetail?.coordinate || !userLocation) {
+    if (!isOnlineDelivery || !storeDetail?.coordinate) {
+      return 0;
+    }
+
+    const targetLatitude = selectedAddress?.latitude ?? userLocation?.latitude;
+    const targetLongitude =
+      selectedAddress?.longitude ?? userLocation?.longitude;
+
+    if (targetLatitude === undefined || targetLongitude === undefined) {
       return 0;
     }
 
@@ -136,8 +156,8 @@ export const CheckoutPage = () => {
     }
 
     const distance = calculateDistance(
-      userLocation.latitude,
-      userLocation.longitude,
+      targetLatitude,
+      targetLongitude,
       storeCoordinates.lat,
       storeCoordinates.lng
     );
@@ -151,23 +171,11 @@ export const CheckoutPage = () => {
     }
 
     return 15000 + Math.ceil(distance - 5) * 3000;
-  }, [isOnlineDelivery, storeDetail, userLocation]);
+  }, [isOnlineDelivery, selectedAddress, storeDetail, userLocation]);
 
   const totalAmount = subtotalAmount + deliveryFee;
   const isInsufficientBalance = balance < totalAmount;
   const shortage = isInsufficientBalance ? totalAmount - balance : 0;
-
-  const selectedAddress = useMemo(() => {
-    return (
-      combinedAddressOptions.find(
-        (option: DeliveryAddressOption) => option.id === activeSelectedAddressId
-      ) ??
-      deliveryAddressOptions.find(
-        (option: DeliveryAddressOption) => option.id === activeSelectedAddressId
-      ) ??
-      null
-    );
-  }, [activeSelectedAddressId, combinedAddressOptions, deliveryAddressOptions]);
 
   const handleProcessPayment = async () => {
     if (!orderId || isInsufficientBalance) return;
@@ -283,6 +291,7 @@ export const CheckoutPage = () => {
           subtotalAmount={subtotalAmount}
           deliveryFee={deliveryFee}
           totalAmount={totalAmount}
+          isOnlineDelivery={isOnlineDelivery}
           formatCurrency={formatCurrency}
         />
       </div>

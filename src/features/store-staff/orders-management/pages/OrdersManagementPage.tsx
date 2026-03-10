@@ -85,10 +85,18 @@ export default function OrdersPage() {
   };
 
   const filtered =
-    tab === 'ALL' ? mergedOrders : mergedOrders.filter((o) => o.status === tab);
+    tab === 'ALL'
+      ? mergedOrders
+      : tab === 'PENDING'
+        ? mergedOrders.filter(
+            (o) => o.status === 'PENDING' || o.status === 'PAID'
+          )
+        : mergedOrders.filter((o) => o.status === tab);
 
   const counts = {
-    PENDING: mergedOrders.filter((o) => o.status === 'PENDING').length,
+    PENDING: mergedOrders.filter(
+      (o) => o.status === 'PENDING' || o.status === 'PAID'
+    ).length,
     PREPARING: mergedOrders.filter((o) => o.status === 'PREPARING').length,
     COMPLETED: mergedOrders.filter((o) => o.status === 'COMPLETED').length,
     REJECTED: mergedOrders.filter((o) => o.status === 'REJECTED').length,

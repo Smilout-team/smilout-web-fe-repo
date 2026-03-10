@@ -7,7 +7,7 @@ export interface OrderItem {
 export interface Order {
   id: string;
   orderType: 'DELIVERY' | 'INSTORE';
-  status: 'PENDING' | 'PAID' | 'PREPARING';
+  status: 'PENDING' | 'PAID' | 'PREPARING' | 'COMPLETED';
   deliveryOption?: 'ASAP' | 'SCHEDULED' | null;
   scheduledDeliveryAt?: string | null;
   orderDate: string;
