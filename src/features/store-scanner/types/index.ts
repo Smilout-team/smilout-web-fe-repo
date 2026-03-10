@@ -9,3 +9,12 @@ export interface ScanStoreResponse {
   status: 'PENDING';
   totalAmount: number;
 }
+
+export interface NearbyStore {
+  storeId: string;
+  storeName: string;
+  address: string;
+  latitude: number;
+  longitude: number;
+  distance: number;
+}

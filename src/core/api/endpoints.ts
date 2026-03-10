@@ -13,6 +13,8 @@ export const ENDPOINTS = {
   GET_TOP_UP_STATUS: (invoiceNumber: string) =>
     `${API_PATHS.TOP_UP}/${invoiceNumber}`,
   SCAN_STORE: `${API_PATHS.STORES}/scan`,
+  GET_NEARBY_STORES: (latitude: number, longitude: number, limit = 4) =>
+    `${API_PATHS.STORES}/nearby?latitude=${latitude}&longitude=${longitude}&limit=${limit}`,
   GET_STORE_DETAIL: (storeId: string) => `${API_PATHS.STORES}/${storeId}`,
   SCAN_PRODUCT: `${API_PATHS.ORDERS}/scan-product`,
   GET_MY_ORDERS: `${API_PATHS.ORDERS}/me`,

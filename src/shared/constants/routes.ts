@@ -19,6 +19,7 @@ export const ROUTES = {
   WALLET: '/wallet',
   TOP_UP_RESULT: '/wallet/top-up/result',
   SCAN_STORE: '/scan-store',
+  NEARBY_STORES: '/nearby-stores',
   STORE_HUB: '/store-hub',
   SCAN_PRODUCT: '/scan-product',
   CART: '/cart',

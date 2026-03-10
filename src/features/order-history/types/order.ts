@@ -33,6 +33,8 @@ export interface StoreRecommendation {
   storeName: string;
   address: string;
   distance: number | null;
+  latitude: number | null;
+  longitude: number | null;
   totalPrice: number;
   totalOriginalPrice: number;
   availableProducts: ProductAvailability[];
