@@ -28,6 +28,7 @@ export default function StoreRecommendationsPage() {
   } | null>(null);
 
   const recommendationsMutation = useRepurchaseRecommendations();
+  const { mutateAsync: fetchRecommendations } = recommendationsMutation;
   const createCartMutation = useCreateCartFromStore();
 
   useEffect(() => {
@@ -51,17 +52,20 @@ export default function StoreRecommendationsPage() {
   useEffect(() => {
     if (!orderId) return;
 
-    recommendationsMutation
-      .mutateAsync({
-        orderId,
-        userLatitude: userLocation?.latitude,
-        userLongitude: userLocation?.longitude,
-      })
+    fetchRecommendations({
+      orderId,
+      userLatitude: userLocation?.latitude,
+      userLongitude: userLocation?.longitude,
+    })
       .then(setData)
-      .catch(() => {
-        toast.error('Không thể tải đề xuất cửa hàng');
+      .catch((error: unknown) => {
+        toast.error(
+          error instanceof Error && error.message
+            ? error.message
+            : 'Không thể tải đề xuất cửa hàng'
+        );
       });
-  }, [orderId, recommendationsMutation, userLocation]);
+  }, [orderId, fetchRecommendations, userLocation]);
 
   const getRecommendationBadge = (recommendation: string) => {
     const styles = {
