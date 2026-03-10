@@ -50,7 +50,7 @@ export const StoreScannerPage = () => {
   };
 
   const handleFindStore = () => {
-    toast.info('Tính năng tìm cửa hàng đang được phát triển');
+    navigate(ROUTES.NEARBY_STORES);
   };
 
   return (
