@@ -58,7 +58,11 @@ function mapBackendOrderToFrontend(backendOrder: BackendOrder): Order {
     (sum, item) => sum + item.priceAtPurchase * item.quantity,
     0
   );
-  const shippingFee = backendOrder.orderType === 'DELIVERY' ? 15000 : 0;
+
+  const shippingFee =
+    backendOrder.orderType === 'DELIVERY'
+      ? Math.max(backendOrder.totalAmount - subtotal, 0)
+      : 0;
 
   const scheduledTimeText = backendOrder.scheduledDeliveryAt
     ? new Date(backendOrder.scheduledDeliveryAt).toLocaleString('vi-VN', {

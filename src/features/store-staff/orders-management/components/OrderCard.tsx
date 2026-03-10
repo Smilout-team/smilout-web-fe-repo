@@ -79,10 +79,12 @@ export default function OrderCard({
           <span>Tạm tính</span>
           <span>{order.subtotal.toLocaleString()}đ</span>
         </div>
-        <div className="flex justify-between text-gray-600">
-          <span>Phí giao hàng</span>
-          <span>{order.shippingFee.toLocaleString()}đ</span>
-        </div>
+        {order.orderType === 'DELIVERY' && (
+          <div className="flex justify-between text-gray-600">
+            <span>Phí giao hàng</span>
+            <span>{order.shippingFee.toLocaleString()}đ</span>
+          </div>
+        )}
       </div>
 
       <div className="flex justify-between font-semibold text-[var(--color-primary)]">
@@ -99,7 +101,7 @@ export default function OrderCard({
         )}
       </div>
 
-      {order.status === 'PENDING' && (
+      {(order.status === 'PENDING' || order.status === 'PAID') && (
         <div className="flex gap-3">
           <Button
             variant="secondary"

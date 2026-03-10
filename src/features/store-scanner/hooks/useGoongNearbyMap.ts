@@ -13,7 +13,6 @@ type UseGoongNearbyMapParams = {
   userLocation: UserLocation | null;
 };
 
-// Type definitions for Goong Maps (based on Mapbox GL)
 type GoongMap = {
   loaded: () => boolean;
   resize: () => void;

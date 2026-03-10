@@ -5,6 +5,7 @@ interface OrderSummarySectionProps {
   subtotalAmount: number;
   deliveryFee: number;
   totalAmount: number;
+  isOnlineDelivery: boolean;
   formatCurrency: (amount: number) => string;
 }
 
@@ -13,6 +14,7 @@ export function OrderSummarySection({
   subtotalAmount,
   deliveryFee,
   totalAmount,
+  isOnlineDelivery,
   formatCurrency,
 }: OrderSummarySectionProps) {
   return (
@@ -27,7 +29,7 @@ export function OrderSummarySection({
               {item.name} x{item.quantity}
             </div>
             <div className="font-medium text-gray-900">
-              {formatCurrency(item.price * item.quantity)}d
+              {formatCurrency(item.price * item.quantity)}đ
             </div>
           </div>
         ))}
@@ -35,24 +37,28 @@ export function OrderSummarySection({
 
       <div className="my-3 border-t border-gray-200" />
 
-      <div className="flex justify-between text-sm">
-        <div className="text-gray-700">Tạm tính</div>
-        <div className="font-medium text-gray-900">
-          {formatCurrency(subtotalAmount)}d
-        </div>
-      </div>
+      {isOnlineDelivery && (
+        <div>
+          <div className="flex justify-between text-sm">
+            <div className="text-gray-700">Tạm tính</div>
+            <div className="font-medium text-gray-900">
+              {formatCurrency(subtotalAmount)}đ
+            </div>
+          </div>
 
-      <div className="mt-3 flex justify-between text-sm">
-        <div className="text-gray-700">Phí giao hàng</div>
-        <div className="font-medium text-gray-900">
-          {formatCurrency(deliveryFee)}d
+          <div className="mt-3 flex justify-between text-sm">
+            <div className="text-gray-700">Phí giao hàng</div>
+            <div className="font-medium text-gray-900">
+              {formatCurrency(deliveryFee)}đ
+            </div>
+          </div>
         </div>
-      </div>
+      )}
 
       <div className="mt-3 flex justify-between text-base">
         <div className="font-semibold text-gray-900">Tổng cộng</div>
         <div className="text-lg font-bold text-[#FF5252]">
-          {formatCurrency(totalAmount)}d
+          {formatCurrency(totalAmount)}đ
         </div>
       </div>
     </div>

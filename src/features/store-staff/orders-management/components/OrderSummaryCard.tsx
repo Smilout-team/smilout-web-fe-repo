@@ -1,4 +1,5 @@
 import Tag from '@/shared/components/common/Tag';
+import type { OrderType } from '../types/order.type';
 
 interface Props {
   subtotal: number;
@@ -7,6 +8,7 @@ interface Props {
   paymentMethod: string;
   isPaid?: boolean;
   itemCount: number;
+  orderType: OrderType;
 }
 
 export default function OrderSummaryCard({
@@ -16,6 +18,7 @@ export default function OrderSummaryCard({
   paymentMethod,
   isPaid,
   itemCount,
+  orderType,
 }: Props) {
   return (
     <div className="space-y-3 rounded-[var(--radius-card)] bg-[var(--bg-card)] p-4 shadow-[var(--shadow-card)]">
@@ -24,10 +27,12 @@ export default function OrderSummaryCard({
         <span>{subtotal.toLocaleString()}đ</span>
       </div>
 
-      <div className="flex justify-between text-sm text-[var(--text-secondary)]">
-        <span>Phí giao hàng</span>
-        <span>{shippingFee.toLocaleString()}đ</span>
-      </div>
+      {orderType === 'DELIVERY' && (
+        <div className="flex justify-between text-sm text-[var(--text-secondary)]">
+          <span>Phí giao hàng</span>
+          <span>{shippingFee.toLocaleString()}đ</span>
+        </div>
+      )}
 
       <div className="flex justify-between border-t border-[var(--border-default)] pt-3 text-base font-semibold text-[var(--color-primary)]">
         <span>Tổng cộng</span>

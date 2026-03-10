@@ -21,7 +21,7 @@ export interface DeliveryAddressOption {
 export interface ProcessPaymentResponse {
   orderId: string;
   storeId: string;
-  status: 'PREPARING';
+  status: 'PAID' | 'PREPARING';
   deliveryAddress: string | null;
   deliveryOption: 'ASAP' | 'SCHEDULED' | null;
   scheduledDeliveryAt: string | null;

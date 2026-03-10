@@ -12,7 +12,7 @@ import type {
 interface OrderHistoryApiItem {
   id: string;
   orderType: 'DELIVERY' | 'INSTORE';
-  status: 'PENDING' | 'PAID' | 'PREPARING';
+  status: 'PENDING' | 'PAID' | 'PREPARING' | 'COMPLETED';
   deliveryAddress: string | null;
   deliveryOption: 'ASAP' | 'SCHEDULED' | null;
   scheduledDeliveryAt: string | null;

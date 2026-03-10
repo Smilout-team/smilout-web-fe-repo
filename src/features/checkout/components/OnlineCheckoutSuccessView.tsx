@@ -57,7 +57,7 @@ export function OnlineCheckoutSuccessView({
           <div className="mb-2 flex items-center justify-between">
             <div className="text-xs text-gray-600">Mã đơn hàng</div>
             <span className="rounded-full bg-green-100 px-2 py-1 text-xs font-medium text-green-700">
-              Đã xác nhận
+              Đơn hàng đã đặt
             </span>
           </div>
           <div className="mb-3 text-sm font-bold text-gray-900">#{orderId}</div>
@@ -105,15 +105,12 @@ export function OnlineCheckoutSuccessView({
               <div className="h-6 w-6 rounded-full bg-green-500" />
               <div>
                 <div className="font-medium text-gray-900">Đơn hàng đã đặt</div>
-                <div className="text-xs text-green-600">Hoan thanh</div>
+                <div className="text-xs text-green-600">Hoàn thành</div>
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <div className="h-6 w-6 rounded-full bg-green-500" />
-              <div>
-                <div className="font-medium text-gray-900">Đang chuẩn bị</div>
-                <div className="text-xs text-green-600">Hoan thanh</div>
-              </div>
+              <div className="h-6 w-6 rounded-full bg-gray-300" />
+              <div className="text-gray-400">Đang Chuẩn bị hàng</div>
             </div>
             <div className="flex items-center gap-3">
               <div className="h-6 w-6 rounded-full bg-gray-300" />
@@ -140,7 +137,7 @@ export function OnlineCheckoutSuccessView({
                   {item.name} x{item.quantity}
                 </span>
                 <span className="text-gray-900">
-                  {(item.price * item.quantity).toLocaleString('vi-VN')}d
+                  {(item.price * item.quantity).toLocaleString('vi-VN')}đ
                 </span>
               </div>
             ))}
@@ -152,19 +149,19 @@ export function OnlineCheckoutSuccessView({
             <div className="flex items-center justify-between">
               <span className="text-gray-500">Tạm tính</span>
               <span>
-                {(paymentData?.subtotalAmount ?? 0).toLocaleString('vi-VN')}d
+                {(paymentData?.subtotalAmount ?? 0).toLocaleString('vi-VN')}đ
               </span>
             </div>
             <div className="flex items-center justify-between">
               <span className="text-gray-500">Phí giao hàng</span>
               <span>
-                {(paymentData?.deliveryFee ?? 0).toLocaleString('vi-VN')}d
+                {(paymentData?.deliveryFee ?? 0).toLocaleString('vi-VN')}đ
               </span>
             </div>
             <div className="flex items-center justify-between pt-1 text-base font-semibold text-[#ff5252]">
               <span>Tổng cộng</span>
               <span>
-                {(paymentData?.totalAmount ?? 0).toLocaleString('vi-VN')}d
+                {(paymentData?.totalAmount ?? 0).toLocaleString('vi-VN')}đ
               </span>
             </div>
           </div>

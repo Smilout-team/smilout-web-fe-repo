@@ -1,13 +1,7 @@
 import Tag from '@/shared/components/common/Tag';
 import type { OrderStatus } from '../types/order.type';
 
-import {
-  Clock,
-  ChefHat,
-  CheckCircle2,
-  XCircle,
-  DollarSign,
-} from 'lucide-react';
+import { Clock, ChefHat, CheckCircle2, XCircle } from 'lucide-react';
 
 export default function OrderStatusTag({ status }: { status: OrderStatus }) {
   switch (status) {
@@ -27,8 +21,8 @@ export default function OrderStatusTag({ status }: { status: OrderStatus }) {
 
     case 'PAID':
       return (
-        <Tag tone="green" icon={<DollarSign />}>
-          Đã thanh toán
+        <Tag tone="primary" icon={<Clock />}>
+          Chờ xác nhận
         </Tag>
       );
 
