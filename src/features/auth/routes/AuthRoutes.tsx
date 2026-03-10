@@ -5,7 +5,9 @@ import SignUp from '@/features/auth/pages/SignUp';
 import Unauthorized from '@/features/auth/pages/Unauthorized';
 import StoreStaffSignIn from '@/features/auth/pages/StoreStaffSignIn';
 import ForgotPassword from '@/features/auth/pages/ForgotPassword';
-import EmailVerification from '../pages/EmailVerification';
+import EmailVerification from '@/features/auth/pages/EmailVerification';
+import ChangePassword from '@/features/auth/pages/ChangePassword';
+import SuccessfullyChangePassword from '@/features/auth/pages/SucessfullyChangePassword';
 
 export const AuthRoutes: RouteObject[] = [
   {
@@ -27,6 +29,14 @@ export const AuthRoutes: RouteObject[] = [
   {
     path: 'email-verification',
     element: <EmailVerification />,
+  },
+  {
+    path: 'change-password',
+    element: <ChangePassword />,
+  },
+  {
+    path: 'change-password-success',
+    element: <SuccessfullyChangePassword />,
   },
   {
     path: 'unauthorized',
