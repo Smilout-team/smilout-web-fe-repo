@@ -1,19 +1,20 @@
-import { useState } from 'react';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import { Input } from '@/shared/components/common/Input';
 import { Button } from '@/shared/components/common/Button';
 import { ROUTES } from '@/shared/constants';
-import { useNavigate } from 'react-router-dom';
+import formatErrorMessage from '@/shared/utils/formatErrorMessage';
+import { useForgotPassword } from '@/shared/hooks/useForgotPassword';
 
 interface ForgotPasswordFormData {
   email: string;
 }
 
 export function ForgotPasswordForm() {
-  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const { mutateAsync, isPending } = useForgotPassword();
 
   const {
     register,
@@ -21,20 +22,25 @@ export function ForgotPasswordForm() {
     formState: { errors },
   } = useForm<ForgotPasswordFormData>();
 
+  useEffect(() => {
+    sessionStorage.removeItem('auth.fp.email');
+    sessionStorage.removeItem('auth.fp.otp');
+  }, []);
+
   const onSubmit = async (data: ForgotPasswordFormData) => {
     try {
-      setIsLoading(true);
+      await mutateAsync({ email: data.email });
 
-      console.log(data);
+      sessionStorage.setItem('auth.fp.email', data.email);
 
       toast.success('Đã gửi mã xác thực!');
       navigate(ROUTES.VERIFY_CODE);
     } catch (error) {
       const message =
-        error instanceof Error ? error.message : 'Gửi mã thất bại';
+        error instanceof Error
+          ? formatErrorMessage(error.message)
+          : 'Gửi mã thất bại';
       toast.error(message);
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -53,7 +59,7 @@ export function ForgotPasswordForm() {
           error={errors.email?.message}
           inputSize="lg"
           className="h-[58.46px]"
-          disabled={isLoading}
+          disabled={isPending}
           {...register('email', {
             required: 'Vui lòng nhập email',
             validate: (value) =>
@@ -71,8 +77,8 @@ export function ForgotPasswordForm() {
         variant="primary"
         size="lg"
         fullWidth
-        loading={isLoading}
-        disabled={isLoading}
+        loading={isPending}
+        disabled={isPending}
         className="h-[67.96px] rounded-[16px] text-[18px] font-bold"
       >
         Gửi mã xác thực

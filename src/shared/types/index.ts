@@ -1,4 +1,11 @@
-export type { AuthUser, SignInPayload, SignUpPayload } from './auth.types';
+export type {
+  AuthUser,
+  SignInPayload,
+  SignUpPayload,
+  ForgotPasswordPayload,
+  VerifyOtpPayload,
+  ResetPasswordPayload,
+} from './auth.types';
 export type {
   ActiveStoreSession,
   OrderItem,

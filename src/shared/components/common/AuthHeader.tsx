@@ -4,7 +4,7 @@ import clsx from 'clsx';
 interface AuthHeaderProps {
   icon?: React.ReactNode;
   title: string;
-  description?: string;
+  description?: React.ReactNode;
   align?: 'center' | 'left';
   size?: 'sm' | 'md';
   className?: string;

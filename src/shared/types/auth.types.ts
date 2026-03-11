@@ -17,3 +17,19 @@ export type SignUpPayload = {
   password: string;
   passwordConfirmation: string;
 };
+
+export type ForgotPasswordPayload = {
+  email: string;
+};
+
+export type VerifyOtpPayload = {
+  email: string;
+  otp: string;
+};
+
+export type ResetPasswordPayload = {
+  email: string;
+  otp: string;
+  newPassword: string;
+  confirmPassword: string;
+};

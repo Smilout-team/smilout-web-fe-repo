@@ -4,9 +4,19 @@ import {
   type AuthUser,
   type SignInPayload,
   type SignUpPayload,
+  type ForgotPasswordPayload,
+  type VerifyOtpPayload,
+  type ResetPasswordPayload,
 } from '@/shared/types';
 
-export type { AuthUser, SignInPayload, SignUpPayload };
+export type {
+  AuthUser,
+  SignInPayload,
+  SignUpPayload,
+  ForgotPasswordPayload,
+  VerifyOtpPayload,
+  ResetPasswordPayload,
+};
 
 type AuthResponse = {
   user: AuthUser;
@@ -57,6 +67,18 @@ export const authService = {
     >('/auth/sign-up', payload);
 
     return parseAuthUser(response);
+  },
+
+  forgotPassword: async (payload: ForgotPasswordPayload): Promise<void> => {
+    await httpClient.post('/auth/forgot-password', payload);
+  },
+
+  verifyOtp: async (payload: VerifyOtpPayload): Promise<void> => {
+    await httpClient.post('/auth/verify-otp', payload);
+  },
+
+  resetPassword: async (payload: ResetPasswordPayload): Promise<void> => {
+    await httpClient.post('/auth/reset-password', payload);
   },
 
   signOut: async (): Promise<void> => {

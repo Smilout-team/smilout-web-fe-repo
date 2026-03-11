@@ -6,6 +6,8 @@ export const PUBLIC_PATHS = [
   '/store-staff/sign-in',
   '/forgot-password',
   '/email-verification',
+  '/change-password',
+  '/change-password-success',
 ] as const;
 
 export const ROUTES = {
@@ -28,4 +30,6 @@ export const ROUTES = {
   CHECKOUT_SUCCESS: '/checkout/success',
   FORGOT_PASSWORD: '/forgot-password',
   VERIFY_CODE: '/email-verification',
+  CHANGE_PASSWORD: '/change-password',
+  CHANGE_PASSWORD_SUCCESS: '/change-password-success',
 } as const;
