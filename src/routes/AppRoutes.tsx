@@ -15,6 +15,7 @@ import { CheckoutPage, CheckoutSuccessPage } from '@/features/checkout/pages';
 import ProtectedRoutes from '@/routes/ProtectedRoutes';
 import Home from '@/features/home/pages/home';
 import { OrderHistoryRoutes } from '@/features/order-history/routes/OrderHistoryRoutes';
+import SearchProductRoutes from '@/features/search-product/routes/SearchProductRoutes';
 
 const routes: RouteObject[] = [
   {
@@ -39,6 +40,11 @@ const routes: RouteObject[] = [
           ...StoreScannerRoutes,
           ...ProductScannerRoutes,
           ...OrderHistoryRoutes,
+          {
+            path: 'shop/*',
+            element: <SearchProductRoutes />,
+          },
+
           {
             path: 'store-hub',
             element: <StoreHubPage />,
