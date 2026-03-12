@@ -34,7 +34,7 @@ export function EmailVerifyHeader() {
           <Key
             size={24}
             strokeWidth={2}
-            className="text-[var(--text-primary)]"
+            className="text-[var(--color-primary)]"
           />
         </div>
       }
