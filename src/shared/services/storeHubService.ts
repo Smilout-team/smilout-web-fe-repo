@@ -42,4 +42,18 @@ export const storeHubService = {
 
     return response.data;
   },
+
+  addToCart: async (orderId: string, productId: string, quantity: number) => {
+    await httpClient.post(`/orders/${orderId}/items`, {
+      productId,
+      quantity,
+    });
+  },
+
+  createOrder: async (storeId: string) => {
+    const res = await httpClient.post<ApiResponse<{ id: string }>>('/orders', {
+      storeId,
+    });
+    return res.data;
+  },
 };
