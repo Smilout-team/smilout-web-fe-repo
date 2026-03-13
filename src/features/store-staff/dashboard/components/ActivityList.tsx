@@ -1,38 +1,18 @@
 import ActivityItem from './ActivityItem';
 
-interface Activity {
-  id: string;
+export interface Activity {
+  id?: string;
   type: 'order' | 'fraud' | 'success';
   name: string;
   description: string;
   time: string;
 }
 
-const mockData: Activity[] = [
-  {
-    id: '1',
-    type: 'order',
-    name: 'Kim Tuyền',
-    description: 'Đơn hàng mới #12345',
-    time: '2 phút trước',
-  },
-  {
-    id: '2',
-    type: 'fraud',
-    name: 'Duyên Hà',
-    description: 'Cảnh báo gian lận',
-    time: '5 phút trước',
-  },
-  {
-    id: '3',
-    type: 'success',
-    name: 'Thị Diệu',
-    description: 'Thanh toán thành công',
-    time: '8 phút trước',
-  },
-];
-
-export default function ActivityList() {
+export default function ActivityList({
+  activities,
+}: {
+  activities: Activity[];
+}) {
   return (
     <div className="space-y-4 pb-6">
       <div className="flex items-center justify-between">
@@ -46,7 +26,7 @@ export default function ActivityList() {
       </div>
 
       <div className="space-y-3">
-        {mockData.map((item) => (
+        {activities.map((item) => (
           <ActivityItem key={item.id} {...item} />
         ))}
       </div>

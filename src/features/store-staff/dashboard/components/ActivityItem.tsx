@@ -1,7 +1,7 @@
 import { AlertTriangle, CheckCircle, ShoppingBag } from 'lucide-react';
 
 interface Props {
-  type: 'order' | 'fraud' | 'success';
+  type: 'order' | 'fraud' | 'success' | 'other';
   name: string;
   description: string;
   time: string;
@@ -20,10 +20,14 @@ const typeConfig = {
     icon: CheckCircle,
     color: 'text-[var(--color-success)]',
   },
+  other: {
+    icon: ShoppingBag,
+    color: 'text-gray-400',
+  },
 };
 
 export default function ActivityItem({ type, name, description, time }: Props) {
-  const config = typeConfig[type];
+  const config = typeConfig[type] || typeConfig.other;
   const Icon = config.icon;
 
   return (

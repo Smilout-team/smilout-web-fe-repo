@@ -39,6 +39,9 @@ export default function StatCard({ title, value, tone, to }: Props) {
   const navigate = useNavigate();
 
   const handleClick = () => {
+    if (to == '') {
+      return;
+    }
     if (to) navigate(to);
   };
 

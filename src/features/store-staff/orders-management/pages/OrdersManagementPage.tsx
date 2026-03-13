@@ -8,11 +8,14 @@ import { ordersManagementService } from '../services/ordersManagementService';
 import type { OrderStatus } from '../types/order.type';
 
 export default function OrdersPage() {
+  const statusFromQuery = new URLSearchParams(window.location.search)
+    .get('status')
+    ?.toUpperCase();
   const { data: orders = [], isLoading } = useOrdersManagement();
   const [statusOverrides, setStatusOverrides] = useState<
     Record<string, OrderStatus>
   >({});
-  const [tab, setTab] = useState('PENDING');
+  const [tab, setTab] = useState(statusFromQuery || 'PENDING');
   const [rejectModalOpen, setRejectModalOpen] = useState(false);
   const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null);
 
