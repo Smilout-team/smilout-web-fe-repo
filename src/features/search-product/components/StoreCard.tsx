@@ -11,10 +11,6 @@ export default function StoreCard({ store, onSelect }: StoreCardProps) {
       className="mb-4 cursor-pointer rounded-[var(--radius-card)] border bg-[var(--bg-card)] p-4 shadow-[var(--shadow-card)] transition-all"
     >
       <div className="flex items-start gap-3">
-        {/* Nút Radio y chang Figma */}
-        <div className="mt-1">
-          <div className="flex h-5 w-5 items-center justify-center rounded-full border-2 transition-all"></div>
-        </div>
         <div className="flex-1">
           <div className="mb-1 flex items-center justify-between">
             <p className="text-[length:var(--text-md)] font-[var(--font-semibold)] text-[var(--text-primary)]">
