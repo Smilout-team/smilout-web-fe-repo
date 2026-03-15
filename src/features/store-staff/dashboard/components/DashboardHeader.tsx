@@ -1,6 +1,8 @@
+import { useAuth } from '@/shared/hooks/useAuth';
 import { User, LogOut } from 'lucide-react';
 
 export default function DashboardHeader() {
+  const user = useAuth().user!;
   return (
     <div className="bg-[var(--color-primary)] p-6 text-[var(--text-on-primary)] shadow-[var(--shadow-card)]">
       <div className="flex items-start justify-between">
@@ -11,7 +13,7 @@ export default function DashboardHeader() {
 
           <div>
             <p className="text-lg font-semibold text-[var(--text-on-primary)]">
-              Kim Hân
+              {user.name}
             </p>
 
             <p className="text-sm text-[var(--text-on-primary)] opacity-90">
@@ -30,7 +32,7 @@ export default function DashboardHeader() {
           <p className="text-[var(--text-on-primary)] opacity-80">Cửa hàng</p>
 
           <p className="font-medium text-[var(--text-on-primary)]">
-            Circle K - Nguyễn Huệ
+            {user.store?.storeName || ''}
           </p>
         </div>
 
@@ -39,7 +41,9 @@ export default function DashboardHeader() {
             Mã cửa hàng
           </p>
 
-          <p className="font-medium text-[var(--text-on-primary)]">CK001</p>
+          <p className="font-medium text-[var(--text-on-primary)]">
+            {user.store?.id || 'CK001'}
+          </p>
         </div>
       </div>
     </div>

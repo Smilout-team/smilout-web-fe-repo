@@ -3,6 +3,10 @@ export type AuthUser = {
   name: string;
   email: string;
   roles: string[];
+  store?: {
+    id: string;
+    storeName: string;
+  };
 };
 
 export type SignInPayload = {
