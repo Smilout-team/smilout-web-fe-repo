@@ -46,8 +46,8 @@ export const TopUpForm: React.FC<TopUpFormProps> = () => {
         maxAmount={MAX_AMOUNT}
       />
 
-      <div className="rounded-lg border-l-4 border-[#2563EB] bg-[#F0F4F8] px-4 py-3">
-        <p className="text-xs leading-relaxed text-[#2563EB]">
+      <div className="rounded-lg border-l-4 border-[var(--color-primary)] bg-[var(--color-primary-light)] px-4 py-3">
+        <p className="text-xs leading-relaxed text-[var(--color-primary)]">
           Lưu ý: Số tiền nạp sẽ được thêm vào ví SMILOUT của bạn. Không hỗ trợ
           liên kết thẻ trực tiếp theo chính sách bảo mật.
         </p>

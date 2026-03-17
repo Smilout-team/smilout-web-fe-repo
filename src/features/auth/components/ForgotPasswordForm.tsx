@@ -47,7 +47,7 @@ export function ForgotPasswordForm() {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="flex flex-col"
+      className="mx-auto flex max-w-[440px] flex-col px-6 md:max-w-[700px] md:px-12"
       noValidate
     >
       <div className="mb-[24px]">
@@ -89,7 +89,7 @@ export function ForgotPasswordForm() {
           Nhớ mật khẩu?{' '}
           <Link
             to={ROUTES.SIGN_IN}
-            className="font-bold text-[#FF6B6B] hover:underline"
+            className="font-bold text-[var(--color-primary-button)] hover:underline"
           >
             Quay lại đăng nhập
           </Link>

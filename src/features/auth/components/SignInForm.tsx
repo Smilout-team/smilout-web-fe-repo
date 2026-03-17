@@ -107,7 +107,7 @@ export function SignInForm() {
       <div className="mb-[20px]">
         <Link
           to={ROUTES.FORGOT_PASSWORD}
-          className="font-sans text-[14px] text-[#FF6B6B] hover:underline"
+          className="font-sans text-[14px] text-[var(--color-primary-button)] hover:underline"
         >
           Quên mật khẩu?
         </Link>
@@ -151,7 +151,7 @@ export function SignInForm() {
           Chưa có tài khoản?{' '}
           <Link
             to={ROUTES.SIGN_UP}
-            className="font-bold text-[#FF6B6B] hover:underline"
+            className="font-bold text-[var(--color-primary-button)] hover:underline"
           >
             Đăng ký ngay
           </Link>

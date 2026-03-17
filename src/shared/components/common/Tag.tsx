@@ -19,12 +19,12 @@ interface TagProps extends React.HTMLAttributes<HTMLSpanElement> {
 
 const toneStyles: Record<TagTone, Record<TagVariant, string>> = {
   red: {
-    light: 'bg-[var(--color-primary-light)] text-[var(--text-on-primary)]',
+    light: 'bg-[var(--color-danger)] text-[var(--text-on-primary)]',
 
-    solid: 'bg-[var(--color-primary)] text-[var(--text-on-primary)]',
+    solid: 'bg-[var(--color-danger)] text-[var(--text-primary)]',
 
     outline:
-      'bg-[var(--bg-card)] border border-[var(--color-primary)] text-[var(--color-primary)]',
+      'bg-[var(--bg-card)] border border-[var(--color-danger)] text-[var(--color-danger)]',
   },
 
   green: {
@@ -55,11 +55,12 @@ const toneStyles: Record<TagTone, Record<TagVariant, string>> = {
   },
 
   primary: {
-    light: 'bg-[var(--color-primary-light)] text-[var(--text-on-primary)]',
+    light:
+      'bg-[var(--color-primary-button)] text-[var(--color-white)] opacity-80',
 
-    solid: 'bg-[var(--color-primary)] text-[var(--text-on-primary)]',
+    solid: 'bg-[var(--color-primary-button)] text-[var(--color-white)]',
 
-    outline: 'bg-[var(--bg-card)] text-[var(--color-primary)]',
+    outline: 'bg-[var(--color-primary-button)] text-[var(--color-white)]',
   },
 };
 

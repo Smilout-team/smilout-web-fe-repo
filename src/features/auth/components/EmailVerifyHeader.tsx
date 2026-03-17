@@ -42,7 +42,7 @@ export function EmailVerifyHeader() {
       description={
         <>
           Chúng tôi đã gửi mã 6 chữ số đến{' '}
-          <span className="font-semibold text-[#FF6B6B]">
+          <span className="font-semibold text-red-500">
             {maskEmail(email || '')}
           </span>
         </>

@@ -19,7 +19,7 @@ export const HomeGreetingCard = ({
   return (
     <section
       className="rounded-[var(--radius-xl)] p-4 text-[var(--text-inverse)]"
-      style={{ background: 'var(--color-primary-gradient)' }}
+      style={{ background: 'var(--color-primary)' }}
     >
       <div className="flex items-center justify-between gap-3">
         <div className="flex items-center gap-3">
@@ -27,16 +27,20 @@ export const HomeGreetingCard = ({
             {getInitials(userName)}
           </div>
           <div>
-            <p className="text-[length:var(--text-sm)] opacity-90">Xin chào</p>
-            <h2 className="text-[length:var(--text-2xl)] leading-[var(--line-height-tight)] font-[var(--font-semibold)]">
+            <p className="text-bold text-[length:var(--text-sm)] text-[var(--text-white)]">
+              Xin chào
+            </p>
+            <h2 className="text-[length:var(--text-2xl)] leading-[var(--line-height-tight)] font-[var(--font-semibold)] text-[var(--text-white)]">
               {userName}
             </h2>
           </div>
         </div>
 
-        <div className="rounded-[var(--radius-lg)] bg-[rgba(255,255,255,0.2)] px-3 py-2 text-right">
-          <p className="text-[length:var(--text-xs)] opacity-90">Số dư ví</p>
-          <p className="inline-flex items-center gap-1 text-[length:var(--text-lg)] font-[var(--font-semibold)]">
+        <div className="rounded-[var(--radius-lg)] bg-[rgba(255,255,255,0.25)] px-3 py-2 text-right">
+          <p className="text-[length:var(--text-xs)] text-[var(--text-white)]">
+            Số dư ví
+          </p>
+          <p className="inline-flex items-center gap-1 text-[length:var(--text-lg)] font-[var(--font-semibold)] text-[var(--text-white)]">
             <Wallet size={14} />
             {walletBalance}
           </p>

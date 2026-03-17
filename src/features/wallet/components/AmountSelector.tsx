@@ -45,8 +45,8 @@ export const AmountSelector: React.FC<AmountSelectorProps> = ({
             className={clsx(
               'rounded-lg border-2 px-4 py-3 text-lg font-semibold transition-all duration-200',
               value === amount
-                ? 'border-[#FF6B6B] bg-[#FFE8E8] text-[#FF6B6B]'
-                : 'border-[#E5E7EB] bg-white text-[#6B7280] hover:border-[#FF6B6B]'
+                ? 'border-[var(--color-primary)] bg-[var(--color-primary-light)] text-[var(--color-primary)]'
+                : 'border-[#E5E7EB] bg-white text-[#6B7280] hover:border-[var(--color-primary)]'
             )}
           >
             {formatCurrency(amount)}
@@ -79,7 +79,7 @@ export const AmountSelector: React.FC<AmountSelectorProps> = ({
         <div className="rounded-lg bg-[#F0F4F8] px-4 py-3">
           <p className="text-center text-[#6B7280]">
             Bạn sẽ nạp:{' '}
-            <span className="font-bold text-[#FF6B6B]">
+            <span className="font-bold text-[var(--color-primary)]">
               {formatCurrency(value)}
             </span>
           </p>

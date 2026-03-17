@@ -38,11 +38,6 @@ export function DeliveryAddressSection({
         />
       </div>
 
-      <div className="mb-3 rounded-lg border border-blue-100 bg-blue-50 px-3 py-2 text-xs text-blue-700">
-        Địa chỉ mặc định được lấy từ tọa độ hiện tại bằng Goong Reverse
-        Geocoding.
-      </div>
-
       <div className="space-y-2">
         {options.map((option) => (
           <button
@@ -51,12 +46,12 @@ export function DeliveryAddressSection({
             onClick={() => onSelectAddress(option.id)}
             className={`w-full rounded-lg border p-3 text-left transition-colors ${
               selectedAddressId === option.id
-                ? 'border-[#FF5252] bg-red-50'
+                ? 'border-[var(--color-primary)] bg-blue-100'
                 : 'border-gray-200 bg-white'
             }`}
           >
             <div className="flex items-center gap-2 text-sm font-semibold text-gray-900">
-              <MapPin size={14} className="text-[#FF5252]" />
+              <MapPin size={14} className="text-[var(--color-primary)]" />
               <span>{option.label}</span>
             </div>
             <div className="mt-1 text-sm text-gray-600">{option.address}</div>

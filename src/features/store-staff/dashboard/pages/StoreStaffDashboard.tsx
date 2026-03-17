@@ -37,42 +37,43 @@ const StoreStaffDashboard = () => {
   });
 
   return (
-    <div className="col-span-2 min-h-screen space-y-6 bg-[var(--bg-page)] px-4">
+    <div className="col-span-2 min-h-screen bg-[var(--bg-page)]">
       <StoreHeader />
+      <div className="mt-6 space-y-6 px-4">
+        <RevenueCard
+          revenue={revenueData?.data?.total ?? 0}
+          compareToYesterday={revenueData?.data?.compareToYesterday ?? 0}
+        />
 
-      <RevenueCard
-        revenue={revenueData?.data?.total ?? 0}
-        compareToYesterday={revenueData?.data?.compareToYesterday ?? 0}
-      />
+        <div className="grid grid-cols-2 gap-4">
+          <StatCard
+            title="Khách trong cửa hàng"
+            value={customerData?.data?.count ?? 0}
+            tone="blue"
+            to="/store-staff/users"
+          />
+          <StatCard
+            title="Quản lý đơn đặt hàng"
+            value={pendingDeliveryData?.data?.count ?? 0}
+            tone="orange"
+            to="/store-staff/orders"
+          />
+          <StatCard
+            title="Cảnh báo gian lận"
+            value={fraudData?.data?.count ?? 0}
+            tone="red"
+            to="/store-staff/fraud-management"
+          />
+          <StatCard
+            title="Đơn hoàn thành"
+            value={completedData?.data?.count ?? 0}
+            tone="green"
+            to="/store-staff/orders?status=completed"
+          />
+        </div>
 
-      <div className="grid grid-cols-2 gap-4">
-        <StatCard
-          title="Khách trong cửa hàng"
-          value={customerData?.data?.count ?? 0}
-          tone="blue"
-          to="/store-staff/users"
-        />
-        <StatCard
-          title="Quản lý đơn đặt hàng"
-          value={pendingDeliveryData?.data?.count ?? 0}
-          tone="orange"
-          to="/store-staff/orders"
-        />
-        <StatCard
-          title="Cảnh báo gian lận"
-          value={fraudData?.data?.count ?? 0}
-          tone="red"
-          to="/store-staff/fraud-management"
-        />
-        <StatCard
-          title="Đơn hoàn thành"
-          value={completedData?.data?.count ?? 0}
-          tone="green"
-          to="/store-staff/orders?status=completed"
-        />
+        <ActivityList activities={activityData?.data?.activities ?? []} />
       </div>
-
-      <ActivityList activities={activityData?.data?.activities ?? []} />
     </div>
   );
 };

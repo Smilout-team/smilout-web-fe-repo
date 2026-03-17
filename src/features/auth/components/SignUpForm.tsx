@@ -187,7 +187,7 @@ export function SignUpForm() {
           Đã có tài khoản?{' '}
           <Link
             to={ROUTES.SIGN_IN}
-            className="font-bold text-[#FF6B6B] hover:underline"
+            className="font-bold text-[var(--color-primary-button)] hover:underline"
           >
             Đăng nhập ngay
           </Link>

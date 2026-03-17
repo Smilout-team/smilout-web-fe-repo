@@ -77,7 +77,7 @@ export function OnlineCheckoutSuccessView({
             </div>
           </div>
 
-          <div className="mt-3 rounded-lg bg-red-50 p-3 text-sm">
+          <div className="mt-3 rounded-lg bg-[var(--color-primary-light)] p-3 text-sm">
             <div className="text-gray-600">Thời gian giao hàng dự kiến</div>
             <div className="font-semibold text-[#ff5252]">
               {paymentData?.deliveryOption === 'SCHEDULED' &&
@@ -158,7 +158,7 @@ export function OnlineCheckoutSuccessView({
                 {(paymentData?.deliveryFee ?? 0).toLocaleString('vi-VN')}đ
               </span>
             </div>
-            <div className="flex items-center justify-between pt-1 text-base font-semibold text-[#ff5252]">
+            <div className="flex items-center justify-between pt-1 text-base font-semibold text-[var(--color-primary)]">
               <span>Tổng cộng</span>
               <span>
                 {(paymentData?.totalAmount ?? 0).toLocaleString('vi-VN')}đ
@@ -173,14 +173,14 @@ export function OnlineCheckoutSuccessView({
               window.location.href = `tel:${storeDetail.contactPhone}`;
             }
           }}
-          className="w-full rounded-lg border border-[#ff5252] bg-white py-3 font-semibold text-[#ff5252]"
+          className="w-full rounded-lg border border-[var(--color-primary)] bg-white py-3 font-semibold text-[var(--color-primary)]"
         >
           Liên hệ cửa hàng
         </button>
 
         <button
           onClick={() => navigate(ROUTES.ORDER_HISTORY)}
-          className="w-full rounded-lg bg-[#ff5252] py-3 font-semibold text-white"
+          className="w-full rounded-lg bg-[var(--color-primary)] py-3 font-semibold text-white"
         >
           Xem đơn hàng của tôi
         </button>

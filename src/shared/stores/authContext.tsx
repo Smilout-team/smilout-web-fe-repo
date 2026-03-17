@@ -76,6 +76,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     onSuccess: () => {
       queryClient.setQueryData(AUTH_QUERY_KEY, null);
       queryClient.removeQueries({ queryKey: AUTH_QUERY_KEY });
+      refetch();
     },
   });
 

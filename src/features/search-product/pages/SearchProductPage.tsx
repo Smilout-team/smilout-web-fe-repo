@@ -167,7 +167,7 @@ export default function SearchProductPage() {
           {getCategories(allProducts).map((cat) => (
             <Tag
               key={cat}
-              tone={activeCategory === cat ? 'red' : 'gray'}
+              tone={activeCategory === cat ? 'primary' : 'gray'}
               variant={activeCategory === cat ? 'solid' : 'light'}
               rounded="full"
               size="md"

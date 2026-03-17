@@ -69,8 +69,8 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
                   ]
                 : [
                     'border-[var(--border-default)]',
-                    'focus:border-[#FF6B6B]',
-                    'focus:ring-[#FF6B6B]/30',
+                    'focus:border-[var(--color-primary)]',
+                    'focus:ring-[var(--color-primary)/30]',
                   ],
               icon && 'pr-11',
               sizeStyles[inputSize],
