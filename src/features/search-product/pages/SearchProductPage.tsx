@@ -12,7 +12,6 @@ import Tag from '@/shared/components/common/Tag';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useStoreProducts } from '../hooks/useStoreProducts';
 
-// Lấy category động từ dữ liệu sản phẩm, ưu tiên tên nếu có
 function getCategories(products: Product[]) {
   const map = new Map<string, string>();
   for (const p of products) {
@@ -26,7 +25,6 @@ function getCategories(products: Product[]) {
   return ['Tất cả', ...Array.from(map.values())];
 }
 
-// Hàm loại bỏ dấu tiếng Việt
 function removeVietnameseTones(str: string) {
   return str
     .normalize('NFD')
@@ -46,7 +44,6 @@ export default function SearchProductPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Use the hook at the top level
   const {
     data: storeProducts,
     isLoading: productsLoading,
@@ -71,10 +68,8 @@ export default function SearchProductPage() {
     }
   }, [storeProducts, productsLoading, productsError]);
 
-  // Tìm kiếm và lọc động trên FE
   useEffect(() => {
     let result = allProducts;
-    // Lọc theo category (so sánh theo tên category hiển thị)
     if (activeCategory !== 'Tất cả') {
       result = result.filter((p) => {
         let catName = '';
@@ -85,7 +80,6 @@ export default function SearchProductPage() {
         return catName === activeCategory;
       });
     }
-    // Tìm kiếm tên sản phẩm: match cả có dấu và không dấu
     if (searchTerm.trim()) {
       const lower = searchTerm.trim().toLowerCase();
       const lowerNoSign = removeVietnameseTones(lower);

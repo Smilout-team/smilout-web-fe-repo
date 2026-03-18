@@ -1,4 +1,3 @@
-// import React from 'react';
 import { X } from 'lucide-react';
 import { type Product } from '../types/search';
 import Button from '@/shared/components/common/Button';

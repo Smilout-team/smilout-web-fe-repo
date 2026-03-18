@@ -5,7 +5,7 @@ import {
   useEffect,
   useMemo,
 } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import {
   type QueryStatus,
   useMutation,
@@ -13,7 +13,7 @@ import {
   useQueryClient,
 } from '@tanstack/react-query';
 import { authService } from '../services/authService';
-import { AUTH_QUERY_KEY, PUBLIC_PATHS } from '@/shared/constants';
+import { AUTH_QUERY_KEY, PUBLIC_PATHS, ROUTES } from '@/shared/constants';
 import { type AuthUser, type SignInPayload } from '@/shared/types';
 
 type AuthContextValue = {
@@ -35,6 +35,7 @@ export const AuthContext = createContext<AuthContextValue | undefined>(
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const queryClient = useQueryClient();
   const location = useLocation();
+  const navigate = useNavigate();
 
   const isPublicPath = PUBLIC_PATHS.some((path) =>
     location.pathname.startsWith(path)
@@ -74,9 +75,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const signOutMutation = useMutation({
     mutationFn: authService.signOut,
     onSuccess: () => {
+      const user: AuthUser | null = queryClient.getQueryData(
+        AUTH_QUERY_KEY
+      ) as AuthUser | null;
       queryClient.setQueryData(AUTH_QUERY_KEY, null);
       queryClient.removeQueries({ queryKey: AUTH_QUERY_KEY });
-      refetch();
+      if (user?.roles?.includes('STORE_STAFF')) {
+        navigate(ROUTES.STORE_STAFF_SIGN_IN, { replace: true });
+      } else if (user?.roles?.includes('CONSUMER')) {
+        navigate(ROUTES.SIGN_IN, { replace: true });
+      }
     },
   });
 

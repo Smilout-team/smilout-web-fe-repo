@@ -36,7 +36,7 @@ export default function ProductCard({
             variant="primary"
             shape="pill"
             size="sm"
-            className="flex h-8 w-8 items-center justify-center !bg-[var(--color-primary)] !p-0 hover:!bg-[var(--color-primary-hover)]"
+            className="flex h-8 w-8 items-center justify-center p-0"
             onClick={(e) => onAddToCart(e, product)}
           >
             <ShoppingCart size={16} className="text-[var(--text-inverse)]" />

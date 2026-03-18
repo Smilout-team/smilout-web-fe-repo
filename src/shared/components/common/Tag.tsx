@@ -55,8 +55,7 @@ const toneStyles: Record<TagTone, Record<TagVariant, string>> = {
   },
 
   primary: {
-    light:
-      'bg-[var(--color-primary-button)] text-[var(--color-white)] opacity-80',
+    light: 'bg-[var(--color-primary)] text-[var(--color-white)] opacity-80',
 
     solid: 'bg-[var(--color-primary-button)] text-[var(--color-white)]',
 

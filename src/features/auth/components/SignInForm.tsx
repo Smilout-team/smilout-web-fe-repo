@@ -9,6 +9,7 @@ import { Input } from '@/shared/components/common/Input';
 import { Button } from '@/shared/components/common/Button';
 import { useAuth } from '@/shared/hooks/useAuth';
 import { ROUTES } from '@/shared/constants';
+import formatErrorMessage from '@/shared/utils/formatErrorMessage';
 
 interface SignInFormData {
   email: string;
@@ -35,7 +36,9 @@ export function SignInForm() {
       navigate('/home');
     } catch (error) {
       const message =
-        error instanceof Error ? error.message : 'Đăng nhập thất bại';
+        error instanceof Error
+          ? formatErrorMessage(error.message)
+          : 'Đăng nhập thất bại';
       toast.error(message);
     } finally {
       setIsLoading(false);

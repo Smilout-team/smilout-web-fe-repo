@@ -245,6 +245,7 @@ export const StoreHubPage = () => {
             size="lg"
             className="!py-3"
             onClick={() => navigate('/checkout')}
+            disabled={cartItems.length === 0}
           >
             Thanh toán
           </Button>
