@@ -49,7 +49,12 @@ export const QuickReorderSection = ({
           </p>
         </div>
 
-        <Button variant="soft" fullWidth className="mt-3" onClick={onReorder}>
+        <Button
+          variant="primary"
+          fullWidth
+          className="mt-3"
+          onClick={onReorder}
+        >
           Mua lại đơn hàng này
         </Button>
       </div>

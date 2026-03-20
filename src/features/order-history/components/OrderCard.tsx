@@ -52,7 +52,11 @@ export default function OrderCard({ order, onRepurchase }: OrderCardProps) {
           {typeStyle.icon}
           <span>{typeStyle.text}</span>
         </div>
-        <OrderStatusBadge orderType={order.orderType} status={order.status} />
+        <OrderStatusBadge
+          orderType={order.orderType}
+          status={order.status}
+          orderId={order.id}
+        />
       </div>
 
       <div className="mb-2.5 flex items-center gap-2 text-[length:var(--text-sm)] text-[var(--text-secondary)]">

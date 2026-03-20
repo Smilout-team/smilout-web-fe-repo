@@ -99,7 +99,7 @@ export default function StoreSelectionPage() {
   return (
     <div className="flex min-h-screen flex-col bg-[var(--bg-page)]">
       <AppHeader title="Chọn cửa hàng" showBack={true} />
-      <main className="flex-1 p-4">
+      <main className="mb-12 flex-1 p-4">
         <div className="mb-4 flex items-center justify-between">
           <p className="text-[length:var(--text-lg)] font-[var(--font-semibold)] text-[var(--text-primary)]">
             Cửa hàng gần bạn

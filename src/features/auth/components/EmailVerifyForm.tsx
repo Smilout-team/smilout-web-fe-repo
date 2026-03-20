@@ -98,7 +98,7 @@ export function EmailVerifyForm() {
   };
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="mx-auto flex max-w-[440px] flex-col items-center px-6 md:max-w-[700px] md:px-12">
       <div className="mb-[32px] flex gap-[6px] px-12">
         {otp.map((digit, index) => (
           <input
@@ -138,7 +138,7 @@ export function EmailVerifyForm() {
           className={`mt-[4px] font-semibold ${
             countdown > 0
               ? 'cursor-not-allowed text-gray-400'
-              : 'text-[#FF6B6B]'
+              : 'text-[var(--color-primary-button)] hover:underline'
           }`}
         >
           {countdown > 0 ? `Gửi lại sau ${countdown}s` : 'Gửi lại mã'}

@@ -24,7 +24,7 @@ export default function OrderTabs({ active, counts, onChange }: Props) {
           <Tag
             key={tab.key}
             onClick={() => onChange(tab.key)}
-            tone={isActive ? 'primary' : 'red'}
+            tone={isActive ? 'primary' : 'gray'}
             variant={isActive ? 'outline' : 'light'}
             rounded="full"
             size="sm"

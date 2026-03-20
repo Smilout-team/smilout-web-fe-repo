@@ -13,10 +13,10 @@ export default function OrderDetailHeader({ order }: Props) {
         <ReturnButton variant="web" className="bg-white/20 hover:bg-white/30" />
 
         <div className="flex-1">
-          <p className="text-lg font-semibold text-[var(--text-on-primary)]">
+          <p className="text-lg font-semibold text-[var(--text-primary)]">
             Chi tiết đơn hàng
           </p>
-          <p className="text-sm text-[var(--text-on-primary)] opacity-90">
+          <p className="text-sm text-[var(--text-primary)] opacity-80">
             #{order.id}
           </p>
         </div>

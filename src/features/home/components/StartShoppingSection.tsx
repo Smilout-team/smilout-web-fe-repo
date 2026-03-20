@@ -30,7 +30,7 @@ const ActionCard = ({
       className="w-full rounded-[var(--radius-lg)] p-3 text-left transition-transform active:scale-[0.99]"
       style={{
         background: isPrimary
-          ? 'var(--color-primary-gradient)'
+          ? 'var(--color-primary-button)'
           : 'var(--bg-page)',
         border: isPrimary ? 'none' : '1px solid var(--border-default)',
       }}
@@ -39,7 +39,7 @@ const ActionCard = ({
         <div
           className="flex h-10 w-10 items-center justify-center rounded-[var(--radius-md)]"
           style={{
-            background: isPrimary ? 'rgba(255,255,255,0.22)' : 'var(--bg-card)',
+            background: isPrimary ? 'rgba(255,255,255,0.25)' : 'var(--bg-card)',
             color: isPrimary ? 'var(--text-inverse)' : 'var(--color-primary)',
           }}
         >

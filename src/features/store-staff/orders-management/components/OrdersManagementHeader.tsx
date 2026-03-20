@@ -20,10 +20,10 @@ export default function OrdersManagementHeader({
         <ReturnButton variant="web" className="bg-white/20 hover:bg-white/30" />
 
         <div>
-          <p className="text-lg font-semibold text-[var(--text-on-primary)]">
+          <p className="text-lg font-semibold text-[var(--color-white)]">
             Quản lý đơn hàng
           </p>
-          <p className="text-sm text-[var(--text-on-primary)] opacity-90">
+          <p className="text-solid text-sm text-[var(--color-white)] opacity-90">
             {total} đơn hàng
           </p>
         </div>

@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { Html5Qrcode } from 'html5-qrcode';
+import { Html5Qrcode, Html5QrcodeSupportedFormats } from 'html5-qrcode';
 
 interface QRScanFrameProps {
   onScanSuccess: (decodedText: string) => void;
@@ -95,6 +95,7 @@ export const QRScanFrame = ({
         const config = {
           fps: 10,
           qrbox: { width: 250, height: 250 },
+          formatsToSupport: [Html5QrcodeSupportedFormats.QR_CODE],
         };
 
         const transition = scannerRef.current.start(
@@ -115,6 +116,7 @@ export const QRScanFrame = ({
               'IndexSizeError',
               'getImageData',
               'source width is 0',
+              'No MultiFormat Readers were able to detect the code',
             ];
 
             const shouldIgnore = ignoredErrors.some((err) =>

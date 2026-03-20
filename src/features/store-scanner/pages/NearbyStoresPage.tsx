@@ -45,7 +45,7 @@ export default function NearbyStoresPage() {
       {
         enableHighAccuracy: true,
         timeout: 15000,
-        maximumAge: 0,
+        maximumAge: 10000,
       }
     );
 
@@ -74,8 +74,12 @@ export default function NearbyStoresPage() {
         toast.info('Không tìm thấy cửa hàng gần bạn');
         return;
       }
-
-      setSelectedStoreId(stores[0].storeId);
+      if (
+        !selectedStoreId ||
+        !stores.some((store) => store.storeId === selectedStoreId)
+      ) {
+        setSelectedStoreId(stores[0].storeId);
+      }
     });
   }, [fetchNearbyStores, userLocation]);
 
@@ -145,7 +149,7 @@ export default function NearbyStoresPage() {
                 <p className="text-sm text-slate-600">Đang tải bản đồ...</p>
               </div>
             </div>
-          ) : GOONG_MAP_KEY || GOONG_API_KEY ? (
+          ) : GOONG_API_KEY ? (
             <div ref={mapContainerRef} className="h-[26rem] w-full" />
           ) : (
             <div className="flex h-52 items-center justify-center bg-slate-50 px-4 text-center text-sm text-slate-600">

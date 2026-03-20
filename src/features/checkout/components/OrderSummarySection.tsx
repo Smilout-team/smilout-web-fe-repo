@@ -56,8 +56,8 @@ export function OrderSummarySection({
       )}
 
       <div className="mt-3 flex justify-between text-base">
-        <div className="font-semibold text-gray-900">Tổng cộng</div>
-        <div className="text-lg font-bold text-[#FF5252]">
+        <div className="font-bold text-[var(--color-primary)]">Tổng cộng</div>
+        <div className="text-lg font-bold text-[var(--color-primary)]">
           {formatCurrency(totalAmount)}đ
         </div>
       </div>

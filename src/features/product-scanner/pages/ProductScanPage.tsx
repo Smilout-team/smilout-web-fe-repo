@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Camera, ScanLine } from 'lucide-react';
+import { Camera } from 'lucide-react';
 import { AppHeader } from '@/shared/components/common/Header';
 import { Button } from '@/shared/components/common/Button';
 import { STORAGE_KEYS } from '@/shared/constants';
@@ -210,25 +210,7 @@ export const ProductScanPage = () => {
                   </div>
                 </>
               ) : (
-                <div className="flex items-start gap-3">
-                  <div className="mt-1 rounded-full bg-[var(--bg-secondary)] p-2">
-                    <ScanLine
-                      size={16}
-                      className="text-[var(--color-primary)]"
-                    />
-                  </div>
-                  <div>
-                    <p className="text-[length:var(--text-sm)] text-[var(--text-secondary)]">
-                      Sản phẩm vừa thêm
-                    </p>
-                    <p className="text-[length:var(--text-sm)] font-[var(--font-semibold)] text-[var(--text-primary)]">
-                      Product ID: {lastScan.productId}
-                    </p>
-                    <p className="text-[length:var(--text-sm)] text-[var(--text-secondary)]">
-                      Số lượng trong order: {lastScan.quantity}
-                    </p>
-                  </div>
-                </div>
+                <></>
               )}
 
               <div className="flex gap-2">

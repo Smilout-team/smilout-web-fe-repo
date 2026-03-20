@@ -15,14 +15,22 @@ export function PaymentMethodCard({
   onTopUp,
   formatCurrency,
 }: PaymentMethodCardProps) {
+  const colorClass = isInsufficientBalance
+    ? 'bg-red-100 border-red-500'
+    : 'bg-blue-100 border-[var(--color-primary)]';
+  const bgColorClass = isInsufficientBalance
+    ? 'bg-red-900'
+    : 'bg-[var(--color-primary)]';
   return (
     <div className="mb-4 rounded-lg bg-white p-4 shadow-sm">
       <h2 className="mb-3 text-sm font-medium text-gray-700">
         Phương thức thanh toán
       </h2>
-      <div className="flex items-center justify-between rounded-lg border-2 border-[#FF5252] bg-red-50 p-3">
+      <div
+        className={`flex items-center justify-between rounded-lg border-2 ${colorClass} p-3`}
+      >
         <div className="flex items-center gap-3">
-          <div className="rounded-full bg-[#FF5252] p-2">
+          <div className={`rounded-full ${bgColorClass} p-2`}>
             <Wallet size={20} className="text-white" />
           </div>
           <div>
@@ -31,11 +39,6 @@ export function PaymentMethodCard({
               Số dư: {formatCurrency(balance)}đ
             </div>
           </div>
-        </div>
-        <div className="text-orange-500">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
-          </svg>
         </div>
       </div>
 

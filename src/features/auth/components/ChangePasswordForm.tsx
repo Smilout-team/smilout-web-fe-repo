@@ -68,7 +68,7 @@ export function ChangePasswordForm() {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="flex flex-col"
+      className="mx-auto flex max-w-[440px] flex-col px-6 md:max-w-[700px] md:px-12"
       noValidate
     >
       <div className="mb-[24px]">
