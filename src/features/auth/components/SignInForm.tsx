@@ -1,0 +1,164 @@
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { Eye, EyeOff } from 'lucide-react';
+import { useNavigate, Link } from 'react-router-dom';
+import { toast } from 'sonner';
+import { useGoogleLogin } from '@react-oauth/google';
+import { FcGoogle } from 'react-icons/fc';
+import { Input } from '@/shared/components/common/Input';
+import { Button } from '@/shared/components/common/Button';
+import { useAuth } from '@/shared/hooks/useAuth';
+import { ROUTES } from '@/shared/constants';
+
+interface SignInFormData {
+  email: string;
+  password: string;
+}
+
+export function SignInForm() {
+  const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
+  const { signIn, googleSignIn } = useAuth();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<SignInFormData>();
+
+  const onSubmit = async (data: SignInFormData) => {
+    try {
+      setIsLoading(true);
+      await signIn(data);
+      toast.success('Đăng nhập thành công!');
+      navigate('/home');
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : 'Đăng nhập thất bại';
+      toast.error(message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleGoogleLogin = useGoogleLogin({
+    flow: 'auth-code',
+    onSuccess: async (codeResponse) => {
+      try {
+        setIsLoading(true);
+
+        await googleSignIn(codeResponse.code);
+
+        toast.success('Đăng nhập Google thành công!');
+        navigate('/home');
+      } catch (error) {
+        const message =
+          error instanceof Error ? error.message : 'Đăng nhập Google thất bại';
+        toast.error(message);
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    onError: () => toast.error('Đăng nhập Google thất bại'),
+  });
+
+  return (
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="flex flex-col"
+      noValidate
+    >
+      <div className="mb-[24px]">
+        <Input
+          label="Email"
+          type="email"
+          placeholder="email@example.com"
+          error={errors.email?.message}
+          inputSize="lg"
+          className="h-[58.46px]"
+          disabled={isLoading}
+          {...register('email', {
+            required: 'Vui lòng nhập email',
+            pattern: {
+              value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+              message: 'Email không hợp lệ',
+            },
+          })}
+        />
+      </div>
+
+      <div className="mb-[20px]">
+        <Input
+          label="Mật khẩu"
+          type={showPassword ? 'text' : 'password'}
+          placeholder="Nhập mật khẩu"
+          required
+          error={errors.password?.message}
+          inputSize="lg"
+          className="h-[58.46px]"
+          disabled={isLoading}
+          icon={showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+          onIconClick={() => setShowPassword(!showPassword)}
+          {...register('password', { required: 'Vui lòng nhập mật khẩu' })}
+        />
+      </div>
+
+      <div className="mb-[20px]">
+        <Link
+          to={ROUTES.FORGOT_PASSWORD}
+          className="font-sans text-[14px] text-[#FF6B6B] hover:underline"
+        >
+          Quên mật khẩu?
+        </Link>
+      </div>
+
+      <Button
+        type="submit"
+        variant="primary"
+        size="lg"
+        fullWidth
+        loading={isLoading}
+        disabled={isLoading}
+        className="h-[67.96px] rounded-[16px] text-[18px] font-bold"
+      >
+        Đăng nhập
+      </Button>
+
+      <div className="mt-[24px] mb-[24px] flex items-center gap-x-[12px]">
+        <div className="h-[1px] flex-1 bg-[#E5E7EB]" />
+        <span className="font-sans text-[14px] text-[#6A7282]">hoặc</span>
+        <div className="h-[1px] flex-1 bg-[#E5E7EB]" />
+      </div>
+
+      <Button
+        type="button"
+        variant="secondary"
+        size="lg"
+        fullWidth
+        disabled={isLoading}
+        onClick={() => handleGoogleLogin()}
+        className="mb-[30px] h-[58.46px]"
+      >
+        <span className="flex items-center justify-center gap-2">
+          <FcGoogle size={20} />
+          Tiếp tục với Google
+        </span>
+      </Button>
+
+      <div className="text-center">
+        <p className="font-sans text-[16px] text-[#4A5565]">
+          Chưa có tài khoản?{' '}
+          <Link
+            to={ROUTES.SIGN_UP}
+            className="font-bold text-[#FF6B6B] hover:underline"
+          >
+            Đăng ký ngay
+          </Link>
+        </p>
+      </div>
+    </form>
+  );
+}
+
+export default SignInForm;
