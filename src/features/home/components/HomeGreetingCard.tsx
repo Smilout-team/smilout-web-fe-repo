@@ -1,8 +1,10 @@
+import { formatCurrency } from '@/features/wallet/utils/currency';
 import { Wallet } from 'lucide-react';
+import { useMemo } from 'react';
 
 interface HomeGreetingCardProps {
   userName: string;
-  walletBalance: string;
+  walletBalance: number | undefined;
 }
 
 const getInitials = (name: string) => {
@@ -16,6 +18,10 @@ export const HomeGreetingCard = ({
   userName,
   walletBalance,
 }: HomeGreetingCardProps) => {
+  const displayBalance = useMemo(
+    () => formatCurrency(walletBalance || 0),
+    [walletBalance]
+  );
   return (
     <section
       className="rounded-[var(--radius-xl)] p-4 text-[var(--text-inverse)]"
@@ -42,7 +48,7 @@ export const HomeGreetingCard = ({
           </p>
           <p className="inline-flex items-center gap-1 text-[length:var(--text-lg)] font-[var(--font-semibold)] text-[var(--text-white)]">
             <Wallet size={14} />
-            {walletBalance}
+            {displayBalance}
           </p>
         </div>
       </div>
