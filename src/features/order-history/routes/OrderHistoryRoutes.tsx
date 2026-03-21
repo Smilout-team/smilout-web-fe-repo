@@ -4,7 +4,7 @@ import StoreRecommendationsPage from '@/features/order-history/pages/StoreRecomm
 
 export const OrderHistoryRoutes: RouteObject[] = [
   {
-    path: 'orders',
+    path: 'order-history',
     element: <OrderHistoryPage />,
   },
   {

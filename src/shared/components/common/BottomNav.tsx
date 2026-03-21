@@ -5,8 +5,18 @@ import clsx from 'clsx';
 
 const NAV_ITEMS = [
   { id: 'home', label: 'Trang chủ', icon: Home, path: '/home' },
-  { id: 'shop', label: 'Mua sắm', icon: ShoppingBag, path: '/shop' },
-  { id: 'orders', label: 'Đơn hàng', icon: Clock, path: '/orders' },
+  {
+    id: 'online-shopping',
+    label: 'Mua sắm',
+    icon: ShoppingBag,
+    path: '/online-shopping',
+  },
+  {
+    id: 'order-history',
+    label: 'Đơn hàng',
+    icon: Clock,
+    path: '/order-history',
+  },
   { id: 'wallet', label: 'Ví', icon: Wallet, path: '/wallet' },
   { id: 'profile', label: 'Cá nhân', icon: User, path: '/profile' },
 ];

@@ -56,6 +56,14 @@ export const orderHistoryService = {
     return (response.data ?? []).map(mapOrderItem);
   },
 
+  getMyLatestOrder: async (): Promise<Order> => {
+    const response = await httpClient.get<ApiResponse<OrderHistoryApiItem>>(
+      ENDPOINTS.GET_MY_LATEST_ORDER
+    );
+    console.log('API response for latest order:', response.data);
+    return [response.data].map(mapOrderItem)[0];
+  },
+
   getRepurchaseRecommendations: async (
     request: RepurchaseOrderRequest
   ): Promise<RepurchaseOrderResponse> => {

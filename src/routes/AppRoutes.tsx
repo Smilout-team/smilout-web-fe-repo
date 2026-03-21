@@ -41,7 +41,7 @@ const routes: RouteObject[] = [
           ...ProductScannerRoutes,
           ...OrderHistoryRoutes,
           {
-            path: 'shop/*',
+            path: 'online-shopping/*',
             element: <SearchProductRoutes />,
           },
 

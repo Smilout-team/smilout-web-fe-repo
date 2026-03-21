@@ -25,11 +25,12 @@ export const ROUTES = {
   STORE_HUB: '/store-hub',
   SCAN_PRODUCT: '/scan-product',
   CART: '/cart',
-  ORDER_HISTORY: '/orders',
+  ORDER_HISTORY: '/order-history',
   CHECKOUT: '/checkout',
   CHECKOUT_SUCCESS: '/checkout/success',
   FORGOT_PASSWORD: '/forgot-password',
   VERIFY_CODE: '/email-verification',
   CHANGE_PASSWORD: '/change-password',
   CHANGE_PASSWORD_SUCCESS: '/change-password-success',
+  ONLINE_SHOPPING: '/online-shopping',
 } as const;
