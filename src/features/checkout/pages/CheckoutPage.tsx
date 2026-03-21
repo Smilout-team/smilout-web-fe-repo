@@ -266,8 +266,13 @@ export const CheckoutPage = () => {
       return;
     }
 
-    if (isOnlineDelivery && deliveryPhoneNumber === '') {
+    if (isOnlineDelivery && !phoneError && !deliveryPhoneNumber) {
       setDeliveryPhoneNumber(user?.phoneNumber ?? '');
+    }
+
+    if (isOnlineDelivery && phoneError) {
+      toast.error('Số điện thoại người nhận không hợp lệ');
+      return;
     }
 
     try {
@@ -369,6 +374,8 @@ export const CheckoutPage = () => {
                     const error = await debounceValidatePhone(value);
                     if (error) {
                       setPhoneError(error);
+                    } else {
+                      setPhoneError(null);
                     }
                   } else {
                     setPhoneError(null);
