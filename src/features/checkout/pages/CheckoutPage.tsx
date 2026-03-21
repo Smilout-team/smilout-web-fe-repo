@@ -266,13 +266,13 @@ export const CheckoutPage = () => {
       return;
     }
 
+    if (isOnlineDelivery && !phoneError && !deliveryPhoneNumber) {
+      setDeliveryPhoneNumber(user?.phoneNumber ?? '');
+    }
+
     if (isOnlineDelivery && phoneError) {
       toast.error('Số điện thoại người nhận không hợp lệ');
       return;
-    }
-
-    if (isOnlineDelivery && !phoneError && !deliveryPhoneNumber) {
-      setDeliveryPhoneNumber(user?.phoneNumber ?? '');
     }
 
     try {
@@ -381,7 +381,7 @@ export const CheckoutPage = () => {
                     setPhoneError(null);
                   }
                 }}
-                placeholder={`Số điện thoại mặc định của bạn là ${user?.phoneNumber ?? 'Nhập số điện thoại người nhận'}`}
+                placeholder={`Số điện thoại mặc định của bạn là ${user?.phoneNumber ?? 'Nhập số điện thoại của người nhận'}`}
                 className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
                 maxLength={15}
               />
