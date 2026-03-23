@@ -78,7 +78,7 @@ export default function StoreSelectionPage() {
       toast.error('Có lỗi khi tạo order!');
       return;
     }
-    navigate(`/shop/${id}`);
+    navigate(`/online-shopping/${id}`);
   };
 
   if (loading) {
