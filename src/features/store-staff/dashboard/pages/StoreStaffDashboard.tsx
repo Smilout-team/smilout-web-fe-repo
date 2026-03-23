@@ -72,7 +72,18 @@ const StoreStaffDashboard = () => {
               ['dashboard-activity'],
               (old: ActivitiesResponse) => ({
                 ...old,
-                data: { activities: [data.activity, ...old.data.activities] },
+                data: {
+                  activities: [
+                    {
+                      id: data.order.id,
+                      type: 'order',
+                      name: data.order.consumer.name,
+                      description: `Đơn hàng ${data.order.id} - New order`,
+                      time: new Date().toLocaleTimeString(),
+                    },
+                    ...old.data.activities,
+                  ],
+                },
               })
             );
             await deleteDoc(doc(db, 'order_events', change.doc.id));

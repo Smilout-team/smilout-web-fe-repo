@@ -142,28 +142,29 @@ export default function NearbyStoresPage() {
 
       <div className="mx-auto space-y-4 px-4 py-4">
         <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-          {nearbyStoresMutation.isPending ? (
-            <div className="flex h-52 items-center justify-center bg-slate-50">
-              <div className="space-y-2 text-center">
-                <div className="mx-auto h-4 w-4 animate-spin rounded-full border-2 border-slate-300 border-t-red-500"></div>
-                <p className="text-sm text-slate-600">Đang tải bản đồ...</p>
+          <div className="relative isolate overflow-hidden">
+            {nearbyStoresMutation.isPending ? (
+              <div className="flex h-52 items-center justify-center bg-slate-50">
+                <div className="space-y-2 text-center">
+                  <div className="mx-auto h-4 w-4 animate-spin rounded-full border-2 border-slate-300 border-t-red-500"></div>
+                  <p className="text-sm text-slate-600">Đang tải bản đồ...</p>
+                </div>
               </div>
-            </div>
-          ) : GOONG_API_KEY ? (
-            <div ref={mapContainerRef} className="h-[26rem] w-full" />
-          ) : (
-            <div className="flex h-52 items-center justify-center bg-slate-50 px-4 text-center text-sm text-slate-600">
-              <div className="space-y-2">
-                <p>⚠️ Không thể hiển thị bản đồ</p>
-                <p className="text-xs text-slate-500">
-                  Thiếu cấu hình Goong Map Key
-                </p>
+            ) : GOONG_API_KEY ? (
+              <div ref={mapContainerRef} className="h-[26rem] w-full" />
+            ) : (
+              <div className="flex h-52 items-center justify-center bg-slate-50 px-4 text-center text-sm text-slate-600">
+                <div className="space-y-2">
+                  <p>⚠️ Không thể hiển thị bản đồ</p>
+                  <p className="text-xs text-slate-500">
+                    Thiếu cấu hình Goong Map Key
+                  </p>
+                </div>
               </div>
-            </div>
-          )}
-
+            )}
+          </div>
           {selectedStore && (
-            <div className="space-y-2 p-3">
+            <div className="space-y-2 border-t border-slate-100 p-3">
               <div className="flex items-center justify-between text-sm">
                 <p className="font-semibold text-[var(--text-primary)]">
                   {selectedStore.storeName}

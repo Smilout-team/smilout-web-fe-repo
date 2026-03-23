@@ -296,7 +296,11 @@ export const CheckoutPage = () => {
         userLongitude: isOnlineDelivery
           ? (selectedAddress?.longitude ?? userLocation?.longitude)
           : undefined,
-        deliveryPhoneNumber: isOnlineDelivery ? deliveryPhoneNumber : undefined,
+        deliveryPhoneNumber: isOnlineDelivery
+          ? deliveryPhoneNumber === ''
+            ? user?.phoneNumber
+            : deliveryPhoneNumber
+          : undefined,
       });
 
       navigate(ROUTES.CHECKOUT_SUCCESS, {
