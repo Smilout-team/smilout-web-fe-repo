@@ -1,4 +1,5 @@
 import type { StoreDetail } from '@/shared/types/storeHub.types';
+import { QRCodeSVG } from 'qrcode.react';
 
 interface InStoreCheckoutSuccessViewProps {
   orderId: string;
@@ -55,33 +56,14 @@ export function InStoreCheckoutSuccessView({
           </p>
 
           <div className="mx-auto mb-4 flex h-48 w-48 items-center justify-center rounded-lg border-2 border-gray-200 bg-white">
-            <svg
-              viewBox="0 0 200 200"
-              className="h-full w-full"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <rect width="200" height="200" fill="white" />
-              <g fill="#EF4444">
-                <rect x="20" y="20" width="50" height="50" />
-                <rect x="130" y="20" width="50" height="50" />
-                <rect x="20" y="130" width="50" height="50" />
-                <rect x="90" y="40" width="15" height="15" />
-                <rect x="110" y="40" width="15" height="15" />
-                <rect x="50" y="90" width="15" height="15" />
-                <rect x="70" y="90" width="15" height="15" />
-                <rect x="90" y="90" width="15" height="15" />
-                <rect x="110" y="90" width="15" height="15" />
-                <rect x="130" y="90" width="15" height="15" />
-                <rect x="150" y="90" width="15" height="15" />
-                <rect x="90" y="110" width="15" height="15" />
-                <rect x="130" y="110" width="15" height="15" />
-                <rect x="70" y="130" width="15" height="15" />
-                <rect x="110" y="130" width="15" height="15" />
-                <rect x="150" y="130" width="15" height="15" />
-                <rect x="90" y="150" width="15" height="15" />
-                <rect x="130" y="150" width="15" height="15" />
-              </g>
-            </svg>
+            <QRCodeSVG
+              value={orderId}
+              size={192}
+              bgColor="#fff"
+              fgColor="#000"
+              level="H"
+              includeMargin={false}
+            />
           </div>
 
           <div className="text-center">
@@ -124,7 +106,7 @@ export function InStoreCheckoutSuccessView({
       <div className="fixed right-0 bottom-16 left-0 bg-white p-4 shadow-[0_-2px_10px_rgba(0,0,0,0.1)]">
         <button
           onClick={onComplete}
-          className="w-full rounded-lg bg-[#FF5252] px-4 py-3.5 font-semibold text-white transition-colors hover:bg-[#FF4444]"
+          className="w-full rounded-lg bg-[var(--color-primary-button)] px-4 py-3.5 font-semibold text-white hover:opacity-90"
         >
           Hoàn tất và về trang chủ
         </button>

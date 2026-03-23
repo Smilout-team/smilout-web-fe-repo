@@ -222,7 +222,7 @@ export default function NearbyStoresPage() {
                   onClick={() => setSelectedStoreId(store.storeId)}
                   className={`w-full rounded-xl border p-3 text-left transition ${
                     isActive
-                      ? 'border-red-300 bg-red-50'
+                      ? 'border-blue-300 bg-blue-50'
                       : 'border-slate-200 bg-white hover:border-slate-300'
                   }`}
                 >
@@ -237,7 +237,7 @@ export default function NearbyStoresPage() {
                         </span>
                       )}
                       {isActive && (
-                        <span className="rounded-full bg-red-500 px-2 py-0.5 text-xs font-semibold text-white">
+                        <span className="rounded-full bg-[var(--color-primary-button)] px-2 py-0.5 text-xs font-semibold text-white">
                           Đã chọn
                         </span>
                       )}
