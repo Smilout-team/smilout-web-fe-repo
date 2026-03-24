@@ -17,6 +17,12 @@ export const storeScannerService = {
     );
   },
 
+  exitStore: async (orderId: string): Promise<ApiResponse<void>> => {
+    return httpClient.post<ApiResponse<void>>(ENDPOINTS.EXIT_STORE, {
+      orderId,
+    });
+  },
+
   getNearbyStores: async (
     latitude: number,
     longitude: number,

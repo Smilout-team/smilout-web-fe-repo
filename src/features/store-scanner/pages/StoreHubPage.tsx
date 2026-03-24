@@ -7,6 +7,7 @@ import { STORAGE_KEYS } from '@/shared/constants';
 import { useOrderItems } from '@/shared/hooks/useOrderItems';
 import { useStoreDetail } from '@/shared/hooks/useStoreDetail';
 import type { ActiveStoreSession } from '@/shared/types';
+import { storeScannerService } from '../services/storeScannerService';
 
 interface StoreCartItem {
   id: string;
@@ -91,8 +92,12 @@ export const StoreHubPage = () => {
   );
 
   const handleExitStore = () => {
-    localStorage.removeItem(STORAGE_KEYS.ACTIVE_STORE_SESSION);
-    navigate(ROUTES.SCAN_STORE);
+    storeScannerService
+      .exitStore(activeStoreSession?.orderId ?? '')
+      .finally(() => {
+        localStorage.removeItem(STORAGE_KEYS.ACTIVE_STORE_SESSION);
+        navigate(ROUTES.SCAN_STORE);
+      });
   };
 
   return (

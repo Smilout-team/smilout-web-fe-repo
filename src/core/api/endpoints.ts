@@ -29,4 +29,5 @@ export const ENDPOINTS = {
   GET_DELIVERY_ADDRESSES: `${API_PATHS.PAYMENT}/delivery-addresses`,
   SEARCH_DELIVERY_ADDRESSES: `${API_PATHS.PAYMENT}/delivery-addresses/search`,
   PROCESS_PAYMENT: `${API_PATHS.PAYMENT}`,
+  EXIT_STORE: `${API_PATHS.STORES}/exit`,
 };

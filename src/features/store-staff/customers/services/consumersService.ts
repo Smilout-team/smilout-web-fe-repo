@@ -15,10 +15,13 @@ export interface ConsumerInStore {
 }
 
 interface ConsumerInStoreResponse {
-  id: string;
-  name: string;
-  phoneNumber: string;
-  createdAt: string;
+  consumer: {
+    id: string;
+    name: string;
+    phoneNumber: string;
+    createdAt: string;
+  };
+  timeStart: string;
 }
 
 export const customersService = {
@@ -27,13 +30,13 @@ export const customersService = {
       `/stores/${storeId}/consumers-in-store`
     );
     return (res.data as Array<ConsumerInStoreResponse>).map((item) => {
-      const avatarText = item.name
+      const avatarText = item.consumer.name
         .split(' ')
         .slice(-2)
         .map((w) => w[0])
         .join('')
         .toUpperCase();
-      const checkInDate = new Date(item.createdAt);
+      const checkInDate = new Date(item.timeStart);
       const now = new Date();
       const diffMs = now.getTime() - checkInDate.getTime();
       const diffMin = Math.floor(diffMs / 60000);
@@ -48,7 +51,7 @@ export const customersService = {
             year: '2-digit',
           });
       return {
-        ...item,
+        ...item.consumer,
         avatarText,
         checkInTime,
         duration,

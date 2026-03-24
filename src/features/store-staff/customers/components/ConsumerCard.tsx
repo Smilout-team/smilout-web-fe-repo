@@ -57,7 +57,7 @@ const ConsumerCard: React.FC<ConsumerCardProps> = ({ consumer }) => {
 
           <div className="mb-3 flex items-center gap-2 text-sm text-gray-500">
             <Phone className="h-4 w-4 text-gray-400" />
-            <span>{consumer.phoneNumber}</span>
+            <span>{consumer.phoneNumber || 'Số điện thoại không có'}</span>
           </div>
 
           <div className="mt-1 grid grid-cols-2 gap-4 border-t border-gray-100 pt-3 text-xs text-gray-500">

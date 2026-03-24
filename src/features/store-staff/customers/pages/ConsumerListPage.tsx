@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { normalizeSearchString } from '@/shared/utils/normalizeSearch';
 import { Input } from '@/shared/components/common/Input';
 import ConsumerCard from '../components/ConsumerCard';
 import { Search, Loader2 } from 'lucide-react';
@@ -17,11 +18,16 @@ const ConsumerListPage: React.FC = () => {
     error,
   } = useConsumersInStore(storeId || '');
 
-  const filteredConsumers = consumers.filter(
-    (c) =>
-      c.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (c.phoneNumber || '').includes(searchTerm)
-  );
+  const normalizedSearch = normalizeSearchString(searchTerm);
+  const filteredConsumers = consumers.filter((c) => {
+    const normalizedName = normalizeSearchString(c.name || '');
+    const normalizedPhone = (c.phoneNumber || '').replace(/\s+/g, '');
+    // So sánh tên đã chuẩn hóa hoặc số điện thoại (bỏ khoảng trắng)
+    return (
+      normalizedName.includes(normalizedSearch) ||
+      normalizedPhone.includes(normalizedSearch.replace(/\s+/g, ''))
+    );
+  });
 
   return (
     <div className="min-h-screen bg-[var(--bg-page)] pb-10">
