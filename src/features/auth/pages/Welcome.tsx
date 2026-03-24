@@ -18,7 +18,7 @@ const features = [
 
 export function Welcome() {
   return (
-    <div className="flex min-h-screen flex-col bg-gradient-to-b from-[#FF6B6B] to-[#FF5252]">
+    <div className="flex min-h-screen flex-col bg-gradient-to-b from-[var(--color-primary)] to-[var(--color-primary-button)]">
       <div className="flex flex-1 flex-col items-center justify-center px-6 pt-16 pb-8">
         <h1 className="text-center text-[32px] font-bold text-white">
           Mua sắm thông minh
@@ -48,7 +48,7 @@ export function Welcome() {
         <div className="mx-auto w-full max-w-[340px] space-y-4">
           <Link
             to={ROUTES.SIGN_UP}
-            className="flex h-[56px] w-full items-center justify-center rounded-full bg-white text-[16px] font-semibold text-[#FF5252] transition hover:bg-white/90"
+            className="flex h-[56px] w-full items-center justify-center rounded-full bg-white text-[16px] font-semibold text-[var(--color-primary-button)] transition hover:bg-white/90"
           >
             Đăng ký ngay
           </Link>

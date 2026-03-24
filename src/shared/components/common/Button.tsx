@@ -26,8 +26,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 
 const variantStyles: Record<ButtonVariant, string> = {
   primary: clsx(
-    'bg-gradient-to-r',
-    'from-[var(--red-400)] via-[var(--red-500)] to-[var(--red-600)]',
+    'bg-[var(--color-primary-button)]',
     'text-[var(--text-on-primary)]'
   ),
 
@@ -43,8 +42,8 @@ const variantStyles: Record<ButtonVariant, string> = {
 
   outline: clsx(
     'bg-transparent',
-    'border border-[var(--color-danger)]',
-    'text-[var(--color-danger)]'
+    'border border-[var(--color-primary-button)]',
+    'text-[var(--color-primary-button)]'
   ),
 
   ghost: clsx('bg-transparent', 'text-[var(--text-primary)]'),
@@ -92,6 +91,7 @@ export const Button: React.FC<ButtonProps> = ({
         sizeStyles[size],
         shapeStyles[shape],
         fullWidth && 'w-full',
+        'hover:opacity-90',
 
         loading && 'cursor-wait opacity-60',
         disabled &&

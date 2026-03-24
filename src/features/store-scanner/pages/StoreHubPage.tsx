@@ -231,7 +231,7 @@ export const StoreHubPage = () => {
       <div className="fixed right-0 bottom-16 left-0 border-t border-[var(--border-default)] bg-[var(--bg-card)] px-4 py-3">
         <div className="mx-auto flex gap-3">
           <Button
-            variant="secondary"
+            variant="outline"
             fullWidth
             size="lg"
             className="!py-3"
@@ -245,6 +245,7 @@ export const StoreHubPage = () => {
             size="lg"
             className="!py-3"
             onClick={() => navigate('/checkout')}
+            disabled={cartItems.length === 0}
           >
             Thanh toán
           </Button>

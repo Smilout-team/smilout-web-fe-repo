@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
+import { debounce } from 'lodash';
+
 import {
   CheckoutHeader,
   CheckoutSubmitBar,
@@ -21,13 +23,21 @@ import { useOrderItems } from '@/shared/hooks/useOrderItems';
 import { useStoreDetail } from '@/shared/hooks/useStoreDetail';
 import { ROUTES } from '@/shared/constants/routes';
 import { STORAGE_KEYS } from '@/shared/constants';
+import { useAuth } from '@/shared/hooks/useAuth';
+import { validatePhoneNumberWithAbstractAPI } from '@/shared/utils/validatePhone';
+import formatErrorMessage from '@/shared/utils/formatErrorMessage';
 
 export const CheckoutPage = () => {
+  const [phoneError, setPhoneError] = useState<string | null>(null);
   const navigate = useNavigate();
+  const { user } = useAuth();
   const processPayment = useProcessPayment();
   const { data: walletData } = useWalletBalance();
   const [selectedAddressId, setSelectedAddressId] = useState<string | null>(
     null
+  );
+  const [deliveryPhoneNumber, setDeliveryPhoneNumber] = useState(
+    user?.phoneNumber ?? ''
   );
   const [deliveryOption, setDeliveryOption] = useState<'ASAP' | 'SCHEDULED'>(
     'ASAP'
@@ -38,7 +48,17 @@ export const CheckoutPage = () => {
   const [userLocation, setUserLocation] = useState<{
     latitude: number;
     longitude: number;
-  } | null>(null);
+  } | null>(() => {
+    const stored = localStorage.getItem('USER_LOCATION');
+    if (stored) {
+      try {
+        return JSON.parse(stored);
+      } catch {
+        return null;
+      }
+    }
+    return null;
+  });
 
   const sessionData = useMemo(() => {
     const session = localStorage.getItem(STORAGE_KEYS.ACTIVE_STORE_SESSION);
@@ -52,6 +72,15 @@ export const CheckoutPage = () => {
       context?: 'in_store' | 'online';
     };
   }, [navigate]);
+
+  const debounceValidatePhone = useMemo(
+    () =>
+      debounce(async (nextValue: string) => {
+        const valid = await validatePhoneNumberWithAbstractAPI(nextValue);
+        return valid ? null : 'Số điện thoại không hợp lệ';
+      }, 1000),
+    []
+  );
 
   const orderId = sessionData?.orderId ?? null;
   const isOnlineDelivery = sessionData?.context === 'online';
@@ -103,6 +132,26 @@ export const CheckoutPage = () => {
 
   const activeSelectedAddressId = selectedAddressId ?? defaultAddressId;
 
+  function haversineDistance(
+    lat1: number,
+    lng1: number,
+    lat2: number,
+    lng2: number
+  ): number {
+    const toRad = (v: number) => (v * Math.PI) / 180;
+    const R = 6371e3;
+    const dLat = toRad(lat2 - lat1);
+    const dLng = toRad(lng2 - lng1);
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(toRad(lat1)) *
+        Math.cos(toRad(lat2)) *
+        Math.sin(dLng / 2) *
+        Math.sin(dLng / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c;
+  }
+
   useEffect(() => {
     if (!isOnlineDelivery || !navigator.geolocation) {
       return;
@@ -110,10 +159,32 @@ export const CheckoutPage = () => {
 
     navigator.geolocation.getCurrentPosition(
       (position) => {
-        setUserLocation({
+        const newLoc = {
           latitude: position.coords.latitude,
           longitude: position.coords.longitude,
-        });
+        };
+        const stored = localStorage.getItem('USER_LOCATION');
+        let shouldUpdate = false;
+        if (stored) {
+          try {
+            const oldLoc = JSON.parse(stored);
+            const dist = haversineDistance(
+              oldLoc.latitude,
+              oldLoc.longitude,
+              newLoc.latitude,
+              newLoc.longitude
+            );
+            if (dist > 200) shouldUpdate = true;
+          } catch {
+            shouldUpdate = true;
+          }
+        } else {
+          shouldUpdate = true;
+        }
+        if (shouldUpdate) {
+          setUserLocation(newLoc);
+          localStorage.setItem('USER_LOCATION', JSON.stringify(newLoc));
+        }
       },
       () => {
         toast.error('Không thể lấy vị trí hiện tại để tính phí giao hàng');
@@ -195,6 +266,15 @@ export const CheckoutPage = () => {
       return;
     }
 
+    if (isOnlineDelivery && !phoneError && !deliveryPhoneNumber) {
+      setDeliveryPhoneNumber(user?.phoneNumber ?? '');
+    }
+
+    if (isOnlineDelivery && phoneError) {
+      toast.error('Số điện thoại người nhận không hợp lệ');
+      return;
+    }
+
     try {
       const session = localStorage.getItem(STORAGE_KEYS.ACTIVE_STORE_SESSION);
       const { storeId } = session ? JSON.parse(session) : { storeId: null };
@@ -216,6 +296,11 @@ export const CheckoutPage = () => {
         userLongitude: isOnlineDelivery
           ? (selectedAddress?.longitude ?? userLocation?.longitude)
           : undefined,
+        deliveryPhoneNumber: isOnlineDelivery
+          ? deliveryPhoneNumber === ''
+            ? user?.phoneNumber
+            : deliveryPhoneNumber
+          : undefined,
       });
 
       navigate(ROUTES.CHECKOUT_SUCCESS, {
@@ -228,7 +313,9 @@ export const CheckoutPage = () => {
       });
     } catch (error) {
       const message =
-        error instanceof Error ? error.message : 'Thanh toán không thành công';
+        error instanceof Error
+          ? formatErrorMessage(error.message)
+          : 'Thanh toán không thành công';
       toast.error(message);
       return null;
     }
@@ -276,6 +363,36 @@ export const CheckoutPage = () => {
               isSearching={isSearchingAddresses}
               onSelectAddress={setSelectedAddressId}
             />
+
+            <div className="mb-4 rounded-lg bg-white p-4 shadow-sm">
+              <label className="mb-2 block text-sm font-medium text-gray-700">
+                Số điện thoại người nhận
+              </label>
+              <input
+                type="tel"
+                value={deliveryPhoneNumber}
+                onChange={async (e) => {
+                  const value = e.target.value;
+                  setDeliveryPhoneNumber(value);
+                  if (value.length >= 10 && value.length <= 15) {
+                    const error = await debounceValidatePhone(value);
+                    if (error) {
+                      setPhoneError(error);
+                    } else {
+                      setPhoneError(null);
+                    }
+                  } else {
+                    setPhoneError(null);
+                  }
+                }}
+                placeholder={`Số điện thoại mặc định của bạn là ${user?.phoneNumber ?? 'Nhập số điện thoại của người nhận'}`}
+                className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
+                maxLength={15}
+              />
+              {isOnlineDelivery && phoneError && (
+                <div className="mt-2 text-xs text-red-500">{phoneError}</div>
+              )}
+            </div>
 
             <DeliveryOptionSection
               deliveryOption={deliveryOption}

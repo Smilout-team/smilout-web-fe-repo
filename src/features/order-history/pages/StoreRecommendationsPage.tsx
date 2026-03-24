@@ -296,11 +296,7 @@ export default function StoreRecommendationsPage() {
                 <Button
                   onClick={() => handleSelectStore(store.storeId)}
                   loading={createCartMutation.isPending}
-                  className={`w-full ${
-                    store.recommendation === 'best'
-                      ? 'bg-green-600 hover:bg-green-700'
-                      : ''
-                  }`}
+                  className={`w-full`}
                 >
                   Chọn cửa hàng này
                 </Button>

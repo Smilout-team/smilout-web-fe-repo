@@ -28,12 +28,12 @@ export default function OrderItemsCard({ items }: Props) {
                 <p className="text-sm font-medium text-[var(--text-primary)]">
                   {item.name}
                 </p>
-                <p className="text-xs text-[var(--text-secondary)]">
+                <p className="text-xs text-[var(--text-primary)]">
                   {item.price.toLocaleString()}đ x {item.quantity}
                 </p>
               </div>
             </div>
-            <p className="text-sm text-[var(--color-primary)]">
+            <p className="text-semibold text-sm text-[var(--color-primary)]">
               {(item.price * item.quantity).toLocaleString()}đ
             </p>
           </div>

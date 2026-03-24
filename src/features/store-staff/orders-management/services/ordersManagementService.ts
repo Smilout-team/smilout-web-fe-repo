@@ -2,7 +2,7 @@ import { httpClient } from '@/core/api/httpClient.api';
 import type { ApiResponse } from '@/core/api/types';
 import type { Order, OrderStatus, OrderType } from '../types/order.type';
 
-interface BackendOrderItem {
+export interface BackendOrderItem {
   id: string;
   productId: string;
   productName: string;
@@ -11,7 +11,7 @@ interface BackendOrderItem {
   imageUrls: string[] | Record<string, unknown>;
 }
 
-interface BackendOrder {
+export interface BackendOrder {
   id: string;
   orderType: OrderType;
   status: OrderStatus;
@@ -53,7 +53,9 @@ function getFirstImageUrl(
   return '/placeholder.png';
 }
 
-function mapBackendOrderToFrontend(backendOrder: BackendOrder): Order {
+export const mapBackendOrderToFrontend = (
+  backendOrder: BackendOrder
+): Order => {
   const subtotal = backendOrder.items.reduce(
     (sum, item) => sum + item.priceAtPurchase * item.quantity,
     0
@@ -75,11 +77,12 @@ function mapBackendOrderToFrontend(backendOrder: BackendOrder): Order {
     : null;
 
   const deliveryNote =
-    backendOrder.deliveryOption === 'SCHEDULED' && scheduledTimeText
-      ? `Thời gian giao: ${scheduledTimeText}`
+    (backendOrder.deliveryOption === 'SCHEDULED' && scheduledTimeText
+      ? `Thời gian giao: ${scheduledTimeText} `
       : backendOrder.deliveryOption === 'ASAP'
         ? 'Thời gian giao: Giao ngay'
-        : `Thời gian tạo đơn: ${formatTimeAgo(backendOrder.createdAt)}`;
+        : '') +
+    ` - Số điện thoại giao hàng: ${backendOrder.deliveryPhoneNumber}`;
 
   return {
     id: backendOrder.id,
@@ -97,17 +100,14 @@ function mapBackendOrderToFrontend(backendOrder: BackendOrder): Order {
     subtotal,
     shippingFee,
     total: backendOrder.totalAmount,
-    time:
-      backendOrder.deliveryOption === 'SCHEDULED' && scheduledTimeText
-        ? scheduledTimeText
-        : formatTimeAgo(backendOrder.createdAt),
+    time: formatTimeAgo(backendOrder.createdAt),
     status: backendOrder.status,
     orderType: backendOrder.orderType,
     paymentMethod: 'Ví SMILOUT',
     isPaid: backendOrder.status !== 'PENDING',
     note: deliveryNote,
   };
-}
+};
 
 export const ordersManagementService = {
   getOrders: async (): Promise<Order[]> => {

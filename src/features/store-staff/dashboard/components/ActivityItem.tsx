@@ -10,7 +10,7 @@ interface Props {
 const typeConfig = {
   order: {
     icon: ShoppingBag,
-    color: 'text-orange-500',
+    color: 'text-blue-500',
   },
   fraud: {
     icon: AlertTriangle,

@@ -1,13 +1,29 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { toast } from 'sonner';
 import OrdersManagementHeader from '../components/OrdersManagementHeader';
 import OrderCard from '../components/OrderCard';
 import ConfirmRejectModal from '../components/ConfirmRejectModal';
 import { useOrdersManagement } from '../hooks';
-import { ordersManagementService } from '../services/ordersManagementService';
+import {
+  ordersManagementService,
+  type BackendOrder,
+  type BackendOrderItem,
+} from '../services/ordersManagementService';
 import type { OrderStatus } from '../types/order.type';
 
+import {
+  collection,
+  query,
+  onSnapshot,
+  doc,
+  deleteDoc,
+} from 'firebase/firestore';
+import { db } from '@/core/configs/firebase';
+import { useAuth } from '@/shared/hooks/useAuth';
+import { mapBackendOrderToFrontend } from '../services/ordersManagementService';
+
 export default function OrdersPage() {
+  const { user } = useAuth();
   const statusFromQuery = new URLSearchParams(window.location.search)
     .get('status')
     ?.toUpperCase();
@@ -18,23 +34,20 @@ export default function OrdersPage() {
   const [tab, setTab] = useState(statusFromQuery || 'PENDING');
   const [rejectModalOpen, setRejectModalOpen] = useState(false);
   const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null);
+  const [realtimeOrders, setRealtimeOrders] = useState<BackendOrder[]>([]);
 
-  const mergedOrders = useMemo(
-    () =>
-      orders.map((order) => {
-        const overriddenStatus = statusOverrides[order.id];
-
-        if (!overriddenStatus) {
-          return order;
-        }
-
-        return {
-          ...order,
-          status: overriddenStatus,
-        };
-      }),
-    [orders, statusOverrides]
-  );
+  const mergedOrders = useMemo(() => {
+    const realtimeIds = new Set(realtimeOrders.map((order) => order.id));
+    const filteredOrders = orders.filter((order) => !realtimeIds.has(order.id));
+    const allOrders = [
+      ...realtimeOrders.map(mapBackendOrderToFrontend),
+      ...filteredOrders,
+    ];
+    return allOrders.map((order) => {
+      const overriddenStatus = statusOverrides[order.id];
+      return overriddenStatus ? { ...order, status: overriddenStatus } : order;
+    });
+  }, [realtimeOrders, orders, statusOverrides]);
 
   const handleAccept = async (id: string) => {
     try {
@@ -91,19 +104,57 @@ export default function OrdersPage() {
     tab === 'ALL'
       ? mergedOrders
       : tab === 'PENDING'
-        ? mergedOrders.filter(
-            (o) => o.status === 'PENDING' || o.status === 'PAID'
-          )
+        ? mergedOrders.filter((o) => o.status === 'PAID')
         : mergedOrders.filter((o) => o.status === tab);
 
   const counts = {
-    PENDING: mergedOrders.filter(
-      (o) => o.status === 'PENDING' || o.status === 'PAID'
-    ).length,
+    PENDING: mergedOrders.filter((o) => o.status === 'PAID').length,
     PREPARING: mergedOrders.filter((o) => o.status === 'PREPARING').length,
     COMPLETED: mergedOrders.filter((o) => o.status === 'COMPLETED').length,
     REJECTED: mergedOrders.filter((o) => o.status === 'REJECTED').length,
   };
+
+  useEffect(() => {
+    const q = query(collection(db, 'order_events'));
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      snapshot.docChanges().forEach(async (change) => {
+        const data = change.doc.data();
+        if (change.type === 'added') {
+          if (
+            data.type === 'order_new' &&
+            data.order.storeId === user?.store?.id
+          ) {
+            toast.info(`Đơn hàng mới từ ${data.order.consumer.name}`);
+            setRealtimeOrders((prev) => [
+              {
+                id: data.order.id,
+                orderType: data.order.orderType,
+                status: data.order.status,
+                deliveryAddress: data.order.deliveryAddress,
+                deliveryPhoneNumber: data.order.deliveryPhoneNumber,
+                deliveryOption: data.order.deliveryOption,
+                scheduledDeliveryAt: data.order.scheduledDeliveryAt,
+                createdAt: data.order.createdAt,
+                totalAmount: data.order.totalAmount,
+                consumer: data.order.consumer,
+
+                items: data.order.orderItems.map((item: BackendOrderItem) => ({
+                  id: item.id,
+                  productName: item.productName,
+                  priceAtPurchase: Number(item.priceAtPurchase),
+                  quantity: item.quantity,
+                  imageUrls: item.imageUrls,
+                })),
+              },
+              ...prev,
+            ]);
+            await deleteDoc(doc(db, 'order_events', change.doc.id));
+          }
+        }
+      });
+    });
+    return () => unsubscribe();
+  }, [user?.store?.id]);
 
   return (
     <div className="min-h-screen bg-[var(--bg-page)] pb-10">

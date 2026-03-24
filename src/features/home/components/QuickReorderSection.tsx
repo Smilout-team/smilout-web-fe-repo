@@ -1,15 +1,17 @@
 import { ReceiptText, Store } from 'lucide-react';
 import { Button } from '@/shared/components/common/Button';
+import { useLatestOrder } from '@/features/order-history/hooks/useLatestOrder';
 
 interface QuickReorderSectionProps {
   onViewAll: () => void;
-  onReorder: () => void;
+  onReorder: (orderId: string) => void;
 }
 
 export const QuickReorderSection = ({
   onViewAll,
   onReorder,
 }: QuickReorderSectionProps) => {
+  const recentOrder = useLatestOrder();
   return (
     <section>
       <div className="mb-3 flex items-center justify-between">
@@ -36,20 +38,30 @@ export const QuickReorderSection = ({
               Đơn hàng gần nhất
             </p>
             <p className="line-clamp-2 text-[length:var(--text-md)] font-[var(--font-medium)] text-[var(--text-primary)]">
-              Coca Cola, Snack Lays, Sữa TH...
+              {recentOrder.data?.items
+                .map((item) => item.productName)
+                .join(', ') || 'Không có đơn hàng nào'}
             </p>
             <p className="mt-1 inline-flex items-center gap-1 text-[length:var(--text-sm)] text-[var(--text-secondary)]">
               <Store size={14} />
-              CircleK - Nguyễn Huệ
+              {recentOrder.data?.storeName || 'Không xác định'}
             </p>
           </div>
 
           <p className="text-[length:var(--text-md)] font-[var(--font-medium)] text-[var(--color-primary)]">
-            125.000đ
+            {recentOrder.data?.totalPrice.toLocaleString('vi-VN', {
+              style: 'currency',
+              currency: 'VND',
+            }) || ''}
           </p>
         </div>
 
-        <Button variant="soft" fullWidth className="mt-3" onClick={onReorder}>
+        <Button
+          variant="primary"
+          fullWidth
+          className="mt-3"
+          onClick={() => onReorder(recentOrder.data?.id || '')}
+        >
           Mua lại đơn hàng này
         </Button>
       </div>

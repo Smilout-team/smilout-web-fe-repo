@@ -34,7 +34,7 @@ export default function OrderSummaryCard({
         </div>
       )}
 
-      <div className="flex justify-between border-t border-[var(--border-default)] pt-3 text-base font-semibold text-[var(--color-primary)]">
+      <div className="flex justify-between border-t border-[var(--border-default)] pt-3 text-lg font-semibold text-[var(--color-primary)]">
         <span>Tổng cộng</span>
         <span>{total.toLocaleString()}đ</span>
       </div>

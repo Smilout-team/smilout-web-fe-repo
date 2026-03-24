@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Eye, EyeOff } from 'lucide-react';
 import { useNavigate, Link } from 'react-router-dom';
@@ -7,6 +7,9 @@ import { Input } from '@/shared/components/common/Input';
 import { Button } from '@/shared/components/common/Button';
 import { authService } from '@/shared/services/authService';
 import { ROUTES } from '@/shared/constants';
+import { validatePhoneNumberWithAbstractAPI } from '@/shared/utils/validatePhone';
+import { validateEmailWithAbstractAPI } from '@/shared/utils/validateEmail';
+import { debounce } from 'lodash';
 
 interface SignUpFormData {
   name: string;
@@ -52,6 +55,22 @@ export function SignUpForm() {
     }
   };
 
+  const debounceValidatePhone = useCallback(
+    debounce(async (nextValue: string) => {
+      const valid = await validatePhoneNumberWithAbstractAPI(nextValue);
+      return valid ? null : 'Số điện thoại không hợp lệ';
+    }, 1000),
+    []
+  );
+
+  const debounceValidateEmail = useCallback(
+    debounce(async (nextValue: string) => {
+      const valid = await validateEmailWithAbstractAPI(nextValue);
+      return valid ? null : 'Email không hợp lệ hoặc không hoạt động';
+    }, 1000),
+    []
+  );
+
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
@@ -89,11 +108,19 @@ export function SignUpForm() {
           disabled={isLoading}
           {...register('email', {
             required: 'Vui lòng nhập email',
-            validate: (value) =>
-              value?.trim() !== '' || 'Email không được chứa chỉ khoảng trắng',
-            pattern: {
-              value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-              message: 'Email không hợp lệ',
+            validate: async (value) => {
+              if (value?.trim() === '') {
+                return 'Email không được chứa chỉ khoảng trắng';
+              }
+              const validFormat = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+              if (!validFormat) {
+                return 'Định dạng email không hợp lệ';
+              }
+              const emailError = await debounceValidateEmail(value);
+              if (emailError) {
+                return emailError;
+              }
+              return true;
             },
           })}
         />
@@ -111,12 +138,19 @@ export function SignUpForm() {
           disabled={isLoading}
           {...register('phoneNumber', {
             required: 'Vui lòng nhập số điện thoại',
-            validate: (value) =>
-              value?.trim() !== '' ||
-              'Số điện thoại không được chứa chỉ khoảng trắng',
-            pattern: {
-              value: /^[0-9]{10,11}$/,
-              message: 'Số điện thoại không hợp lệ',
+            validate: async (value) => {
+              if (value?.trim() === '') {
+                return 'Số điện thoại không được chứa chỉ khoảng trắng';
+              }
+              if (value.length >= 10 && value.length <= 15) {
+                const phoneError = await debounceValidatePhone(value);
+                if (phoneError) {
+                  return phoneError;
+                }
+              } else {
+                return 'Số điện thoại không hợp lệ';
+              }
+              return true;
             },
           })}
         />
@@ -187,7 +221,7 @@ export function SignUpForm() {
           Đã có tài khoản?{' '}
           <Link
             to={ROUTES.SIGN_IN}
-            className="font-bold text-[#FF6B6B] hover:underline"
+            className="font-bold text-[var(--color-primary-button)] hover:underline"
           >
             Đăng nhập ngay
           </Link>

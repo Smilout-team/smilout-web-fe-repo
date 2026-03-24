@@ -8,7 +8,7 @@ export default function StoreCard({ store, onSelect }: StoreCardProps) {
   return (
     <div
       onClick={() => onSelect(store.storeId)}
-      className="mb-4 cursor-pointer rounded-[var(--radius-card)] border bg-[var(--bg-card)] p-4 shadow-[var(--shadow-card)] transition-all"
+      className="mb-4 cursor-pointer rounded-[var(--radius-card)] border border-[var(--border-default)] bg-[var(--bg-card)] p-4 shadow-[var(--shadow-card)] transition-all hover:border-[var(--color-primary)]"
     >
       <div className="flex items-start gap-3">
         <div className="flex-1">

@@ -18,6 +18,7 @@ export const ENDPOINTS = {
   GET_STORE_DETAIL: (storeId: string) => `${API_PATHS.STORES}/${storeId}`,
   SCAN_PRODUCT: `${API_PATHS.ORDERS}/scan-product`,
   GET_MY_ORDERS: `${API_PATHS.ORDERS}/me`,
+  GET_MY_LATEST_ORDER: `${API_PATHS.ORDERS}/me/latest`,
   GET_ORDER_ITEMS: (orderId: string) => `${API_PATHS.ORDERS}/${orderId}/items`,
   DELETE_ORDER_ITEM: (orderId: string, itemId: string) =>
     `${API_PATHS.ORDERS}/${orderId}/items/${itemId}`,

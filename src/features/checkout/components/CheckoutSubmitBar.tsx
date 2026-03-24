@@ -21,7 +21,7 @@ export function CheckoutSubmitBar({
         className={`w-full rounded-lg px-4 py-3.5 font-semibold text-white transition-colors ${
           disabled
             ? 'bg-gray-300 text-gray-500 disabled:cursor-not-allowed'
-            : 'bg-[#FF5252] hover:bg-[#FF4444]'
+            : 'bg-[var(--color-primary-button)] hover:bg-[var(--color-primary-button)]'
         }`}
       >
         {isPending

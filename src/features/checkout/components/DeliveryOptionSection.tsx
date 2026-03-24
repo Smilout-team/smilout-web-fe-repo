@@ -27,7 +27,7 @@ export function DeliveryOptionSection({
           onClick={() => onChangeDeliveryOption('ASAP')}
           className={`w-full rounded-lg border p-3 text-left transition-colors ${
             deliveryOption === 'ASAP'
-              ? 'border-[#FF5252] bg-red-50'
+              ? 'border-[var(--color-primary)] bg-blue-100'
               : 'border-gray-200 bg-white'
           }`}
         >
@@ -42,7 +42,7 @@ export function DeliveryOptionSection({
           onClick={() => onChangeDeliveryOption('SCHEDULED')}
           className={`w-full rounded-lg border p-3 text-left transition-colors ${
             deliveryOption === 'SCHEDULED'
-              ? 'border-[#FF5252] bg-red-50'
+              ? 'border-[var(--color-primary)] bg-blue-100'
               : 'border-gray-200 bg-white'
           }`}
         >

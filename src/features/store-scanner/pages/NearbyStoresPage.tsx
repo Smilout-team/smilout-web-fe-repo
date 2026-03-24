@@ -45,7 +45,7 @@ export default function NearbyStoresPage() {
       {
         enableHighAccuracy: true,
         timeout: 15000,
-        maximumAge: 0,
+        maximumAge: 10000,
       }
     );
 
@@ -74,8 +74,12 @@ export default function NearbyStoresPage() {
         toast.info('Không tìm thấy cửa hàng gần bạn');
         return;
       }
-
-      setSelectedStoreId(stores[0].storeId);
+      if (
+        !selectedStoreId ||
+        !stores.some((store) => store.storeId === selectedStoreId)
+      ) {
+        setSelectedStoreId(stores[0].storeId);
+      }
     });
   }, [fetchNearbyStores, userLocation]);
 
@@ -138,28 +142,29 @@ export default function NearbyStoresPage() {
 
       <div className="mx-auto space-y-4 px-4 py-4">
         <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-          {nearbyStoresMutation.isPending ? (
-            <div className="flex h-52 items-center justify-center bg-slate-50">
-              <div className="space-y-2 text-center">
-                <div className="mx-auto h-4 w-4 animate-spin rounded-full border-2 border-slate-300 border-t-red-500"></div>
-                <p className="text-sm text-slate-600">Đang tải bản đồ...</p>
+          <div className="relative isolate overflow-hidden">
+            {nearbyStoresMutation.isPending ? (
+              <div className="flex h-52 items-center justify-center bg-slate-50">
+                <div className="space-y-2 text-center">
+                  <div className="mx-auto h-4 w-4 animate-spin rounded-full border-2 border-slate-300 border-t-red-500"></div>
+                  <p className="text-sm text-slate-600">Đang tải bản đồ...</p>
+                </div>
               </div>
-            </div>
-          ) : GOONG_MAP_KEY || GOONG_API_KEY ? (
-            <div ref={mapContainerRef} className="h-[26rem] w-full" />
-          ) : (
-            <div className="flex h-52 items-center justify-center bg-slate-50 px-4 text-center text-sm text-slate-600">
-              <div className="space-y-2">
-                <p>⚠️ Không thể hiển thị bản đồ</p>
-                <p className="text-xs text-slate-500">
-                  Thiếu cấu hình Goong Map Key
-                </p>
+            ) : GOONG_API_KEY ? (
+              <div ref={mapContainerRef} className="h-[26rem] w-full" />
+            ) : (
+              <div className="flex h-52 items-center justify-center bg-slate-50 px-4 text-center text-sm text-slate-600">
+                <div className="space-y-2">
+                  <p>⚠️ Không thể hiển thị bản đồ</p>
+                  <p className="text-xs text-slate-500">
+                    Thiếu cấu hình Goong Map Key
+                  </p>
+                </div>
               </div>
-            </div>
-          )}
-
+            )}
+          </div>
           {selectedStore && (
-            <div className="space-y-2 p-3">
+            <div className="space-y-2 border-t border-slate-100 p-3">
               <div className="flex items-center justify-between text-sm">
                 <p className="font-semibold text-[var(--text-primary)]">
                   {selectedStore.storeName}
@@ -217,7 +222,7 @@ export default function NearbyStoresPage() {
                   onClick={() => setSelectedStoreId(store.storeId)}
                   className={`w-full rounded-xl border p-3 text-left transition ${
                     isActive
-                      ? 'border-red-300 bg-red-50'
+                      ? 'border-blue-300 bg-blue-50'
                       : 'border-slate-200 bg-white hover:border-slate-300'
                   }`}
                 >
@@ -232,7 +237,7 @@ export default function NearbyStoresPage() {
                         </span>
                       )}
                       {isActive && (
-                        <span className="rounded-full bg-red-500 px-2 py-0.5 text-xs font-semibold text-white">
+                        <span className="rounded-full bg-[var(--color-primary-button)] px-2 py-0.5 text-xs font-semibold text-white">
                           Đã chọn
                         </span>
                       )}

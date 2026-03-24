@@ -18,7 +18,7 @@ export default function ProductCard({
       className="flex cursor-pointer flex-col overflow-hidden rounded-[var(--radius-card)] border border-[var(--border-default)] bg-[var(--bg-card)] shadow-[var(--shadow-card)] transition-transform active:scale-[0.98]"
     >
       <img
-        src={product.imageUrl}
+        src={product.imageUrls[0]}
         alt={product.name}
         className="h-32 w-full object-cover"
       />
@@ -29,15 +29,14 @@ export default function ProductCard({
           </p>
         </div>
         <div className="mt-2 flex items-center justify-between gap-2">
-          <p className="text-[length:var(--text-lg)] font-[var(--font-bold)] text-[var(--color-primary)]">
+          <p className="text-[length:var(--text-lg)] font-[var(--font-bold)] text-[var(--text-primary)]">
             {product.price.toLocaleString('vi-VN')}đ
           </p>
-          {/* Nút Giỏ hàng  */}
           <Button
             variant="primary"
             shape="pill"
             size="sm"
-            className="flex h-8 w-8 items-center justify-center !bg-[var(--color-primary)] !p-0 hover:!bg-[var(--color-primary-hover)]"
+            className="flex h-8 w-8 items-center justify-center p-0"
             onClick={(e) => onAddToCart(e, product)}
           >
             <ShoppingCart size={16} className="text-[var(--text-inverse)]" />

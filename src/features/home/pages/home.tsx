@@ -8,45 +8,58 @@ import {
   QuickReorderSection,
   HomeShortcutGrid,
 } from '../components';
+import { useWalletBalance } from '@/features/wallet/hooks/useWalletBalance';
 
 export default function Home() {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const {
+    data: balanceData,
+    isLoading: balanceLoading,
+    error: balanceError,
+  } = useWalletBalance();
 
   const handleStorePurchase = () => {
     navigate(ROUTES.SCAN_STORE);
   };
 
   const handleOnlinePurchase = () => {
-    toast.info('Tính năng mua sắm online đang được cập nhật');
+    navigate(ROUTES.ONLINE_SHOPPING);
   };
 
   const handleViewAllReorders = () => {
-    navigate('/orders');
+    navigate(ROUTES.ORDER_HISTORY);
   };
 
-  const handleReorder = () => {
-    toast.success('Đang xử lý mua lại đơn hàng');
+  const handleReorder = (orderId: string) => {
+    navigate(`/orders/${orderId}/repurchase`);
   };
 
   const handleFindStore = () => {
-    toast.info('Tính năng tìm cửa hàng đang được cập nhật');
+    navigate(ROUTES.NEARBY_STORES);
   };
 
   const handleOrders = () => {
-    navigate('/orders');
+    navigate(ROUTES.ORDER_HISTORY);
   };
 
   const handleWallet = () => {
-    navigate('/wallet');
+    navigate(ROUTES.WALLET);
   };
+
+  if (balanceLoading) {
+    return null;
+  }
+  if (balanceError) {
+    toast.error('Không thể tải thông tin ví. Vui lòng thử lại sau.');
+  }
 
   return (
     <div className="min-h-screen bg-[var(--bg-page)] px-4 py-4 pb-24">
       <div className="mx-auto space-y-4">
         <HomeGreetingCard
           userName={user?.name || user?.email || 'Khách hàng'}
-          walletBalance="88.000đ"
+          walletBalance={balanceData?.balance}
         />
 
         <StartShoppingSection
@@ -56,7 +69,7 @@ export default function Home() {
 
         <QuickReorderSection
           onViewAll={handleViewAllReorders}
-          onReorder={handleReorder}
+          onReorder={(orderId) => handleReorder(orderId)}
         />
 
         <HomeShortcutGrid

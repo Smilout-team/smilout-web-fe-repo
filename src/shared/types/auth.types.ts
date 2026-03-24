@@ -3,6 +3,7 @@ export type AuthUser = {
   name: string;
   email: string;
   roles: string[];
+  phoneNumber: string;
   store?: {
     id: string;
     storeName: string;

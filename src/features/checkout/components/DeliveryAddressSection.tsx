@@ -1,5 +1,6 @@
 import { MapPin, Search } from 'lucide-react';
 import type { DeliveryAddressOption } from '../types';
+import { useReverseGeocode } from '../hooks';
 
 interface DeliveryAddressSectionProps {
   addressKeyword: string;
@@ -8,6 +9,42 @@ interface DeliveryAddressSectionProps {
   selectedAddressId: string | null;
   isSearching: boolean;
   onSelectAddress: (id: string) => void;
+}
+
+function isRawCoordinateFallback(address: string): boolean {
+  return (
+    address.startsWith('Gần tọa độ') ||
+    /^\(\d+\.\d+,\s*\d+\.\d+\)$/.test(address.trim())
+  );
+}
+
+function CoordinateAddressLabel({ option }: { option: DeliveryAddressOption }) {
+  const needsGeocode = isRawCoordinateFallback(option.address);
+  const geocoded = useReverseGeocode(
+    needsGeocode ? option.latitude : undefined,
+    needsGeocode ? option.longitude : undefined
+  );
+
+  if (!needsGeocode) {
+    return <div className="mt-1 text-sm text-gray-600">{option.address}</div>;
+  }
+
+  if (geocoded === null) {
+    return (
+      <div className="mt-1 flex items-center gap-1.5 text-sm text-gray-400">
+        <span className="inline-block h-3 w-3 animate-spin rounded-full border-2 border-gray-300 border-t-blue-500" />
+        Đang lấy địa chỉ...
+      </div>
+    );
+  }
+
+  if (geocoded === undefined) {
+    return (
+      <div className="mt-1 text-sm text-gray-500">Vị trí GPS hiện tại</div>
+    );
+  }
+
+  return <div className="mt-1 text-sm text-gray-600">{geocoded}</div>;
 }
 
 export function DeliveryAddressSection({
@@ -38,11 +75,6 @@ export function DeliveryAddressSection({
         />
       </div>
 
-      <div className="mb-3 rounded-lg border border-blue-100 bg-blue-50 px-3 py-2 text-xs text-blue-700">
-        Địa chỉ mặc định được lấy từ tọa độ hiện tại bằng Goong Reverse
-        Geocoding.
-      </div>
-
       <div className="space-y-2">
         {options.map((option) => (
           <button
@@ -51,15 +83,20 @@ export function DeliveryAddressSection({
             onClick={() => onSelectAddress(option.id)}
             className={`w-full rounded-lg border p-3 text-left transition-colors ${
               selectedAddressId === option.id
-                ? 'border-[#FF5252] bg-red-50'
+                ? 'border-[var(--color-primary)] bg-blue-100'
                 : 'border-gray-200 bg-white'
             }`}
           >
             <div className="flex items-center gap-2 text-sm font-semibold text-gray-900">
-              <MapPin size={14} className="text-[#FF5252]" />
+              <MapPin size={14} className="text-[var(--color-primary)]" />
               <span>{option.label}</span>
             </div>
-            <div className="mt-1 text-sm text-gray-600">{option.address}</div>
+
+            {option.source === 'COORDINATE' ? (
+              <CoordinateAddressLabel option={option} />
+            ) : (
+              <div className="mt-1 text-sm text-gray-600">{option.address}</div>
+            )}
           </button>
         ))}
       </div>

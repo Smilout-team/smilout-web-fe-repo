@@ -3,6 +3,7 @@ export interface ProcessPaymentRequest {
   deliveryAddress?: string;
   deliveryOption?: 'ASAP' | 'SCHEDULED';
   scheduledDeliveryAt?: string;
+  deliveryPhoneNumber?: string;
   userLatitude?: number;
   userLongitude?: number;
 }
