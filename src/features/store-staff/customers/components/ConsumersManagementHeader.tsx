@@ -1,12 +1,12 @@
 import React from 'react';
 import ReturnButton from '@/shared/components/common/ReturnButton';
 
-interface CustomersManagementHeaderProps {
+interface ConsumersManagementHeaderProps {
   total: number;
   isLoading?: boolean;
 }
 
-const CustomersManagementHeader: React.FC<CustomersManagementHeaderProps> = ({
+const ConsumersManagementHeader: React.FC<ConsumersManagementHeaderProps> = ({
   total,
   isLoading,
 }) => {
@@ -31,4 +31,4 @@ const CustomersManagementHeader: React.FC<CustomersManagementHeaderProps> = ({
   );
 };
 
-export default CustomersManagementHeader;
+export default ConsumersManagementHeader;

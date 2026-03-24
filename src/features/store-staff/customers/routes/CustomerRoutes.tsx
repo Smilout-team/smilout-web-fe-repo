@@ -1,5 +1,5 @@
 import { type RouteObject } from 'react-router-dom';
-import CustomerListPage from '../pages/CustomerListPage';
+import CustomerListPage from '../pages/ConsumerListPage';
 
 export const CustomerRoutes: RouteObject[] = [
   {

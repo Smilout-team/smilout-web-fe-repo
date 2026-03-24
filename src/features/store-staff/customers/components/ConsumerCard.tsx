@@ -1,24 +1,24 @@
 import React from 'react';
 import clsx from 'clsx';
-import { Clock3, Phone, UserRound, MapPin } from 'lucide-react';
+import { Clock3, Phone, UserRound, Check } from 'lucide-react';
 
-export interface Customer {
+export interface Consumer {
   id: string;
   name: string;
-  phone: string;
-  checkInTime: string;
-  duration: string;
-  avatarText: string;
+  phoneNumber: string;
+  checkInTime?: string;
+  duration?: string;
+  avatarText?: string;
   avatarBgColor?: string;
   avatarTextColor?: string;
   statusDotColor?: string;
 }
 
-interface CustomerCardProps {
-  customer: Customer;
+interface ConsumerCardProps {
+  consumer: Consumer;
 }
 
-const CustomerCard: React.FC<CustomerCardProps> = ({ customer }) => {
+const ConsumerCard: React.FC<ConsumerCardProps> = ({ consumer }) => {
   return (
     <div
       className={clsx(
@@ -34,43 +34,43 @@ const CustomerCard: React.FC<CustomerCardProps> = ({ customer }) => {
         <div
           className={clsx(
             'flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-full text-2xl font-bold',
-            customer.avatarBgColor || 'bg-blue-100',
-            customer.avatarTextColor || 'text-blue-600'
+            consumer.avatarBgColor || 'bg-blue-100',
+            consumer.avatarTextColor || 'text-blue-600'
           )}
         >
-          {customer.avatarText}
+          {consumer.avatarText || consumer.name.charAt(0)}
         </div>
 
         <div className="flex flex-grow flex-col">
           <div className="mb-1.5 flex items-center gap-2">
             <UserRound className="h-4 w-4 text-blue-500" />
             <span className="text-lg font-semibold text-gray-800">
-              {customer.name}
+              {consumer.name}
             </span>
             <div
               className={clsx(
                 'h-2 w-2 rounded-full',
-                customer.statusDotColor || 'bg-green-500'
+                consumer.statusDotColor || 'bg-green-500'
               )}
             />
           </div>
 
           <div className="mb-3 flex items-center gap-2 text-sm text-gray-500">
             <Phone className="h-4 w-4 text-gray-400" />
-            <span>{customer.phone}</span>
+            <span>{consumer.phoneNumber}</span>
           </div>
 
           <div className="mt-1 grid grid-cols-2 gap-4 border-t border-gray-100 pt-3 text-xs text-gray-500">
             <div className="flex items-center gap-1.5">
-              <MapPin className="h-4 w-4 text-gray-400" />
+              <Check className="h-4 w-4 text-gray-400" />
               <span className="font-medium text-gray-600">
-                {customer.checkInTime}
+                {consumer.checkInTime}
               </span>
             </div>
             <div className="flex items-center justify-end gap-1.5">
               <Clock3 className="h-4 w-4 text-gray-400" />
               <span className="font-medium text-gray-600">
-                {customer.duration}
+                {consumer.duration}
               </span>
             </div>
           </div>
@@ -80,4 +80,4 @@ const CustomerCard: React.FC<CustomerCardProps> = ({ customer }) => {
   );
 };
 
-export default CustomerCard;
+export default ConsumerCard;
