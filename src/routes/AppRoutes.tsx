@@ -16,7 +16,7 @@ import ProtectedRoutes from '@/routes/ProtectedRoutes';
 import Home from '@/features/home/pages/home';
 import { OrderHistoryRoutes } from '@/features/order-history/routes/OrderHistoryRoutes';
 import SearchProductRoutes from '@/features/search-product/routes/SearchProductRoutes';
-
+import { CustomerRoutes } from '@/features/store-staff/customers/routes/CustomerRoutes';
 const routes: RouteObject[] = [
   {
     path: '/',
@@ -74,6 +74,7 @@ const routes: RouteObject[] = [
           ...DashboardRoutes,
           ...OrdersManagementRoutes,
           ...FraudRoutes,
+          ...CustomerRoutes,
         ],
       },
     ],
